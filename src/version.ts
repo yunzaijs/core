@@ -3,8 +3,8 @@ import { createRequire } from 'module'
 try {
   const require = createRequire(import.meta.url)
   const pkg = require('../package.json')
-  const repoOwner = 'yoimiya-kokomi'
-  const repoName = 'Miao-Yunzai'
+  const repoOwner = 'yunzai-org'
+  const repoName = 'yunzaijs'
   const filePath = 'package.json'
   const blob = 'dev'
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?ref=${blob}`
