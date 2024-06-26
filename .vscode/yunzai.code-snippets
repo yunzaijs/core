@@ -1,0 +1,17 @@
+{
+  "Test Plugin Class": {
+    "prefix": "plugin",
+    "body": [
+      "import { Plugin } from 'yunzai/core'",
+      "export class App extends Plugin {",
+      "    constructor() {",
+      "        super()",
+      "        this.rule = [",
+      "           $1",
+      "        ]",
+      "    }",
+      "}"
+    ],
+    "description": "Create a new App plugin class for Yunzai"
+  }
+}

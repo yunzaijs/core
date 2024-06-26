@@ -1,0 +1,34 @@
+{
+  "name": "yunzai",
+  "version": "4.0.0-rc.0",
+  "author": "Yoimiya-Kokomi, Le-niao",
+  "description": "QQ Group Bot",
+  "main": "./index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./config": {
+      "import": "./config/index.js"
+    },
+    "./db": {
+      "import": "./db/index.js"
+    },
+    "./mys": {
+      "import": "./mys/index.js"
+    },
+    "./utils": {
+      "import": "./utils/index.js"
+    },
+    "./core": {
+      "import": "./core/index.js"
+    },
+    "./init": {
+      "import": "./init/index.js"
+    },
+    "./image": {
+      "import": "./image/index.js"
+    }
+  }
+}
