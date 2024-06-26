@@ -19,7 +19,7 @@ git clone --depth=1 https://github.com/yunzai-org/yunzaijs.git
 - 进入目录
 
 ```sh
-cd Miao-Yunzai
+cd yunzaijs
 ```
 
 - 安装依赖
