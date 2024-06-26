@@ -1,4 +1,4 @@
-# Miao-Yunzai
+# YunzaiJS
 
 > 必要环境 Windows/Linux + Chrome/Chromium/Edge
 
@@ -6,14 +6,14 @@
 
 > 推荐环境 Node.js@18.20.3 + Redis@6.0.0
 
-[☞点击阅读文档了解更多](https://ningmengchongshui.github.io/Miao-Yunzai-Docs/)
+[☞点击阅读文档了解更多](https://yunzai-org.github.io/docs/)
 
 ## 使用教程
 
 - 安装源码
 
 ```sh
-git clone --depth=1 -b dev https://gitee.com/yoimiya-kokomi/Miao-Yunzai.git
+git clone --depth=1 https://github.com/yunzai-org/yunzaijs.git
 ```
 
 - 进入目录
