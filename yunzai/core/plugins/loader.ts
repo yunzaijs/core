@@ -12,8 +12,8 @@ import { EventType } from '../types.js'
 import Handler from './handler.js'
 // config
 import cfg from '../../config/config.js'
-// 中间
-import Runtime from '../middleware/runtime.js'
+// 中间件
+import { MiddlewareStore } from '../middleware/index.js'
 import { PLUGINS_PATH } from '../../config/system.js'
 
 /**
@@ -300,22 +300,19 @@ class PluginsLoader {
     if (!this.checkBlack(e)) return
 
     /**
-     * 消息中间
+     * 消息中间件
+     * 重新构造了this.reply()
      * 处理回复
      */
     this.reply(e)
 
     /**
-     * 消息中间
-     * 注册runtime
+     * 执行中间间
      */
-    await Runtime.init(e)
-
-
-    /**
-     * 消息中间
-     * 注册runtime
-     */
+    const map = MiddlewareStore.value('message')
+    for (const [key, middleware] of map) {
+      e[key] = await middleware.init(e);
+    }
 
     // 判断是否是星铁命令，若是星铁命令则标准化处理
     // e.isSr = true，且命令标准化为 #星铁 开头
@@ -336,6 +333,7 @@ class PluginsLoader {
      *
      */
     const priority = []
+
 
     /**
      *
@@ -445,6 +443,9 @@ class PluginsLoader {
           if (typeof plugin[v.fnc] !== 'function') {
             continue
           }
+
+          //
+
           const res = await plugin[v.fnc](e)
           // 非常规返回，不是true，直接结束。
           if (typeof res != 'boolean' && res !== true) {

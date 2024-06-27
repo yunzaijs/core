@@ -6,6 +6,8 @@ export const CONFIG_DEFAULT_PATH = 'config/default_config/'
 export const CONFIG_PLUGINS_PATH = 'config/plugins/'
 // 插件目录
 export const PLUGINS_PATH = 'plugins'
+// 中间件目录
+export const MIDDLEWARE_PATH = 'middleware'
 // 数据文件存储目录
 export const SQLITE_DB_DIR = '/data/db'
 // 机器人名称

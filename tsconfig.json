@@ -36,5 +36,5 @@
     "transpileOnly": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["src", "yunzai", "plugins", "lib", "renderers"]
+  "include": ["src", "yunzai", "plugins", "lib", "renderers", "middleware"]
 }

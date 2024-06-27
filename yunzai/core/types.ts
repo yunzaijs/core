@@ -1,12 +1,14 @@
 import { Sendable, type GroupMessage } from 'icqq'
 import { Client } from 'icqq'
-// tudo 中间间导致的，可能会写成循环引用
-import Runtime from './middleware/runtime'
 
 /**
  * 消息事件体
  */
 export interface EventType extends GroupMessage {
+  /**
+   * 支持扩展属性
+   */
+  [key: string]: any
   /**
    *  'group' | 'private'
    * @deprecated 已废弃
@@ -82,11 +84,6 @@ export interface EventType extends GroupMessage {
    *  群头像
    */
   group_avatar: string
-
-  /**
-   * @deprecated 已废弃
-   */
-  runtime: typeof Runtime.prototype
 
   /**
    * @deprecated 已废弃

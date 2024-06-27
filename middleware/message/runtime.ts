@@ -1,30 +1,28 @@
+/**
+ * ***********
+ * 消息中间件
+ * ************
+ * 原神中间件 -
+ * **********
+ * 当消息来临时
+ * 对消息字段进行扩展
+ * *********
+ * 扩展的原则的
+ * e.runtime = new Runtime()
+ * 一个消息中间件，扩展一个字段
+ */
 import { filter, repeat } from 'lodash-es'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-// config
-import { BOT_NAME } from '../../config/system.js'
-// config
-import CFG from '../../config/config.js'
-// utils
-import puppeteer from '../../utils/puppeteer/puppeteer.js'
-import * as common from '../../utils/common.js'
-//
-import Handler from '../plugins/handler.js'
-// mys
-import {
-  gsCfg,
-  mysApi as MysApi,
-  mysInfo as MysInfo,
-  NoteUser,
-  MysUser
-} from '../../mys/index.js'
-
+import { BOT_NAME, ConfigController as CFG } from 'yunzai/config'
+import { puppeteer } from 'yunzai/utils'
+import * as common from 'yunzai/utils'
+import { handler as Handler } from 'yunzai/core'
+import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
 /**
- * 这是专属于原神的模块
- * 这在未来是要废弃的
- *
- * 会制作成 机器人 中间件
- *
- * @deprecated 已废弃
+ * yunzai-runtime
+ * *********
+ * 中间件设计处于实验阶段，。。。
+ * *********
  */
 export default class Runtime {
   e = null
@@ -116,16 +114,26 @@ export default class Runtime {
   }
 
   /**
-   *
+   * 属性名
+   */
+  static name = 'runtime'
+
+  /**
+   * 静态方法
+   * 通过执行init初始化class
+   * 这是不合理的设计
    * @param e
    * @returns
    */
   static async init(e) {
+    // 初始化缓存
     await MysInfo.initCache()
-    const runtime = new Runtime(e)
-    e.runtime = runtime
-    await runtime.initUser()
-    return runtime
+    // 实例化
+    e[Runtime.name] = new Runtime(e)
+    // 初始化
+    await e[Runtime.name].initUser()
+    // 返回属性字段
+    return e[Runtime.name]
   }
 
   /**
