@@ -6,16 +6,17 @@ try {
   const repoOwner = 'yunzai-org'
   const repoName = 'yunzaijs'
   const filePath = 'package.json'
-  const blob = 'dev'
-  const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?ref=${blob}`
+  const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`
   const response = await fetch(url)
   if (response.status === 200) {
     const content = ((await response.json()) as any).content
     const buffer = Buffer.from(content, 'base64')
     const packageJson = buffer.toString('utf-8')
     const pkg2 = JSON.parse(packageJson)
-    if (pkg.version <= pkg2.version) {
-      console.error('警告：版本未提升！')
+    const version = String(pkg.version).split('.').join('')
+    const version2 = String(pkg2.version).split('.').join('')
+    if (Number(version) <= Number(version2)) {
+      console.error('警告：版本未提升！', version, version2)
       process.exit(1)
     }
   } else {

@@ -43,7 +43,6 @@ npm run login
 
 ## 致谢
 
-
 |                           Nickname                            | Contribution         |
 | :-----------------------------------------------------------: | -------------------- |
 | [Yunzai v3.0](https://github.com/yoimiya-kokomi/Miao-Yunzai)  | 喵喵的Yunzai-Bot V3  |

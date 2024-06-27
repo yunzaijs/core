@@ -1,6 +1,6 @@
 import { spawn } from 'child_process'
 const child1 = spawn(
-  'tailwindcss -i ./src/input.css -o ./public/output.css --watch',
+  'tailwindcss -i ./src/input.css -o ./public/output.css --watch  -m',
   [],
   {
     shell: true,

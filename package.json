@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "4.0.9",
+  "version": "4.0.10",
   "author": "Yoimiya-Kokomi, Le-niao",
   "description": "QQ Group Bot",
   "main": "./app.js",
@@ -21,6 +21,7 @@
     "version": "ts-node src/version.ts",
     "lint": "commitlint --config .commitlint.config.cjs -e -V",
     "format": "prettier --write .",
+    "check-format": "git diff --exit-code",
     "prepare": "husky"
   },
   "dependencies": {
