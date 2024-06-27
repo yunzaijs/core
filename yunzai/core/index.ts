@@ -1,4 +1,4 @@
-export * from './app/index.js'
+export * from './app/plugin.js'
 export * from './app/functional.js'
 export * from './types.js'
 export * from './app/common.js'

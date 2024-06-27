@@ -57,38 +57,148 @@ type PluginSuperType = {
    *  rule.log  false时不显示执行日志
    *  rule.permission 权限 master,owner,admin,all
    */
-  rule?: {
-    reg?: RegExp | string
-    fnc?: string
-    event?: keyof EventMap
-    log?: boolean
-    permission?: 'master' | 'owner' | 'admin' | 'all'
-  }[]
+  rule?: RuleType
 }
 
-export class Plugin {
-  name: PluginSuperType['name'] = 'your-plugin'
-  dsc: PluginSuperType['dsc'] = '无'
-  task: PluginSuperType['task'] = null
+type RuleType = {
   /**
-   * 指令集
+   * 正则
    */
-  rule: PluginSuperType['rule'] = []
+  reg?: RegExp | string
+  /**
+   * 函数名
+   */
+  fnc?: string
   /**
    * 事件
    */
-  event: PluginSuperType['event'] = 'message'
+  event?: keyof EventMap
+  /**
+   * 是否打印log
+   */
+  log?: boolean
+  /**
+   * 权限
+   */
+  permission?: 'master' | 'owner' | 'admin' | 'all'
+}[]
+
+export class BasePlugin {
+  /**
+   * 指令集
+   */
+  rule: RuleType = []
   /**
    * 优先级
    */
-  priority: PluginSuperType['priority'] = 9999
-  namespace: PluginSuperType['namespace'] = null
-  handler: PluginSuperType['handler'] = null
+  priority: number = 9999
+  /**
+   * 事件，默认 message
+   */
+  event: keyof EventMap = 'message'
   /**
    * 事件
    */
   e: EventType
 
+  /**
+   * @param msg 发送的消息
+   * @param quote 是否引用回复
+   * @param data.recallMsg 群聊是否撤回消息，0-120秒，0不撤回
+   * @param data.at 是否at用户
+   */
+  reply(msg: any[] | string = '', quote = false, data = {}) {
+    // 不存在 e.reply
+    if (!this.e?.reply || !msg) return false
+    return this.e.reply(msg, quote, data)
+  }
+
+  /**
+   *
+   * @param isGroup
+   * @returns
+   */
+  conKey(isGroup = false) {
+    if (isGroup && this.e.isGroup) {
+      return `${this.e.group_id}`
+    } else {
+      return `${this.e.user_id}`
+    }
+  }
+
+  /**
+   * @param type 执行方法
+   * @param isGroup 是否群聊
+   * @param time 操作时间
+   * @param timeout 操作超时回复
+   */
+  setContext(
+    type: string,
+    isGroup = false,
+    time = 120,
+    timeout = '操作超时已取消'
+  ) {
+    const key = this.conKey(isGroup)
+    if (!State[key]) State[key] = {}
+    State[key][type] = this.e
+    if (time) {
+      State[key][type][SymbolTimeout] = setTimeout(() => {
+        if (State[key][type]) {
+          const resolve = State[key][type][SymbolResolve]
+          delete State[key][type]
+          resolve ? resolve(false) : this.reply(timeout, true)
+        }
+      }, time * 1000)
+    }
+    return State[key][type]
+  }
+
+  /**
+   *
+   * @param type
+   * @param isGroup
+   * @returns
+   */
+  getContext(type?: string, isGroup?: boolean) {
+    if (type) return State[this.conKey(isGroup)]?.[type]
+    return State[this.conKey(isGroup)]
+  }
+
+  /**
+   *
+   * @param type
+   * @param isGroup
+   */
+  finish(type: string, isGroup?: boolean) {
+    const key = this.conKey(isGroup)
+    if (State[key]?.[type]) {
+      clearTimeout(State[key][type][SymbolTimeout])
+      delete State[key][type]
+    }
+  }
+}
+
+export class Plugin extends BasePlugin {
+  /**
+   * @deprecated 已废弃
+   */
+  name: PluginSuperType['name'] = 'your-plugin'
+  /**
+   * @deprecated 已废弃
+   */
+  dsc: PluginSuperType['dsc'] = '无'
+  /**
+   * @deprecated 已废弃
+   */
+  task: PluginSuperType['task'] = null
+  /**
+   * @deprecated 已废弃
+   */
+  namespace: PluginSuperType['namespace'] = null
+  /**
+   * @deprecated 已废弃
+   */
+  handler: PluginSuperType['handler'] = null
   /**
    * @deprecated 已废弃
    */
@@ -106,12 +216,17 @@ export class Plugin {
    */
   userId: number
 
+  // global.Bot.on('notice.group.poke',(e)=>{ } )
+
   /**
    * @param event 执行事件，默认message
    * @param priority 优先级，数字越小优先级越高
    * @param rule 优先级，数字越小优先级越高
    */
   constructor(init: PluginSuperType = {}) {
+    //
+    super()
+
     const {
       event,
       priority = 5000,
@@ -122,6 +237,7 @@ export class Plugin {
       namespace,
       task
     } = init
+
     name && (this.name = name)
     dsc && (this.dsc = dsc)
     event && (this.event = event)
@@ -148,80 +264,6 @@ export class Plugin {
     if (handler) {
       this.handler = handler
       this.namespace = namespace || ''
-    }
-  }
-
-  /**
-   * @param msg 发送的消息
-   * @param quote 是否引用回复
-   * @param data.recallMsg 群聊是否撤回消息，0-120秒，0不撤回
-   * @param data.at 是否at用户
-   */
-  reply(msg: any[] | string = '', quote = false, data = {}) {
-    if (!this.e?.reply || !msg) return false
-    return this.e.reply(msg, quote, data)
-  }
-
-  /**
-   *
-   * @param isGroup
-   * @returns
-   */
-  conKey(isGroup = false) {
-    if (isGroup && this.e.isGroup) {
-      return `${this.name}.${this.group_id || this.groupId || this.e.group_id}`
-    } else {
-      return `${this.name}.${this.user_id || this.userId || this.e.user_id}`
-    }
-  }
-
-  /**
-   * @param type 执行方法
-   * @param isGroup 是否群聊
-   * @param time 操作时间
-   * @param timeout 操作超时回复
-   */
-  setContext(
-    type: string,
-    isGroup = false,
-    time = 120,
-    timeout = '操作超时已取消'
-  ) {
-    const key = this.conKey(isGroup)
-    if (!State[key]) State[key] = {}
-    State[key][type] = this.e
-    if (time)
-      State[key][type][SymbolTimeout] = setTimeout(() => {
-        if (State[key][type]) {
-          const resolve = State[key][type][SymbolResolve]
-          delete State[key][type]
-          resolve ? resolve(false) : this.reply(timeout, true)
-        }
-      }, time * 1000)
-    return State[key][type]
-  }
-
-  /**
-   *
-   * @param type
-   * @param isGroup
-   * @returns
-   */
-  getContext(type?: string, isGroup?: boolean) {
-    if (type) return State[this.conKey(isGroup)]?.[type]
-    return State[this.conKey(isGroup)]
-  }
-
-  /**
-   *
-   * @param type
-   * @param isGroup
-   */
-  finish(type: string, isGroup?: boolean) {
-    const key = this.conKey(isGroup)
-    if (State[key]?.[type]) {
-      clearTimeout(State[key][type][SymbolTimeout])
-      delete State[key][type]
     }
   }
 
@@ -262,11 +304,11 @@ export class Plugin {
 }
 
 /**
- * @deprecated 已废弃
+ *
  */
 export const plugin = Plugin
 
 /**
  * global.plugin
  */
-global.plugin = Plugin
+global.plugin = plugin

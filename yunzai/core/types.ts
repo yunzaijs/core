@@ -4,15 +4,6 @@ import { Client } from 'icqq'
 import Runtime from './middleware/runtime'
 
 /**
- * 消息体
- * 应该是根据
- * eleven 来进行赋值的
- *
- * tudo
- * 错误的设计导致其混乱
- */
-
-/**
  * 消息事件体
  */
 export interface EventType extends GroupMessage {
@@ -214,10 +205,3 @@ export interface EventType extends GroupMessage {
    */
   friend?: any
 }
-
-/**
- * 函数式回调类型
- */
-export type MessageCallBackType = (
-  e: EventType
-) => Promise<boolean | undefined | void>

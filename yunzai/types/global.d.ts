@@ -1,8 +1,8 @@
 import { segment as se } from 'icqq'
 import { RedisClientType } from 'redis'
-import { Client, plugin as p } from 'yunzai/core'
 import chalk, { type ChalkInstance } from 'chalk'
-import { Renderer } from 'yunzai/utils'
+import { Client, plugin as p } from '../core/index.js'
+import { Renderer } from '../utils/index.js'
 
 /**
  *
