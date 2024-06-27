@@ -21,11 +21,11 @@ class Middleware {
       for (const name of middlewares[key]) {
         const typing = key as MiddlewareType
         // 消息中间件
-        const dir = `file://${join(process.cwd(), MIDDLEWARE_PATH, typing, `${name}.ts`)}`
+        const dir = `file://${join(process.cwd(), MIDDLEWARE_PATH, typing, name)}`
         this.use({
           typing,
           // 中间件名称
-          name: `yunzai-${name}`,
+          name: `${typing}-${name}`,
           // 植入
           val: (await import(dir)).default
         })
@@ -40,6 +40,7 @@ class Middleware {
    */
   use(plugin: { typing: MiddlewareType; name: string; val: any }) {
     this.#data[plugin.typing].set(plugin.name, plugin.val)
+    logger.info('加载中间件:', plugin.name)
   }
 
   /**

@@ -59,11 +59,6 @@ class PluginsLoader {
   pluginCount = null
 
   /**
-   * 星铁命令前缀
-   */
-  srReg = /^#?(\*|星铁|星轨|穹轨|星穹|崩铁|星穹铁道|崩坏星穹铁道|铁道)+/
-
-  /**
    *
    */
   eventMap = {
@@ -310,23 +305,18 @@ class PluginsLoader {
      * 执行中间间
      */
     const map = MiddlewareStore.value('message')
-    for (const [key, middleware] of map) {
-      e[key] = await middleware.init(e);
-    }
-
-    // 判断是否是星铁命令，若是星铁命令则标准化处理
-    // e.isSr = true，且命令标准化为 #星铁 开头
-    Object.defineProperty(e, 'isSr', {
-      get: () => e.game === 'sr',
-      set: v => (e.game = v ? 'sr' : 'gs')
-    })
-    Object.defineProperty(e, 'isGs', {
-      get: () => e.game === 'gs',
-      set: v => (e.game = v ? 'gs' : 'sr')
-    })
-    if (this.srReg.test(e.msg)) {
-      e.game = 'sr'
-      e.msg = e.msg.replace(this.srReg, '#星铁')
+    for (const [_, middleware] of map) {
+      if (Array.isArray(middleware.names)) {
+        const c = new middleware(e)
+        // 初始化方法
+        if (typeof c?.init === 'function') {
+          // 确保是等待的
+          await c.init()
+        }
+        for (const name of middleware.names) {
+          e[name] = await c[name]();
+        }
+      }
     }
 
     /**

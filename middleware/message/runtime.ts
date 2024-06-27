@@ -7,16 +7,13 @@
  * 当消息来临时
  * 对消息字段进行扩展
  * *********
- * 扩展的原则的
- * e.runtime = new Runtime()
- * 一个消息中间件，扩展一个字段
  */
 import { filter, repeat } from 'lodash-es'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { BOT_NAME, ConfigController as CFG } from 'yunzai/config'
 import { puppeteer } from 'yunzai/utils'
 import * as common from 'yunzai/utils'
-import { handler as Handler } from 'yunzai/core'
+import { handler as Handler, type EventType } from 'yunzai/core'
 import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
 /**
  * yunzai-runtime
@@ -25,15 +22,47 @@ import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
  * *********
  */
 export default class Runtime {
-  e = null
-  _mysInfo = null
-  handler = null
+  /**
+   * 定义一个字段
+   */
+  static names = ['runtime']
 
+  /**
+   * 初始化调用的方法
+   * 可用于处理其他异步操作
+   */
+  init = async () => {
+    // 初始化缓存
+    await MysInfo.initCache()
+    // 初始化
+    await this.initUser()
+  }
+
+  /**
+   * 定义属性即方法，并返回对应的结果
+   * @returns
+   */
+  runtime = async () => {
+    return this
+  }
+
+  /**
+   *
+   */
+  e: EventType = null
+  /**
+   *
+   */
+  _mysInfo = null
+  /**
+   *
+   */
+  handler = null
   /**
    *
    * @param e
    */
-  constructor(e) {
+  constructor(e: EventType) {
     this.e = e
     this._mysInfo = {}
     this.handler = {
@@ -111,29 +140,6 @@ export default class Runtime {
    */
   get MysUser() {
     return MysUser
-  }
-
-  /**
-   * 属性名
-   */
-  static name = 'runtime'
-
-  /**
-   * 静态方法
-   * 通过执行init初始化class
-   * 这是不合理的设计
-   * @param e
-   * @returns
-   */
-  static async init(e) {
-    // 初始化缓存
-    await MysInfo.initCache()
-    // 实例化
-    e[Runtime.name] = new Runtime(e)
-    // 初始化
-    await e[Runtime.name].initUser()
-    // 返回属性字段
-    return e[Runtime.name]
   }
 
   /**
