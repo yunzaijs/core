@@ -25,3 +25,7 @@ export const mysApi = MysApi
  * @deprecated 已废弃
  */
 export const mysInfo = MysInfo
+
+/**
+ * 只属于原神插件的包
+ */

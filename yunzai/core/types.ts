@@ -132,6 +132,18 @@ export interface EventType extends GroupMessage {
     makeForwardMsg: any
   }
   /**
+   *
+   */
+  isSr?: boolean
+  /**
+   *
+   */
+  isGs?: boolean
+  /**
+   *
+   */
+  game?: any
+  /**
    * @deprecated 已废弃
    */
   file: any
@@ -156,22 +168,9 @@ export interface EventType extends GroupMessage {
   logText: any
   /**
    *
-   */
-  isSr?: boolean
-  /**
-   *
-   */
-  isGs?: boolean
-  /**
-   *
    * @deprecated 已废弃
    */
   self_id?: any
-  /**
-   *
-   * @deprecated 已废弃
-   */
-  game?: any
   /**
    *
    * @deprecated 已废弃

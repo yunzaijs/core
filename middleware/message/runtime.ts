@@ -22,29 +22,7 @@ import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
  * *********
  */
 export default class Runtime {
-  /**
-   * 定义一个字段
-   */
-  static names = ['runtime']
-
-  /**
-   * 初始化调用的方法
-   * 可用于处理其他异步操作
-   */
-  init = async () => {
-    // 初始化缓存
-    await MysInfo.initCache()
-    // 初始化
-    await this.initUser()
-  }
-
-  /**
-   * 定义属性即方法，并返回对应的结果
-   * @returns
-   */
-  runtime = async () => {
-    return this
-  }
+  static names = ['user', 'runtime']
 
   /**
    *
@@ -58,6 +36,7 @@ export default class Runtime {
    *
    */
   handler = null
+
   /**
    *
    * @param e
@@ -69,6 +48,72 @@ export default class Runtime {
       has: Handler.has,
       call: Handler.call,
       callAll: Handler.callAll
+    }
+  }
+
+  callNames = {
+    init: async () => {
+      // 初始化缓存
+      await MysInfo.initCache()
+    },
+    user: async () => {
+      let e = this.e
+      let user = await NoteUser.create(e)
+      if (user) {
+        // 对象代理
+        e.user = new Proxy(user, {
+          get(self, key) {
+            let game = e.game
+            let fnMap = {
+              uid: 'getUid',
+              uidList: 'getUidList',
+              mysUser: 'getMysUser',
+              ckUidList: 'getCkUidList'
+            }
+            if (fnMap[key]) {
+              return self[fnMap[key]](game)
+            }
+            if (key === 'uidData') {
+              return self.getUidData('', game)
+            }
+            // 不能将类型“symbol”分配给类型“string”。
+            if (
+              [
+                'getUid',
+                'getUidList',
+                'getMysUser',
+                'getCkUidList',
+                'getUidMapList',
+                'getGameDs'
+              ].includes(key as string)
+            ) {
+              return (_game, arg2) => {
+                return self[key](_game || game, arg2)
+              }
+            }
+            // 不能将类型“symbol”分配给类型“string”。
+            if (
+              [
+                'getUidData',
+                'hasUid',
+                'addRegUid',
+                'delRegUid',
+                'setMainUid'
+              ].includes(key as string)
+            ) {
+              return (uid, _game = '') => {
+                return self[key](uid, _game || game)
+              }
+            }
+            return self[key]
+          }
+        })
+      }
+      return this.e.user
+    },
+    runtime: () => {
+      //
+      return this
     }
   }
 
@@ -140,64 +185,6 @@ export default class Runtime {
    */
   get MysUser() {
     return MysUser
-  }
-
-  /**
-   * 初始化
-   */
-  async initUser() {
-    let e = this.e
-    let user = await NoteUser.create(e)
-    if (user) {
-      // 对象代理
-      e.user = new Proxy(user, {
-        get(self, key) {
-          let game = e.game
-          let fnMap = {
-            uid: 'getUid',
-            uidList: 'getUidList',
-            mysUser: 'getMysUser',
-            ckUidList: 'getCkUidList'
-          }
-          if (fnMap[key]) {
-            return self[fnMap[key]](game)
-          }
-          if (key === 'uidData') {
-            return self.getUidData('', game)
-          }
-          // 不能将类型“symbol”分配给类型“string”。
-          if (
-            [
-              'getUid',
-              'getUidList',
-              'getMysUser',
-              'getCkUidList',
-              'getUidMapList',
-              'getGameDs'
-            ].includes(key as string)
-          ) {
-            return (_game, arg2) => {
-              return self[key](_game || game, arg2)
-            }
-          }
-          // 不能将类型“symbol”分配给类型“string”。
-          if (
-            [
-              'getUidData',
-              'hasUid',
-              'addRegUid',
-              'delRegUid',
-              'setMainUid'
-            ].includes(key as string)
-          ) {
-            return (uid, _game = '') => {
-              return self[key](uid, _game || game)
-            }
-          }
-          return self[key]
-        }
-      })
-    }
   }
 
   /**

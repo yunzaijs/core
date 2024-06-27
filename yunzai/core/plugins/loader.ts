@@ -309,12 +309,12 @@ class PluginsLoader {
       if (Array.isArray(middleware.names)) {
         const c = new middleware(e)
         // 初始化方法
-        if (typeof c?.init === 'function') {
+        if (typeof c?.callNames?.init === 'function') {
           // 确保是等待的
-          await c.init()
+          await c.callNames.init()
         }
         for (const name of middleware.names) {
-          e[name] = await c[name]();
+          e[name] = await c.callNames[name]();
         }
       }
     }
