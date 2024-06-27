@@ -22,6 +22,9 @@ import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
  * *********
  */
 export default class Runtime {
+  /**
+   *
+   */
   static names = ['user', 'runtime']
 
   /**
@@ -57,52 +60,46 @@ export default class Runtime {
       await MysInfo.initCache()
     },
     user: async () => {
-      let e = this.e
-      let user = await NoteUser.create(e)
+      const user = await NoteUser.create(this.e)
       if (user) {
         // 对象代理
-        e.user = new Proxy(user, {
-          get(self, key) {
-            let game = e.game
-            let fnMap = {
+        this.e.user = new Proxy(user, {
+          get(self, key: string) {
+            const fnMap = {
               uid: 'getUid',
               uidList: 'getUidList',
               mysUser: 'getMysUser',
               ckUidList: 'getCkUidList'
             }
             if (fnMap[key]) {
-              return self[fnMap[key]](game)
+              return self[fnMap[key]](this.e.game)
             }
             if (key === 'uidData') {
-              return self.getUidData('', game)
+              return self.getUidData('', this.e.game)
             }
-            // 不能将类型“symbol”分配给类型“string”。
-            if (
-              [
-                'getUid',
-                'getUidList',
-                'getMysUser',
-                'getCkUidList',
-                'getUidMapList',
-                'getGameDs'
-              ].includes(key as string)
-            ) {
+            const list = [
+              'getUid',
+              'getUidList',
+              'getMysUser',
+              'getCkUidList',
+              'getUidMapList',
+              'getGameDs'
+            ]
+            if (list.includes(key)) {
               return (_game, arg2) => {
-                return self[key](_game || game, arg2)
+                return self[key](_game || this.e.game, arg2)
               }
             }
-            // 不能将类型“symbol”分配给类型“string”。
-            if (
-              [
-                'getUidData',
-                'hasUid',
-                'addRegUid',
-                'delRegUid',
-                'setMainUid'
-              ].includes(key as string)
-            ) {
+            const list2 = [
+              'getUidData',
+              'hasUid',
+              'addRegUid',
+              'delRegUid',
+              'setMainUid'
+            ]
+            if (list2.includes(key)) {
               return (uid, _game = '') => {
-                return self[key](uid, _game || game)
+                return self[key](uid, _game || this.e.game)
               }
             }
             return self[key]
@@ -120,40 +117,40 @@ export default class Runtime {
   /**
    *
    */
+  get user() {
+    return this.e.user
+  }
+
+  /**
+   * @deprecated 不符合架构设计，已废弃
+   */
   get uid() {
     return this.user?.uid
   }
 
   /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get hasCk() {
     return this.user?.hasCk
   }
 
   /**
-   *
-   */
-  get user() {
-    return this.e.user
-  }
-
-  /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get cfg() {
     return CFG
   }
 
   /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get gsCfg() {
     return gsCfg
   }
 
   /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get common() {
     return common
@@ -167,27 +164,30 @@ export default class Runtime {
   }
 
   /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get MysInfo() {
     return MysInfo
   }
 
   /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get NoteUser() {
     return NoteUser
   }
 
   /**
-   *
+   * @deprecated 不符合架构设计，已废弃
    */
   get MysUser() {
     return MysUser
   }
 
   /**
+   *
+   * @deprecated 不符合架构设计，已废弃
+   *
    * 获取MysInfo实例
    *
    * @param targetType all: 所有用户均可， cookie：查询用户必须具备Cookie
@@ -205,6 +205,8 @@ export default class Runtime {
 
   /**
    *
+   * @deprecated 不符合架构设计，已废弃
+   *
    * @returns
    */
   async getUid() {
@@ -212,8 +214,10 @@ export default class Runtime {
   }
 
   /**
-   * 获取MysApi实例
    *
+   * @deprecated 不符合架构设计，已废弃
+   *
+   * 获取MysApi实例
    * @param targetType all: 所有用户均可， cookie：查询用户必须具备Cookie
    * @param option MysApi option
    * @param isSr 是否为星穹铁道
@@ -229,6 +233,9 @@ export default class Runtime {
 
   /**
    * 生成MysApi实例
+   *
+   * @deprecated 不符合架构设计，已废弃
+   *
    * @param uid
    * @param ck
    * @param option
@@ -241,6 +248,7 @@ export default class Runtime {
 
   /**
    * @deprecated 不符合架构设计，已废弃
+   *
    * @param plugin_name plugin key
    * @param path html文件路径，相对于plugin resources目录
    * @param data 渲染数据
