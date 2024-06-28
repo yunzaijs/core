@@ -62,7 +62,7 @@ class RendererLoader {
           logger.warn('渲染后端 ' + (renderer.id || subFolder.name) + ' 不可用')
         }
         this.renderers.set(renderer.id, renderer)
-        logger.info(`加载渲染后端 ${renderer.id}`)
+        logger.info(`加载渲染器:`, renderer.id)
       } catch (err) {
         logger.error(`渲染后端 ${name} 加载失败`)
         logger.error(err)

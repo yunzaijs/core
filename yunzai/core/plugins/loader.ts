@@ -406,18 +406,16 @@ class PluginsLoader {
          *
          */
         if (!new RegExp(v.reg).test(e.msg)) continue
-        /**
-         * tudo
-         * 名字是被识别起来的名字
-         * 不是开发者自己随便起的
-         */
-        const LOG = `[${plugin._key}][${plugin._name}][${v.fnc}]`
+
+        // tudo 恢复引用
+        e.logFnc = `[${plugin._key}][${plugin._name}][${v.fnc}]`
+
         /**
          *
          */
         if (v.log !== false) {
           logger.info(
-            `${LOG}${e.logText} ${lodash.truncate(e.msg, { length: 100 })}`
+            `${e.logFnc}${e.logText} ${lodash.truncate(e.msg, { length: 100 })}`
           )
         }
         /**
@@ -445,14 +443,14 @@ class PluginsLoader {
             this.setLimit(e)
             if (v.log !== false) {
               logger.mark(
-                `${LOG} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
+                `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
               )
             }
             break
           }
           //
         } catch (error) {
-          logger.error(LOG)
+          logger.error(e.logFnc)
           logger.error(error.stack)
           break
         }
@@ -1136,7 +1134,8 @@ class PluginsLoader {
   onlyReplyAt(e: EventType) {
     if (!e.message || e.isPrivate) return true
 
-    let groupCfg = cfg.getGroup(String(e.group_id))
+    // 群聊配置
+    const groupCfg = cfg.getGroup(e.group_id)
 
     /** 模式0，未开启前缀 */
     if (groupCfg.onlyReplyAt == 0 || !groupCfg.botAlias) return true

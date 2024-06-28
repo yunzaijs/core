@@ -60,6 +60,26 @@ export interface EventType extends GroupMessage {
    */
   img: string[]
   /**
+   * 群号
+   */
+  group_id: number
+  /**
+   * 群名
+   */
+  group_name: string
+  /**
+   *  群头像
+   */
+  group_avatar: string
+  /**
+   * 被执行的地址
+   */
+  logText: string
+  /**
+   * 被执行的方法
+   */
+  logFnc: string
+  /**
    * 消息发送
    * @param arg
    * @returns
@@ -73,23 +93,16 @@ export interface EventType extends GroupMessage {
     }
   ) => Promise<any>
   /**
-   * 群号
+   *
+   * 这是被重置的了的reply
+   * 不可使用
+   * @deprecated 已废弃
    */
-  group_id: number
-  /**
-   * 群名
-   */
-  group_name: string
-  /**
-   *  群头像
-   */
-  group_avatar: string
-
+  replyNew?: any
   /**
    * @deprecated 已废弃
    */
   notice_type: any
-
   /**
    * @deprecated 已废弃
    */
@@ -132,18 +145,6 @@ export interface EventType extends GroupMessage {
     makeForwardMsg: any
   }
   /**
-   *
-   */
-  isSr?: boolean
-  /**
-   *
-   */
-  isGs?: boolean
-  /**
-   *
-   */
-  game?: any
-  /**
    * @deprecated 已废弃
    */
   file: any
@@ -161,11 +162,6 @@ export interface EventType extends GroupMessage {
    * @deprecated 已废弃
    */
   member: any
-  /**
-   *
-   * @deprecated 已废弃
-   */
-  logText: any
   /**
    *
    * @deprecated 已废弃
@@ -191,11 +187,6 @@ export interface EventType extends GroupMessage {
    * @deprecated 已废弃
    */
   hasAlias?: any
-  /**
-   *
-   * @deprecated 已废弃
-   */
-  replyNew?: any
   /**
    * @deprecated 已废弃
    */

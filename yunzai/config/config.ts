@@ -68,7 +68,7 @@ export class ProcessConfig {
   get group() {
     const defCfg = this.getDefSet('group')
     const config = this.getConfig('group')
-    return { ...defCfg.default, ...config.default }
+    return { ...defCfg, ...config }
   }
 
   /**
