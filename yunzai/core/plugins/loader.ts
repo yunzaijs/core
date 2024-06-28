@@ -1141,6 +1141,9 @@ class Loader {
  * 加载插件
  */
 class PluginsLoader extends Loader {
+  constructor() {
+    super()
+  }
   /**
    * 插件监听
    * @deprecated 已废弃
