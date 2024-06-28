@@ -111,6 +111,11 @@ export interface EventType extends GroupMessage {
    * @deprecated 已废弃
    */
   replyNew?: any
+
+  /**
+   *
+   */
+
   /**
    * @deprecated 已废弃
    */

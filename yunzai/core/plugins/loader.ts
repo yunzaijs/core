@@ -18,21 +18,109 @@ import { MiddlewareStore } from '../middleware/index.js'
 import { PLUGINS_PATH, REDIS_COUNT_KEY } from '../../config/system.js'
 
 /**
- * 加载插件
+ * 
+   * 定时任务 是 个 无效的 设计，
+   * 因为 e 是会丢失的，
+   * 但很多开发者 误以为 fnc 和 常规的回调一样能进行，
+   * 这对新人开发插件来说是毁灭性的打击，
+   * 我们应该避免把所有概念都拥堵在一个pluin里，
+   * ********************************
+   * 若想设计成定时可指令的方法，
+   * 应该采用订阅发布模型，
+   * 使用BOT变量去发送消息，
+   * 或者对BOT进行二次封装，
+   * 让开发更容易理解。
+   * ********************************
  */
-class Loader {
-  /**
-   * 指令集
-   */
-  priority = []
-  /**
-   * handle
-   */
-  handler = {}
+class Task {
   /**
    * 定时任务
    */
   task = []
+
+  /**
+ * 收集定时任务
+ * @param task
+ */
+  collectTask(task) {
+    for (const i of Array.isArray(task) ? task : [task]) {
+      if (i?.cron && i?.name) {
+        this.task.push(i)
+      }
+    }
+  }
+
+  /** 
+   * 创建定时任务
+   */
+  createTask() {
+    // 便利存储好的定时任务
+    for (const i of this.task) {
+      // 开始定时
+      i.job = schedule.scheduleJob(i?.cron, async () => {
+        // 指令
+        try {
+          if (i.log == true) logger.mark(`开始定时任务：${i.name}`)
+          await i.fnc()
+          if (i.log == true) logger.mark(`定时任务完成：${i.name}`)
+        } catch (error) {
+          logger.error(`定时任务报错：${i.name}`)
+          logger.error(error)
+        }
+        //
+      })
+    }
+  }
+
+}
+
+
+/**
+ * 加载插件
+ */
+class Loader {
+  /**
+   * 分离 task 机制
+   * @deprecated 已废弃
+   */
+  Timer = new Task()
+
+  /**
+   * @deprecated 已废弃
+   * this.Timer.createTask
+   */
+  get task() {
+    return this.Timer.task
+  }
+  /**
+   * @deprecated 已废弃
+   * this.Timer.createTask
+   */
+  get createTask() {
+    return this.Timer.createTask
+  }
+  /**
+   * @deprecated 已废弃
+   * this.Timer.collectTask
+   */
+  get collectTask() {
+    return this.Timer.collectTask
+  }
+
+  /**
+   * 分离 handler 机制
+   * @deprecated 已废弃
+   * import { handler } from 'yunzai/core'
+   */
+  get handler() {
+    return Handler
+  }
+
+
+  /**
+   * 指令集
+   */
+  priority = []
   /**
    * 命令冷却cd
    */
@@ -80,8 +168,8 @@ class Loader {
       files.map(file => this.#importPlugin(file, packageErr))
     )
     this.#packageTips(packageErr)
-    this.createTask()
-    logger.info(`加载定时任务[${this.task.length}个]`)
+    this.Timer.createTask()
+    logger.info(`加载定时任务[${this.Timer.task.length}个]`)
     logger.info(`加载插件[${this.pluginCount}个]`)
     /** 优先级排序 */
     this.priority = lodash.orderBy(this.priority, ['priority'], ['asc'])
@@ -172,9 +260,9 @@ class Loader {
     logger.debug(`加载插件 [${file.name}][${name}]`)
     // 执行初始化，返回 return 则跳过加载
     if (plugin.init && (await plugin.init()) == 'return') return
-    // 初始化定时任务
-    this.collectTask(plugin.task)
-    // 
+    // 收集定时器
+    this.Timer.collectTask(plugin.task)
+    // 收集指令
     this.priority.push({
       // tudo 不标准写法 - -- 使用 关键词
       plugin: p,
@@ -185,7 +273,11 @@ class Loader {
       // 优先级
       priority: plugin.priority
     })
-    // 
+
+    /**
+     * tudo
+     * 待优化
+     */
     if (plugin.handler) {
       // 
       lodash.forEach(plugin.handler, ({ fn, key, priority }) => {
@@ -256,6 +348,8 @@ class Loader {
     for (const [_, middleware] of map) {
       if (Array.isArray(middleware.names)) {
         const c = new middleware(e)
+        // 赋值 e
+        c.e = e
         // 初始化方法
         if (typeof c?.callNames?.init === 'function') {
           // 确保是等待的
@@ -656,12 +750,10 @@ class Loader {
         }
 
         // 得到返回的消息
-        let msgRes
+        let msgRes = null
 
         // 如果不是数组
-        if (!Array.isArray(msg)) {
-          msg = [msg]
-        }
+        if (!Array.isArray(msg)) msg = [msg]
 
         // 不是频道模式
         if (!e.isGuild) {
@@ -1074,65 +1166,6 @@ class Loader {
     return true
   }
 
-  /**
-   * **************
-   * 定时任务的设计 start
-   */
-
-
-  /**
- * 收集定时任务
- * @param task
- */
-  collectTask(task) {
-    for (const i of Array.isArray(task) ? task : [task]) {
-      if (i?.cron && i?.name) {
-        this.task.push(i)
-      }
-    }
-  }
-
-
-  /**
-   * tudo
-   * 创建定时任务
-   * ********************************
-   * 定时任务 是 个 无效的 设计，
-   * 因为 e 是会丢失的，
-   * 但很多开发者 误以为 fnc 和 常规的回调一样能进行，
-   * 这对新人开发插件来说是毁灭性的打击，
-   * 我们应该避免把所有概念都拥堵在一个pluin里，
-   * ********************************
-   * 若想设计成定时可指令的方法，
-   * 应该采用订阅发布模型，
-   * 使用BOT变量去发送消息，
-   * 或者对BOT进行二次封装，
-   * 让开发更容易理解。
-   */
-  createTask() {
-    // 便利存储好的定时任务
-    for (const i of this.task) {
-      // 开始定时
-      i.job = schedule.scheduleJob(i?.cron, async () => {
-        // 指令
-        try {
-          if (i.log == true) logger.mark(`开始定时任务：${i.name}`)
-          await i.fnc()
-          if (i.log == true) logger.mark(`定时任务完成：${i.name}`)
-        } catch (error) {
-          logger.error(`定时任务报错：${i.name}`)
-          logger.error(error)
-        }
-        //
-      })
-    }
-  }
-
-
-  /**
-   * 定时任务的设计 end
-   * **************
-   */
 
 }
 
@@ -1155,7 +1188,7 @@ class PluginsLoader extends Loader {
    * @deprecated 已废弃 会内存爆炸的机制
    * @param key
    */
-  async changePlugin(key) {
+  async changePlugin(_) {
     return
   }
 
@@ -1166,7 +1199,7 @@ class PluginsLoader extends Loader {
    * @param appName
    * @returns
    */
-  watch(dirName, appName) {
+  watch(_, __) {
     return
   }
 
@@ -1175,7 +1208,7 @@ class PluginsLoader extends Loader {
    * @param dirName
    * @returns
    */
-  watchDir(dirName) {
+  watchDir(_) {
     return
   }
 

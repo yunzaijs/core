@@ -9,14 +9,10 @@ import { type EventType } from 'yunzai/core'
 export default class StarRail {
   static names = ['isSr', 'isGs', 'game', 'msg']
 
-  e: EventType = null
+  e: EventType
 
   // 识别正则
   srReg = /^#?(\*|星铁|星轨|穹轨|星穹|崩铁|星穹铁道|崩坏星穹铁道|铁道)+/
-
-  constructor(e: EventType) {
-    this.e = e
-  }
 
   /**
    *

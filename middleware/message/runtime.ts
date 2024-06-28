@@ -22,36 +22,17 @@ import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
  * *********
  */
 export default class Runtime {
-  /**
-   *
-   */
+  //
   static names = ['user', 'runtime']
+  //
+  e: EventType
 
-  /**
-   *
-   */
-  e: EventType = null
-  /**
-   *
-   */
-  _mysInfo = null
-  /**
-   *
-   */
-  handler = null
+  //
+  _mysInfo = {}
 
-  /**
-   *
-   * @param e
-   */
-  constructor(e: EventType) {
-    this.e = e
-    this._mysInfo = {}
-    this.handler = {
-      has: Handler.has,
-      call: Handler.call,
-      callAll: Handler.callAll
-    }
+  //
+  get handler() {
+    return Handler
   }
 
   callNames = {
