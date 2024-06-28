@@ -1,5 +1,5 @@
 import 'yunzai/init'
-import { Client, MiddlewareStore } from 'yunzai/core'
+import { Client, MiddlewareStore, loader } from 'yunzai/core'
 import { createLogin } from 'yunzai/config'
 /**
  * *********************
@@ -24,5 +24,11 @@ setTimeout(async () => {
 
     // 载入其他中间件
     // MiddlewareStore.use()
+
+    /**
+     * 解析插件
+     * plugins
+     */
+    await loader.load()
   })
 }, 0)

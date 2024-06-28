@@ -159,8 +159,8 @@ class Loader {
     if (this.priority.length) return
     // 得到插件地址
     const files = await this.#getPlugins()
-    logger.info('-----------')
-    logger.info('加载插件中...')
+    logger.info(`加载定时器: ...`)
+    logger.info('加载插件中: ...')
     this.pluginCount = 0
     const packageErr = []
     // 返回成功的
@@ -168,9 +168,9 @@ class Loader {
       files.map(file => this.#importPlugin(file, packageErr))
     )
     this.#packageTips(packageErr)
+    logger.info(`插件数[${this.pluginCount}个]`)
     this.Timer.createTask()
-    logger.info(`加载定时任务[${this.Timer.task.length}个]`)
-    logger.info(`加载插件[${this.pluginCount}个]`)
+    logger.info(`定时数[${this.Timer.task.length}个]`)
     /** 优先级排序 */
     this.priority = lodash.orderBy(this.priority, ['priority'], ['asc'])
   }

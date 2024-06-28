@@ -2,7 +2,6 @@ import EventListener from './listener.js'
 import cfg from '../../config/config.js'
 import { relpyPrivate } from '../app/common.js'
 import { BOT_NAME, REDIS_BOT_LOGIN_KEY } from '../../config/system.js'
-import pluginsLoader from '../plugins/loader.js'
 
 /**
  * 监听上线事件
@@ -26,19 +25,7 @@ export class EventOnline extends EventListener {
    * @param e
    */
   async execute() {
-    /**
-     * 在线后执行
-     */
-
-    /**
-     * 解析插件
-     */
-    await pluginsLoader.load()
-    /**
-     *
-     */
-    logger.mark('----^_^----')
-    logger.mark(logger.chalk.green(`${BOT_NAME} V${cfg.package.version} 上线~`))
+    logger.mark(BOT_NAME, logger.chalk.green(`V${cfg.package.version}`), '上线')
 
     /**
      * 上线通知

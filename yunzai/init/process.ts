@@ -1,10 +1,6 @@
 import { BOT_NAME } from '../config/system.js'
 import config from '../config/config.js'
 /**
- *
- */
-logger.mark(`${BOT_NAME} 启动中...`)
-/**
  * 设置标题
  */
 process.title = BOT_NAME

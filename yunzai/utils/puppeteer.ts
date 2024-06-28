@@ -57,7 +57,7 @@ export class Puppeteer {
     try {
       this.browser = await puppeteer.launch(this.#launch)
       this.#isBrowser = true
-      logger.info('[puppeteer] open success')
+      // logger.info('[puppeteer] open success')
       return true
     } catch (err) {
       this.#isBrowser = false

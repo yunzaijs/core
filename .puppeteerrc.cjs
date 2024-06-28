@@ -42,7 +42,7 @@ if (!executablePath)
 
 if (executablePath || arch === 'arm64' || arch === 'aarch64') {
   ;(typeof logger == 'object' ? logger : console).info(
-    `[Chromium] ${executablePath}`
+    `读取浏览器: ${executablePath}`
   )
   skipDownload = true
 }
