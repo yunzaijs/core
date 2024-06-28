@@ -41,6 +41,14 @@ npm run app
 npm run login
 ```
 
+
+## 贡献
+
+<a href="https://github.com/yunzai-org/yunzaijs/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=yunzai-org/yunzaijs" />
+</a>
+
+
 ## 致谢
 
 |                           Nickname                            | Contribution         |
