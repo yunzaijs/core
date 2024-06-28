@@ -219,6 +219,18 @@ export class ProcessConfig {
     }
   }
 
+
+  /**
+  * 群配置
+  * @param groupId 
+  * @returns 
+  */
+  getGroup(groupId: number | string = '') {
+    const config = this.group
+    if (config[groupId]) return { ...config.default, ...config[groupId] }
+    return { ...config.default }
+  }
+
 }
 
 /**
@@ -232,19 +244,6 @@ class ConfigController extends ProcessConfig {
     // 继承
     super()
   }
-
-  /**
-   * 群配置
-   * @param groupId 
-   * @deprecated 已废弃 请使用 this.group
-   * @returns 
-   */
-  getGroup(groupId: number | string = '') {
-    const config = this.group
-    if (config[groupId]) return { ...config.default, ...config[groupId] }
-    return { ...config.default }
-  }
-
 
   /**
    * @returns 

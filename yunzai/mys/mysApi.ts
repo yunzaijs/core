@@ -2,6 +2,7 @@ import md5 from 'md5'
 import fetch from 'node-fetch'
 import cfg from '../config/config.js'
 import apiTool from './apiTool.js'
+import { REDIS_MYS_GENSHIN } from './system.js'
 
 /**
  *
@@ -289,7 +290,7 @@ export default class MysApi {
    * @returns
    */
   cacheKey(type, data) {
-    return 'Yz:genshin:mys:cache:' + md5(this.uid + type + JSON.stringify(data))
+    return `${REDIS_MYS_GENSHIN}mys:cache:${md5(this.uid + type + JSON.stringify(data))}`
   }
 
   /**

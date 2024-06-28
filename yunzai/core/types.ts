@@ -72,6 +72,18 @@ export interface EventType extends GroupMessage {
    */
   group_avatar: string
   /**
+   * 是否存在at
+   */
+  at?: any
+  /**
+   * 是否at了机器人
+   */
+  atBot: any
+  /**
+   * 携带的文件
+   */
+  file: any
+  /**
    * 被执行的地址
    */
   logText: string
@@ -147,10 +159,6 @@ export interface EventType extends GroupMessage {
   /**
    * @deprecated 已废弃
    */
-  file: any
-  /**
-   * @deprecated 已废弃
-   */
   bot: typeof Client.prototype
   /**
    *
@@ -172,16 +180,6 @@ export interface EventType extends GroupMessage {
    * @deprecated 已废弃
    */
   detail_type?: any
-  /**
-   *
-   * @deprecated 已废弃
-   */
-  at?: any
-  /**
-   *
-   * @deprecated 已废弃
-   */
-  atBot: any
   /**
    *
    * @deprecated 已废弃

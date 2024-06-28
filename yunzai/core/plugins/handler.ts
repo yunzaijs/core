@@ -1,38 +1,34 @@
 import { types } from 'node:util'
 import { orderBy } from 'lodash-es'
 
-/**
- * 
- */
-const events = {}
+class Handler {
+  /**
+   * 
+   */
+  #events = {}
 
-/**
- * 
- */
-const Handler = {
   /**
    * 
    * @param cfg 
    * @returns 
    */
   add(cfg) {
-    let { ns, fn, self, property = 50 } = cfg
-    let key = cfg.key || cfg.event
-    if (!key || !fn) {
-      return
-    }
-    Handler.del(ns, key)
+    const { ns, fn, self, property = 50 } = cfg
+    const key = cfg.key || cfg.event
+    if (!key || !fn) return
+    this.del(ns, key)
     logger.mark(`[Handler][Reg]: [${ns}][${key}]`)
-    events[key] = events[key] || []
-    events[key].push({
+    this.#events[key] = this.#events[key] || []
+    this.#events[key].push({
       property,
       fn,
       ns,
       self,
       key
     })
-    events[key] = orderBy(events[key], ['priority'], ['asc'])
-  },
+    this.#events[key] = orderBy(this.#events[key], ['priority'], ['asc'])
+  }
+
   /**
    * 
    * @param ns 
@@ -41,32 +37,32 @@ const Handler = {
    */
   del(ns, key = '') {
     if (!key) {
-      for (let key in events) {
-        Handler.del(ns, key)
+      for (let key in this.#events) {
+        this.del(ns, key)
       }
       return
     }
-    if (!events[key]) {
-      return
-    }
-    for (let idx = 0; idx < events[key].length; idx++) {
-      let handler = events[key][idx]
+    if (!this.#events[key]) return
+    for (let idx = 0; idx < this.#events[key].length; idx++) {
+      const handler = this.#events[key][idx]
       if (handler.ns === ns) {
-        events[key].splice(idx, 1)
-        events[key] = orderBy(events[key], ['priority'], ['asc'])
+        this.#events[key].splice(idx, 1)
+        this.#events[key] = orderBy(this.#events[key], ['priority'], ['asc'])
       }
     }
-  },
+  }
+
   /**
    * 
    * @param key 
    * @param e 
    * @param args 
    */
-  async callAll(_, __, ___) {
+  async callAll(key, e, args) {
     // 暂时屏蔽调用
-    // return Handler.call(key, e, args, true)
-  },
+    return this.call(key, e, args, true)
+  }
+
   /**
    * 
    * @param key 
@@ -77,7 +73,7 @@ const Handler = {
    */
   async call(key, e, args, allHandler = false) {
     let ret
-    for (let obj of events[key]) {
+    for (let obj of this.#events[key]) {
       let fn = obj.fn
       let done = true
       let reject = (msg = '') => {
@@ -96,18 +92,19 @@ const Handler = {
       }
     }
     return ret
-  },
+  }
+
   /**
    * 
    * @param key 
    * @returns 
    */
   has(key) {
-    return !!events[key]
+    return !!this.#events[key]
   }
 }
 
 /**
  * 
  */
-export default Handler
+export default new Handler()

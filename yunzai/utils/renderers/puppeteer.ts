@@ -1,26 +1,11 @@
 import os from "node:os"
 import lodash from "lodash"
 import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer"
-/**
- * 
- */
 import Renderer from "../renderer/Renderer.js"
-/**
- * 暂时保留对原config的兼容
- */
 import cfg from "../../config/config.js"
-
-/**
- * 
- */
+import { REDIS_CHROMIUM_KEY } from "../../config/system.js"
 const _path = process.cwd()
-
-
-/**
- * mac地址
- */
 let mac = ""
-
 /**
  * 这是被废弃的截图工具
  * 请积极使用最新版
@@ -83,7 +68,7 @@ export default class Puppeteer extends Renderer {
       // 获取Mac地址
       if (!mac) {
         mac = await this.getMac()
-        this.browserMacKey = `Yz:chromium:browserWSEndpoint:${mac}`
+        this.browserMacKey = `${REDIS_CHROMIUM_KEY}browserWSEndpoint:${mac}`
       }
       // 是否有browser实例
       const browserUrl = (await redis.get(this.browserMacKey)) || this.config.wsEndpoint

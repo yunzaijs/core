@@ -1,9 +1,10 @@
 import lodash from 'lodash'
 import schedule from 'node-schedule'
 import { segment } from 'icqq'
-import chokidar from 'chokidar'
+// import chokidar from 'chokidar'
 import moment from 'moment'
-import { basename, join } from 'node:path'
+// import { basename, join } from 'node:path'
+import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import { stat, readdir } from 'node:fs/promises'
 // types
@@ -14,76 +15,89 @@ import Handler from './handler.js'
 import cfg from '../../config/config.js'
 // 中间件
 import { MiddlewareStore } from '../middleware/index.js'
-import { PLUGINS_PATH } from '../../config/system.js'
+import { PLUGINS_PATH, REDIS_COUNT_KEY } from '../../config/system.js'
 
 /**
  * 加载插件
  */
-class PluginsLoader {
+class Loader {
   /**
-   *
+   * 指令集
    */
   priority = []
   /**
-   *
+   * handle
    */
   handler = {}
   /**
-   *
+   * 定时任务
    */
   task = []
-
   /**
    * 命令冷却cd
    */
   groupGlobalCD = {}
-
   /**
-   *
+   * cd
    */
   singleCD = {}
-
   /**
-   * 插件监听
-   */
-  watcher = {}
-
-  /**
-   *
+   *  msg
    */
   msgThrottle = {}
-
   /**
-   *
+   * 插件个数
    */
   pluginCount = null
-
   /**
-   *
+   * 事件
    */
   eventMap = {
-    /**
-     *
-     */
     message: ['post_type', 'message_type', 'sub_type'],
-    /**
-     *
-     */
     notice: ['post_type', 'notice_type', 'sub_type'],
-    /**
-     *
-     */
     request: ['post_type', 'request_type', 'sub_type']
   }
 
   /**
-   * 得到插件地址
-   * @returns
+   * 监听事件加载
+   * @param isRefresh 是否刷新
    */
+  async load(isRefresh = false) {
+    // 重置
+    this.delCount()
+    // 累计
+    if (isRefresh) this.priority = []
+    // 如果
+    if (this.priority.length) return
+    // 得到插件地址
+    const files = await this.#getPlugins()
+    logger.info('-----------')
+    logger.info('加载插件中...')
+    this.pluginCount = 0
+    const packageErr = []
+    // 返回成功的
+    await Promise.allSettled(
+      files.map(file => this.#importPlugin(file, packageErr))
+    )
+    this.#packageTips(packageErr)
+    this.createTask()
+    logger.info(`加载定时任务[${this.task.length}个]`)
+    logger.info(`加载插件[${this.pluginCount}个]`)
+    /** 优先级排序 */
+    this.priority = lodash.orderBy(this.priority, ['priority'], ['asc'])
+  }
+
+  /**
+ * 得到插件地址
+ * @returns
+ */
   #getPlugins = async () => {
     // 便利得到目录和文件
     const files = await readdir(PLUGINS_PATH, { withFileTypes: true })
-    const ret = []
+    const ret: {
+      name: string,
+      path: string
+    }[] = []
     for (const val of files) {
       // 是文件
       if (val.isFile()) continue
@@ -107,52 +121,19 @@ class PluginsLoader {
   }
 
   /**
-   * 监听事件加载
-   * @param isRefresh 是否刷新
-   */
-  async load(isRefresh = false) {
-    // 重置
-    this.delCount()
-    // 累计
-    if (isRefresh) this.priority = []
-    // 如果
-    if (this.priority.length) return
-
-    // 得到插件地址
-    const files = await this.#getPlugins()
-
-    logger.info('-----------')
-    logger.info('加载插件中...')
-
-    this.pluginCount = 0
-    const packageErr = []
-
-    // 返回成功的
-    await Promise.allSettled(
-      files.map(file => this.#importPlugin(file, packageErr))
-    )
-
-    this.packageTips(packageErr)
-    this.createTask()
-
-    logger.info(`加载定时任务[${this.task.length}个]`)
-    logger.info(`加载插件[${this.pluginCount}个]`)
-
-    /** 优先级排序 */
-    this.priority = lodash.orderBy(this.priority, ['priority'], ['asc'])
-  }
-
-  /**
    * 引入插件
    * @param file
    * @param packageErr
    */
-  #importPlugin = async (file, packageErr?: any) => {
+  #importPlugin = async (file: {
+    name: string;
+    path: string;
+  }, packageErr?: any) => {
     try {
       const app = await import(`file://${join(process.cwd(), file.path)}`)
       const pluginArray = []
       for (const key in app.apps) {
-        pluginArray.push(this.loadPlugin(file, app.apps[key], key))
+        pluginArray.push(this.#loadPlugin(file, app.apps[key], key))
       }
       for (const i of await Promise.allSettled(pluginArray))
         if (i?.status && i.status != 'fulfilled') {
@@ -177,41 +158,26 @@ class PluginsLoader {
    * @param name
    * @returns
    */
-  async loadPlugin(file, p, name) {
+  async #loadPlugin(file: {
+    name: string;
+    path: string;
+  }, p: any, name: string) {
     // 不存在原型链
     if (!p?.prototype) return
-
-    /**
-     *
-     */
+    // 记数
     this.pluginCount++
-
-    /**
-     *
-     */
+    // 实例化
     const plugin = new p()
-
-    /**
-     *
-     */
+    // 打印
     logger.debug(`加载插件 [${file.name}][${name}]`)
-
-    /**
-     * 执行初始化，返回 return 则跳过加载
-     */
+    // 执行初始化，返回 return 则跳过加载
     if (plugin.init && (await plugin.init()) == 'return') return
-
-    /**
-     * 初始化定时任务
-     */
+    // 初始化定时任务
     this.collectTask(plugin.task)
-
-    /**
-     *
-     */
+    // 
     this.priority.push({
       // tudo 不标准写法 - -- 使用 关键词
-      class: p,
+      plugin: p,
       // 插件名
       key: file.name,
       // 单例名
@@ -219,18 +185,11 @@ class PluginsLoader {
       // 优先级
       priority: plugin.priority
     })
-
-    /**
-     *
-     */
+    // 
     if (plugin.handler) {
-      /**
-       *
-       */
+      // 
       lodash.forEach(plugin.handler, ({ fn, key, priority }) => {
-        /**
-         *
-         */
+        // 
         Handler.add({
           ns: plugin.namespace || file.name,
           key,
@@ -247,7 +206,7 @@ class PluginsLoader {
    * @param packageErr
    * @returns
    */
-  packageTips(packageErr) {
+  #packageTips(packageErr) {
     if (!packageErr || packageErr.length <= 0) return
     logger.mark('--------插件载入错误--------')
     packageErr.forEach(v => {
@@ -262,48 +221,37 @@ class PluginsLoader {
   }
 
   /**
-   * 处理事件
-   * 参数文档 https://oicqjs.github.io/oicq/interfaces/GroupMessageEvent.html
-   * 这里是每个事件发送的入口
+   * 事件消息入口 是所有事件的集合
+   * 总而言之是个大杂烩
+   * 做了一堆工作。
+   * 这是不好的
+   * tudo
+   * 需要对 插件的时间  和 接收事件  进行一对一匹配
+   * 增加执行效率
    * @param e icqq Events
    */
   async deal(e: EventType) {
-
     // 代理 bot 属性  访问时获取参数
     Object.defineProperty(e, 'bot', {
       value: global.Bot[e?.self_id ?? global.Bot.uin]
     })
 
-    /**
-     * 检查频道消息
-     */
+    // 检查频道消息
     if (this.checkGuildMsg(e)) return
 
-    /**
-     * 冷却
-     */
+    // 冷却
     if (!this.checkLimit(e)) return
 
-    /**
-     * 重新处理e
-     */
+    // 消息处理中间件 - 处理 e 为yunzai 的 e
     this.dealMsg(e)
 
-    /**
-     * 检查黑白名单
-     */
+    // 检查黑白名单
     if (!this.checkBlack(e)) return
 
-    /**
-     * 消息中间件
-     * 重新构造了this.reply()
-     * 处理回复
-     */
+    // 消息中间件 - 重新构造 e.reply 衍生了  e.replyNew
     this.reply(e)
 
-    /**
-     * 执行中间间
-     */
+    // 消息处理中间件
     const map = MiddlewareStore.value('message')
     for (const [_, middleware] of map) {
       if (Array.isArray(middleware.names)) {
@@ -319,40 +267,34 @@ class PluginsLoader {
       }
     }
 
-    /**
-     *
-     */
+    // 被new 起来的 priority
     const priority = []
 
 
-    /**
-     *
-     */
+    // 开始 new
     for (const i of this.priority) {
-      const p = new i.class(e)
+      const p = new i.plugin(e)
       // 现在给e，后续e将无法访问新增字段
       p._key = i.key
       p._name = i.name
       p.e = e
-      /**
-       * 判断是否启用功能，过滤事件
-       */
+      //判断是否启用功能，过滤事件
       if (this.checkDisable(p) && this.filtEvent(e, p)) priority.push(p)
     }
 
-    /**
-     *
-     */
+    // 开始上下文执行
     for (const plugin of priority) {
+      // 不存在
       if (!plugin?.getContext) continue
+
+      //
       const context = {
         ...plugin.getContext(),
         ...plugin.getContext(false, true)
       }
 
-      if (lodash.isEmpty(context)) {
-        continue
-      }
+      // 是空的
+      if (lodash.isEmpty(context)) continue
 
       // 不为空的时候
       let ret = false
@@ -360,31 +302,23 @@ class PluginsLoader {
       // 从方法里执行
       for (const fnc in context) {
         // 不是函数，错误插件错误写法
-        if (typeof plugin[fnc] !== 'function') {
-          continue
-        }
+        if (typeof plugin[fnc] !== 'function') continue
+        // 得到 函数指令的返回值
         ret = await plugin[fnc](context[fnc])
       }
 
-      // 不是约定的直接
-      if (typeof ret != 'boolean' && ret !== true) {
-        break
-      }
+      // 不是 boolean  而且 不为 true
+      if (typeof ret != 'boolean' && ret !== true) break
 
-      //
     }
 
-    /**
-     * 是否只关注主动at
-     */
+    // 是否只关注主动at
     if (!this.onlyReplyAt(e)) return
 
-    /**
-     * 优先执行 accept
-     */
+    // 优先执行 accept 。不进行匹配就会执行的方法
     for (const plugin of priority) {
       if (!plugin.accept) continue
-      // e 引入将丢失
+      //
       const res = await plugin.accept(e)
       // 结束所有
       if (res == 'return') return
@@ -392,55 +326,43 @@ class PluginsLoader {
       if (res) break
     }
 
-    /**
-     * 便利执行
-     */
+    //便利执行
     for (const plugin of priority) {
+      // 空的
       if (!Array.isArray(plugin?.rule) || plugin.rule.length < 1) continue
+      //
       for (const v of plugin.rule) {
-        /**
-         * 判断事件
-         */
+        // 判断事件 不是过滤的
         if (v.event && !this.filtEvent(e, v)) continue
-        /**
-         *
-         */
+        // 不是函数。
+        if (typeof plugin[v.fnc] !== 'function') continue
+        // 校验正则
         if (!new RegExp(v.reg).test(e.msg)) continue
 
-        // tudo 恢复引用
+        // 打印前缀
         e.logFnc = `[${plugin._key}][${plugin._name}][${v.fnc}]`
 
-        /**
-         *
-         */
+        // 打印
         if (v.log !== false) {
           logger.info(
             `${e.logFnc}${e.logText} ${lodash.truncate(e.msg, { length: 100 })}`
           )
         }
-        /**
-         * 判断权限
-         */
+
+        // 判断权限
         if (!this.filtPermission(e, v)) break
-        /**
-         *
-         */
+
+        //
         try {
+          // 开始时间
           const start = Date.now()
-          // 不是函数。
-          if (typeof plugin[v.fnc] !== 'function') {
-            continue
-          }
-
-          //
-
+          // 执行
           const res = await plugin[v.fnc](e)
-          // 非常规返回，不是true，直接结束。
+          // 不是 bool 而且 不为true  直接结束
           if (typeof res != 'boolean' && res !== true) {
-            /**
-             * 设置冷却cd
-             */
+            // 设置冷却cd
             this.setLimit(e)
+            // 打印
             if (v.log !== false) {
               logger.mark(
                 `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
@@ -460,60 +382,6 @@ class PluginsLoader {
     //
   }
 
-  /**
-   * 过滤事件
-   * @param e
-   * @param v
-   * @returns
-   */
-  filtEvent(e: EventType, v) {
-    if (!v.event) return false
-    const event = v.event.split('.')
-    const eventMap = this.eventMap[e.post_type] || []
-    const newEvent = []
-    for (const i in event) {
-      if (event[i] == '*') newEvent.push(event[i])
-      else newEvent.push(e[eventMap[i]])
-    }
-    return v.event == newEvent.join('.')
-  }
-
-  /**
-   * 判断权限
-   * @param e
-   * @param v
-   * @returns
-   */
-  filtPermission(e: EventType, v) {
-    if (v.permission == 'all' || !v.permission) return true
-    if (v.permission == 'master') {
-      if (e.isMaster) {
-        return true
-      } else {
-        e.reply('暂无权限，只有主人才能操作')
-        return false
-      }
-    }
-    if (e.isGroup) {
-      if (!e.member?._info) {
-        e.reply('数据加载中，请稍后再试')
-        return false
-      }
-      if (v.permission == 'owner') {
-        if (!e.member.is_owner) {
-          e.reply('暂无权限，只有群主才能操作')
-          return false
-        }
-      }
-      if (v.permission == 'admin') {
-        if (!e.member.is_admin) {
-          e.reply('暂无权限，只有管理员才能操作')
-          return false
-        }
-      }
-    }
-    return true
-  }
 
   /**
    * 
@@ -536,24 +404,36 @@ class PluginsLoader {
    * @param e.atBot 支持频道
    */
   dealMsg(e: EventType) {
+    // 存在消息
     if (e.message) {
-      for (let val of e.message) {
+
+      //
+
+      for (const val of e.message) {
+
+        // 消息类型
         switch (val.type) {
-          case 'text':
+          case 'text': {
+
+            // 创建了  e.msg
             e.msg =
               (e.msg || '') +
               (val.text || '')
                 .replace(/^\s*[＃井#]+\s*/, '#')
                 .replace(/^\s*[\\*※＊]+\s*/, '*')
                 .trim()
+
+            //
             break
-          case 'image':
-            if (!e.img) {
-              e.img = []
-            }
+          }
+          case 'image': {
+            // 创建了  e.img
+            if (!e.img) e.img = []
             e.img.push(val.url)
             break
-          case 'at':
+          }
+          case 'at': {
+            // 创建了 atBot at
             if (val.qq == e.bot.uin) {
               e.atBot = true
             } else if (e.bot.tiny_id && val.id == e.bot.tiny_id) {
@@ -565,23 +445,36 @@ class PluginsLoader {
               e.at = val.qq
             }
             break
-          case 'file':
+          }
+          case 'file': {
+            // 创建了 file
             e.file = { name: val.name, fid: val.fid }
             break
-          case 'xml':
-          case 'json':
+          }
+          case 'xml': {
+            //
+            break
+          }
+          case 'json': {
+            // 创建了  msg
             e.msg =
               (e.msg || '') +
               (typeof val.data == 'string'
                 ? val.data
                 : JSON.stringify(val.data))
             break
+          }
+          default: {
+            break
+          }
         }
+
+        //
       }
     }
 
     /**
-     *
+     * 创建打文本
      */
     e.logText = ''
 
@@ -589,12 +482,15 @@ class PluginsLoader {
      * 私聊
      */
     if (e.message_type === 'private' || e.notice_type === 'friend') {
+
+      // 是私聊
       e.isPrivate = true
 
       // 存在
       if (e.sender) {
         e.sender.card = e.sender?.nickname
       } else {
+        //
         e.sender = {} as any
         // 不存在
         e.sender = {
@@ -602,6 +498,8 @@ class PluginsLoader {
           nickname: e.friend?.nickname
         } as any
       }
+
+      //创建打文本
       e.logText = `[私聊][${e.sender?.nickname}(${e.user_id})]`
     }
 
@@ -609,7 +507,8 @@ class PluginsLoader {
      * 群聊
      */
     if (e.message_type === 'group' || e.notice_type === 'group') {
-      //
+
+      // 是群聊
       e.isGroup = true
 
       // 存在
@@ -633,8 +532,10 @@ class PluginsLoader {
         } as any
       }
 
+      // 不存在群名
       if (!e.group_name) e.group_name = e.group?.name
 
+      //创建打文本
       e.logText = `[${e.group_name}(${e.sender.card})]`
 
       //
@@ -644,22 +545,24 @@ class PluginsLoader {
     }
 
     if (!e.user_id) {
+      // 用户编号
       e.user_id = e.sender?.user_id
     }
     if (e?.user_id) {
+      // 用户头像
       e.user_avatar = `https://q1.qlogo.cn/g?b=qq&s=0&nk=${e.user_id}`
     }
     if (e?.group_id) {
+      // 群聊头像
       e.group_avatar = `https://p.qlogo.cn/gh/${e.group_id}/${e.group_id}/640/`
     }
     if (e.sender?.nickname) {
+      // 用户名
       e.user_name = e.sender?.nickname
     }
 
-    /**
-     *
-     */
     if (e.user_id && cfg.masterQQ.includes(String(e.user_id))) {
+      // 是主人
       e.isMaster = true
     }
 
@@ -680,11 +583,12 @@ class PluginsLoader {
         }
       }
     }
+
+
+    //
   }
 
   /**
-   * 处理回复
-   * 捕获发送失败异常
    * 重写this.reply
    * @param e
    */
@@ -880,161 +784,88 @@ class PluginsLoader {
   }
 
   /**
+ * **************
+ * 记数 start
+ */
+
+  /**
    *
    * @param e
    * @param msg
    */
   count(e, msg) {
-    /**
-     *
-     */
+    //
     let screenshot = false
-    /**
-     *
-     */
+    //
     if (msg && msg?.file && Buffer.isBuffer(msg?.file)) {
       screenshot = true
     }
-
-    /**
-     *
-     */
+    //
     this.saveCount('sendMsg')
-    /**
-     *
-     */
+    //
     if (screenshot) this.saveCount('screenshot')
-
-    /**
-     *
-     */
+    //
     if (e.group_id) {
-      /**
-       *
-       */
+      //
       this.saveCount('sendMsg', e.group_id)
-      /**
-       *
-       */
+      //
       if (screenshot) this.saveCount('screenshot', e.group_id)
     }
   }
 
   /**
    *
+   * 保持计数
    * @param type
    * @param groupId
    */
   saveCount(type, groupId = '') {
-    /**
-     *
-     */
-    let key = 'Yz:count:'
-
-    /**
-     *
-     */
+    //
+    let key = REDIS_COUNT_KEY
+    //
     if (groupId) {
-      /**
-       *
-       */
       key += `group:${groupId}:`
     }
-
-    /**
-     *
-     */
-    let dayKey = `${key}${type}:day:${moment().format('MMDD')}`
-    /**
-     *
-     */
-    let monthKey = `${key}${type}:month:${Number(moment().month()) + 1}`
-    /**
-     *
-     */
-    let totalKey = `${key}${type}:total`
-
-    /**
-     *
-     */
+    //
+    const dayKey = `${key}${type}:day:${moment().format('MMDD')}`
+    //
+    const monthKey = `${key}${type}:month:${Number(moment().month()) + 1}`
+    //
+    const totalKey = `${key}${type}:total`
+    //
     redis.incr(dayKey)
-    /**
-     *
-     */
+    //
     redis.incr(monthKey)
-    /**
-     *
-     */
+    //
     if (!groupId) redis.incr(totalKey)
-    /**
-     *
-     */
+    //
     redis.expire(dayKey, 3600 * 24 * 30)
-    /**
-     *
-     */
+    //
     redis.expire(monthKey, 3600 * 24 * 30)
   }
 
   /**
-   *
+   * 删除记数
    */
   delCount() {
-    /**
-     *
-     */
-    let key = 'Yz:count:'
-    /**
-     *
-     */
-    redis.set(`${key}sendMsg:total`, '0')
-    /**
-     *
-     */
-    redis.set(`${key}screenshot:total`, '0')
+    //
+    redis.set(`${REDIS_COUNT_KEY}sendMsg:total`, '0')
+    //
+    redis.set(`${REDIS_COUNT_KEY}screenshot:total`, '0')
   }
 
-  /**
-   * 收集定时任务
-   * @param task
-   */
-  collectTask(task) {
-    /**
-     *
-     */
-    for (const i of Array.isArray(task) ? task : [task]) {
-      if (i?.cron && i?.name) {
-        this.task.push(i)
-      }
-    }
-  }
 
   /**
-   * 创建定时任务
+ * 记数 end
+ * **************
+ */
+
+
+  /**
+   * **************
+   * 冷却 start
    */
-  createTask() {
-    /**
-     *
-     */
-    for (const i of this.task) {
-      /**
-       *
-       */
-      i.job = schedule.scheduleJob(i?.cron, async () => {
-        /**
-         *
-         */
-        try {
-          if (i.log == true) logger.mark(`开始定时任务：${i.name}`)
-          await i.fnc()
-          if (i.log == true) logger.mark(`定时任务完成：${i.name}`)
-        } catch (error) {
-          logger.error(`定时任务报错：${i.name}`)
-          logger.error(error)
-        }
-      })
-    }
-  }
+
 
   /**
    * 检查命令冷却cd
@@ -1044,52 +875,29 @@ class PluginsLoader {
   checkLimit(e: EventType) {
     /** 禁言中 */
     if (e.isGroup && e?.group?.mute_left > 0) return false
-    /**
-     *
-     */
+    // 消息不存在，或者是私聊
     if (!e.message || e.isPrivate) return true
-
-    /**
-     *
-     */
-    let config = cfg.getGroup(String(e.group_id))
-
-    /**
-     *
-     */
+    // 得到群聊配置
+    const config = cfg.getGroup(e.group_id)
+    //
     if (config.groupGlobalCD && this.groupGlobalCD[e.group_id]) {
       return false
     }
-    /**
-     *
-     */
+    //
     if (config.singleCD && this.singleCD[`${e.group_id}.${e.user_id}`]) {
       return false
     }
-
-    /**
-     *
-     */
-    let { msgThrottle } = this
-
-    /**
-     *
-     */
-    let msgId = e.user_id + ':' + e.raw_message
-    if (msgThrottle[msgId]) {
-      return false
-    }
-    /**
-     *
-     */
+    //
+    const { msgThrottle } = this
+    //
+    const msgId = e.user_id + ':' + e.raw_message
+    if (msgThrottle[msgId]) return false
+    //
     msgThrottle[msgId] = true
-    /**
-     *
-     */
+    //
     setTimeout(() => {
       delete msgThrottle[msgId]
     }, 200)
-
     return true
   }
 
@@ -1099,32 +907,32 @@ class PluginsLoader {
    * @returns
    */
   setLimit(e: EventType) {
-    /**
-     *
-     */
+    // 不存在，且是私聊
     if (!e.message || e.isPrivate) return
-    /**
-     *
-     */
-    let config = cfg.getGroup(String(e.group_id))
-
-    /**
-     *
-     */
+    // 群聊配置
+    const config = cfg.getGroup(e.group_id)
+    // 锅巴
     if (config.groupGlobalCD) {
       this.groupGlobalCD[e.group_id] = true
       setTimeout(() => {
         delete this.groupGlobalCD[e.group_id]
       }, config.groupGlobalCD)
     }
+    // 
     if (config.singleCD) {
-      let key = `${e.group_id}.${e.user_id}`
+      const key = `${e.group_id}.${e.user_id}`
       this.singleCD[key] = true
       setTimeout(() => {
         delete this.singleCD[key]
       }, config.singleCD)
     }
   }
+
+
+  /**
+   * 冷却 end
+   * **************
+   */
 
   /**
    * 是否只关注主动at
@@ -1133,22 +941,16 @@ class PluginsLoader {
    */
   onlyReplyAt(e: EventType) {
     if (!e.message || e.isPrivate) return true
-
     // 群聊配置
     const groupCfg = cfg.getGroup(e.group_id)
-
     /** 模式0，未开启前缀 */
     if (groupCfg.onlyReplyAt == 0 || !groupCfg.botAlias) return true
-
     /** 模式2，非主人需带前缀或at机器人 */
     if (groupCfg.onlyReplyAt == 2 && e.isMaster) return true
-
     /** at机器人 */
     if (e.atBot) return true
-
     /** 消息带前缀 */
     if (e.hasAlias) return true
-
     return false
   }
 
@@ -1168,7 +970,6 @@ class PluginsLoader {
    */
   checkBlack(e: EventType) {
     const other = cfg.other
-
     /** 黑名单qq */
     if (other.blackQQ?.length) {
       if (other.blackQQ.includes(Number(e.user_id) || String(e.user_id)))
@@ -1195,7 +996,6 @@ class PluginsLoader {
       )
         return false
     }
-
     return true
   }
 
@@ -1204,7 +1004,7 @@ class PluginsLoader {
    * @param p
    * @returns
    */
-  checkDisable(p) {
+  checkDisable(p: any) {
     const groupCfg = cfg.getGroup(p.e.group_id)
     if (groupCfg.disable?.length && groupCfg.disable.includes(p.name))
       return false
@@ -1213,121 +1013,172 @@ class PluginsLoader {
     return true
   }
 
+
+
   /**
-   *
+   * 过滤事件
+   * @param e
+   * @param v
+   * @returns
+   */
+  filtEvent(e: EventType, v: {
+    event: string
+  }) {
+    if (!v.event) return false
+    const event = v.event.split('.')
+    const eventMap = this.eventMap[e.post_type] || []
+    const newEvent = []
+    //
+    for (const i in event) {
+      if (event[i] == '*') newEvent.push(event[i])
+      else newEvent.push(e[eventMap[i]])
+    }
+    //
+    return v.event == newEvent.join('.')
+  }
+
+  /**
+   * 判断权限
+   * @param e
+   * @param v
+   * @returns
+   */
+  filtPermission(e: EventType, v) {
+    if (v.permission == 'all' || !v.permission) return true
+    if (v.permission == 'master') {
+      if (e.isMaster) {
+        return true
+      } else {
+        e.reply('暂无权限，只有主人才能操作')
+        return false
+      }
+    }
+    if (e.isGroup) {
+      if (!e.member?._info) {
+        e.reply('数据加载中，请稍后再试')
+        return false
+      }
+      if (v.permission == 'owner') {
+        if (!e.member.is_owner) {
+          e.reply('暂无权限，只有群主才能操作')
+          return false
+        }
+      }
+      if (v.permission == 'admin') {
+        if (!e.member.is_admin) {
+          e.reply('暂无权限，只有管理员才能操作')
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  /**
+   * **************
+   * 定时任务的设计 start
+   */
+
+
+  /**
+ * 收集定时任务
+ * @param task
+ */
+  collectTask(task) {
+    for (const i of Array.isArray(task) ? task : [task]) {
+      if (i?.cron && i?.name) {
+        this.task.push(i)
+      }
+    }
+  }
+
+
+  /**
+   * tudo
+   * 创建定时任务
+   * ********************************
+   * 定时任务 是 个 无效的 设计，
+   * 因为 e 是会丢失的，
+   * 但很多开发者 误以为 fnc 和 常规的回调一样能进行，
+   * 这对新人开发插件来说是毁灭性的打击，
+   * 我们应该避免把所有概念都拥堵在一个pluin里，
+   * ********************************
+   * 若想设计成定时可指令的方法，
+   * 应该采用订阅发布模型，
+   * 使用BOT变量去发送消息，
+   * 或者对BOT进行二次封装，
+   * 让开发更容易理解。
+   */
+  createTask() {
+    // 便利存储好的定时任务
+    for (const i of this.task) {
+      // 开始定时
+      i.job = schedule.scheduleJob(i?.cron, async () => {
+        // 指令
+        try {
+          if (i.log == true) logger.mark(`开始定时任务：${i.name}`)
+          await i.fnc()
+          if (i.log == true) logger.mark(`定时任务完成：${i.name}`)
+        } catch (error) {
+          logger.error(`定时任务报错：${i.name}`)
+          logger.error(error)
+        }
+        //
+      })
+    }
+  }
+
+
+  /**
+   * 定时任务的设计 end
+   * **************
+   */
+
+}
+
+
+/**
+ * 加载插件
+ */
+class PluginsLoader extends Loader {
+  /**
+   * 插件监听
+   * @deprecated 已废弃
+   */
+  watcher = {}
+
+  /**
+   * 
+   * @deprecated 已废弃 会内存爆炸的机制
    * @param key
    */
   async changePlugin(key) {
-    try {
-      let app = await import(`../../${PLUGINS_PATH}/${key}?${moment().format('x')}`)
-      if (app.apps) app = { ...app.apps }
-      lodash.forEach(app, p => {
-        const plugin = new p()
-        for (const i in this.priority)
-          if (
-            this.priority[i].key == key &&
-            this.priority[i].name == plugin.name
-          ) {
-            this.priority[i].class = p
-            this.priority[i].priority = plugin.priority
-          }
-      })
-      this.priority = lodash.orderBy(this.priority, ['priority'], ['asc'])
-    } catch (error) {
-      logger.error(`加载插件错误：${logger.red(key)}`)
-      logger.error(decodeURI(error.stack))
-    }
+    return
   }
 
   /**
    * 监听热更新
+   * @deprecated 已废弃 会内存爆炸的机制
    * @param dirName
    * @param appName
    * @returns
    */
   watch(dirName, appName) {
-    this.watchDir(dirName)
-    if (this.watcher[`${dirName}.${appName}`]) return
-
-    const file = `./${PLUGINS_PATH}/${dirName}/${appName}`
-    const watcher = chokidar.watch(file)
-    const key = `${dirName}/${appName}`
-
-    /**
-     * 监听修改
-     */
-    watcher.on('change', () => {
-      logger.mark(`[修改插件][${dirName}][${appName}]`)
-      this.changePlugin(key)
-    })
-
-    /**
-     * 监听删除
-     */
-    watcher.on('unlink', () => {
-      logger.mark(`[卸载插件][${dirName}][${appName}]`)
-      /** 停止更新监听 */
-      this.watcher[`${dirName}.${appName}`].removeAllListeners('change')
-      // lodash.remove(this.priority, { key })
-      for (let i = this.priority.length - 1; i >= 0; i--) {
-        if (this.priority[i].key === key) {
-          this.priority.splice(i, 1)
-        }
-      }
-    })
-    this.watcher[`${dirName}.${appName}`] = watcher
+    return
   }
 
   /**
-   * 监听文件夹更新
+   * @deprecated 已废弃 会内存爆炸的机制
    * @param dirName
    * @returns
    */
   watchDir(dirName) {
-    if (this.watcher[dirName]) return
-
-    //
-    const watcher = chokidar.watch(`./${PLUGINS_PATH}/${dirName}/`)
-
-    /**
-     * 热更新
-     */
-    setTimeout(() => {
-      /**
-       * 新增文件
-       */
-      watcher.on('add', async PluPath => {
-        const appName = basename(PluPath)
-        /**
-         */
-        if (!/^(.js|.ts)$/.test(appName)) return
-        logger.mark(`[新增插件][${dirName}][${appName}]`)
-        const key = `${dirName}/${appName}`
-        /**
-         *
-         */
-        await this.#importPlugin({
-          name: key,
-          path: `../../${PLUGINS_PATH}/${key}?${moment().format('X')}`
-        })
-        /**
-         * 优先级排序
-         */
-        this.priority = lodash.orderBy(this.priority, ['priority'], ['asc'])
-        /**
-         *
-         */
-        this.watch(dirName, appName)
-      })
-    }, 10000)
-    this.watcher[dirName] = watcher
-
-
-    //
+    return
   }
+
 }
 
 /**
- *
+ * 插件控制器
  */
 export default new PluginsLoader()

@@ -16,6 +16,10 @@ export const BOT_NAME = 'Yunzai'
 export const REDIS_ROOT_KEY = 'Yz:cache:'
 // redis 机器人登录控制key
 export const REDIS_BOT_LOGIN_KEY = 'Yz:loginMsg:'
+//
+export const REDIS_COUNT_KEY = 'Yz:count:'
+//
+export const REDIS_CHROMIUM_KEY = 'Yz:chromium:'
 
 // import { dirname, join } from 'path'
 // import { fileURLToPath } from 'url'
