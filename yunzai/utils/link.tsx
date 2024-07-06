@@ -1,9 +1,6 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
-const output = require('../../public/output.css')
-const main = require('../main.css')
+import { MainCSS, OutputCSS } from '../css.url'
 /**
  * 得到基础link组件
  * @returns
@@ -11,8 +8,8 @@ const main = require('../main.css')
 export const getLink = () => {
   return renderToString(
     <>
-      <link rel="stylesheet" href={output} />
-      <link rel="stylesheet" href={main} />
+      <link rel="stylesheet" href={OutputCSS} />
+      <link rel="stylesheet" href={MainCSS} />
     </>
   )
 }

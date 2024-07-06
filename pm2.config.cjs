@@ -4,7 +4,7 @@
 module.exports = {
   apps: [
     {
-      name: 'Miao-Yunzai',
+      name: 'yunzaijs',
       script: './app.js',
       args: [...process.argv].slice(4),
       // 超时时间内进程仍未终止，则 PM2 将强制终止该进程

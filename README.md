@@ -29,25 +29,30 @@ npm install pnpm -g
 pnpm install
 ```
 
+或
+
+```sh
+npm install yarn@1.12.1 -g
+yarn
+```
+
 - 启动
 
 ```sh
-npm run app
+npm run app # yarn app
 ```
 
 - 重新登录
 
 ```sh
-npm run login
+npm run login # yarn login
 ```
-
 
 ## 贡献
 
 <a href="https://github.com/yunzai-org/yunzaijs/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=yunzai-org/yunzaijs" />
 </a>
-
 
 ## 致谢
 

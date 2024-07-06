@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "4.0.18",
+  "version": "4.0.19",
   "author": "Yoimiya-Kokomi, Le-niao",
   "description": "QQ Group Bot",
   "main": "./app.js",
@@ -18,7 +18,7 @@
     "pm2": "pm2",
     "image": "node image.js",
     "css": "tailwindcss -i ./src/input.css -o ./public/output.css",
-    "version": "ts-node src/version.ts",
+    "version": "node --no-warnings=ExperimentalWarning --loader ts-node/esm  src/version.ts",
     "lint": "commitlint --config .commitlint.config.cjs -e -V",
     "format": "prettier --write .",
     "check-format": "git diff --exit-code",

@@ -29,6 +29,13 @@
     },
     "./image": {
       "import": "./image/index.js"
+    },
+    "./tsconfig.json": {
+      "import": "./tsconfig.json",
+      "require": "./tsconfig.json"
+    },
+    "./env": {
+      "types": "./types/yunzai-env.d.ts"
     }
   }
 }
