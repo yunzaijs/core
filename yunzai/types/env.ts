@@ -2,7 +2,7 @@
 type CSSModuleClasses = { readonly [key: string]: string }
 
 // CSS
-declare module '*.css' {}
+declare module '*.css' { }
 
 // images
 declare module '*.apng' {

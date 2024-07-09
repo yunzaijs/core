@@ -31,6 +31,8 @@ pnpm install
 
 或
 
+> yarn不能使用最新版
+
 ```sh
 npm install yarn@1.12.1 -g
 yarn
@@ -46,6 +48,24 @@ npm run app # yarn app
 
 ```sh
 npm run login # yarn login
+```
+
+## 依赖
+
+添加依赖不能使用npm模式
+
+需要使用pnpm或yarn@1.12.1
+
+- pnpm
+
+```sh
+pnpm install ioredis -w
+```
+
+- yarn
+
+```sh
+yarn add ioreids
 ```
 
 ## 贡献
