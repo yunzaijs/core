@@ -133,7 +133,7 @@ export default class MysUser extends BaseModel {
     let ret = await create(await servCache.zKey(tables.detail, uid))
     if (ret) {
       logger.mark(
-        `[米游社查询][uid：${uid}]${logger.green(`[使用已查询ck：${ret.ltuid}]`)}`
+        `[米游社查询][uid：${uid}]${logger.chalk.green(`[使用已查询ck：${ret.ltuid}]`)}`
       )
       return ret
     }
@@ -145,7 +145,7 @@ export default class MysUser extends BaseModel {
     ret = await create(await servCache.zMinKey(tables.detail))
     if (ret) {
       logger.mark(
-        `[米游社查询][uid：${uid}]${logger.green(`[分配查询ck：${ret.ltuid}]`)}`
+        `[米游社查询][uid：${uid}]${logger.chalk.green(`[分配查询ck：${ret.ltuid}]`)}`
       )
       return ret
     }

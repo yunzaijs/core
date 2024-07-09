@@ -1,7 +1,7 @@
 import EventListener from './listener.js'
 import cfg from '../../config/config.js'
 import { relpyPrivate } from '../app/common.js'
-import { BOT_NAME, REDIS_BOT_LOGIN_KEY } from '../../config/system.js'
+import { BOT_NAME, BOT_LOGIN_KEY } from '../../config/system.js'
 
 /**
  * 监听上线事件
@@ -43,7 +43,7 @@ export class EventOnline extends EventListener {
     /**
      *
      */
-    const key = `${REDIS_BOT_LOGIN_KEY}:${global.Bot.uin}`
+    const key = `${BOT_LOGIN_KEY}:${global.Bot.uin}`
 
     /**
      *

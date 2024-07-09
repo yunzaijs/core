@@ -16,39 +16,32 @@ async function redisInit() {
   const rc = cfg.redis
   const redisUn = rc.username || ''
   let redisPw = rc.password ? `:${rc.password}` : ''
-  if (rc.username || rc.password) {
-    redisPw += '@'
-  }
+  if (rc.username || rc.password) redisPw += '@'
+
   const redisUrl = `redis://${redisUn}${redisPw}${rc.host}:${rc.port}/${rc.db}`
+
   let client = createClient({ url: redisUrl })
-  try {
-    logger.info(`正在连接 ${logger.blue(redisUrl)}`)
-    await client.connect()
-  } catch (err) {
-    logger.error(`Redis 错误：${logger.red(err)}`)
-    const cmd =
-      'redis-server --save 900 1 --save 300 10 --daemonize yes' +
-      (await aarch64())
-    logger.info('正在启动 Redis...')
-    await execAsync(cmd)
-    await sleep(1000)
-    try {
-      client = createClient({ url: redisUrl })
-      await client.connect()
-    } catch (err) {
-      logger.error(`Redis 错误：${logger.red(err)}`)
-      logger.error(`请先启动 Redis：${logger.blue(cmd)}`)
-      process.exit()
-    }
-  }
-  client.on('error', async err => {
-    logger.error(`Redis 错误：${logger.red(err)}`)
+
+  /**
+   * 错误结束进程
+   * @param err 
+   */
+  const Error = async (err) => {
+    logger.error(`Redis 错误：${logger.chalk.red(err)}`)
     const cmd =
       'redis-server --save 900 1 --save 300 10 --daemonize yes' +
       (await aarch64())
     logger.error(`请先启动 Redis：${cmd}`)
     process.exit()
-  })
+  }
+
+  try {
+    logger.info(`正在连接 ${logger.chalk.blue(redisUrl)}`)
+    await client.connect()
+  } catch (err) {
+    Error(err)
+  }
+  client.on('error', Error)
   /** 全局变量 redis */
   global.redis = client as any
   logger.info('Redis 连接成功')

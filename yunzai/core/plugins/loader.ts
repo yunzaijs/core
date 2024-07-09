@@ -15,7 +15,7 @@ import Handler from './handler.js'
 import cfg from '../../config/config.js'
 // 中间件
 import { MiddlewareStore } from '../middleware/index.js'
-import { PLUGINS_PATH, REDIS_COUNT_KEY } from '../../config/system.js'
+import { PLUGINS_PATH, BOT_COUNT_KEY } from '../../config/system.js'
 
 /**
  * 
@@ -225,7 +225,7 @@ class Loader {
       }
       for (const i of await Promise.allSettled(pluginArray))
         if (i?.status && i.status != 'fulfilled') {
-          logger.error(`加载插件错误：${logger.red(file.name)}`)
+          logger.error(`加载插件错误：${logger.chalk.red(file.name)}`)
           logger.error(decodeURI(i.reason))
         }
     } catch (error) {
@@ -233,7 +233,7 @@ class Loader {
       if (packageErr && error.stack.includes('Cannot find package')) {
         packageErr.push({ error, file })
       } else {
-        logger.error(`加载插件错误：${logger.red(file.name)}`)
+        logger.error(`加载插件错误：${logger.chalk.red(file.name)}`)
         logger.error(decodeURI(error.stack))
       }
     }
@@ -303,10 +303,10 @@ class Loader {
     logger.mark('--------插件载入错误--------')
     packageErr.forEach(v => {
       let pack = v.error.stack.match(/'(.+?)'/g)[0].replace(/'/g, '')
-      logger.mark(`${v.file.name} 缺少依赖：${logger.red(pack)}`)
-      logger.mark(`新增插件后请执行安装命令：${logger.red('pnpm i')} 安装依赖`)
+      logger.mark(`${v.file.name} 缺少依赖：${logger.chalk.red(pack)}`)
+      logger.mark(`新增插件后请执行安装命令：${logger.chalk.red('pnpm i')} 安装依赖`)
       logger.mark(
-        `如安装后仍未解决可联系插件作者将 ${logger.red(pack)} 依赖添加至插件的package.json dependencies中，或手工安装依赖`
+        `如安装后仍未解决可联系插件作者将 ${logger.chalk.red(pack)} 依赖添加至插件的package.json dependencies中，或手工安装依赖`
       )
     })
     logger.mark('---------------------')
@@ -913,7 +913,7 @@ class Loader {
    */
   saveCount(type, groupId = '') {
     //
-    let key = REDIS_COUNT_KEY
+    let key = BOT_COUNT_KEY
     //
     if (groupId) {
       key += `group:${groupId}:`
@@ -941,9 +941,9 @@ class Loader {
    */
   delCount() {
     //
-    redis.set(`${REDIS_COUNT_KEY}sendMsg:total`, '0')
+    redis.set(`${BOT_COUNT_KEY}sendMsg:total`, '0')
     //
-    redis.set(`${REDIS_COUNT_KEY}screenshot:total`, '0')
+    redis.set(`${BOT_COUNT_KEY}screenshot:total`, '0')
   }
 
 
