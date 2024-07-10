@@ -73,7 +73,7 @@ export default class Puppeteer extends Renderer {
         this.browserMacKey = `${BOT_CHROMIUM_KEY}browserWSEndpoint:${mac}`
       }
       // 是否有browser实例
-      const browserUrl = (await levelStorage.get(this.browserMacKey)) || this.config.wsEndpoint
+      const browserUrl = (await levelStorage.get(this.browserMacKey).then(res => res.toString())) || this.config.wsEndpoint
       if (browserUrl) {
         try {
           const browserWSEndpoint = await puppeteer.connect({ browserWSEndpoint: browserUrl })
