@@ -1,72 +1,8 @@
 # YunzaiJS
 
-> 必要环境 Windows/Linux + Chrome/Chromium/Edge
-
-> 必要环境 Node.js>16.14.0 + Redis>5.0.0
-
-> 推荐环境 Node.js@18.20.3 + Redis@6.0.0
+Yunzai Next 即下一个Yunzai机器人，它是基于Icqq协议所构建的机器人开发框架，可以通过开发插件来扩展机器人的功能。相较于从前的版本，新写法更加简洁，且拥有强大的TS&TSX环境，并基于模块化制作了图片热开发工具。未来将支持更多协议，同时提供进行在线调试、插件开发热更新和管理平台。总之，我们将从代码可维护性、开发效率、响应速度和程序稳定性等多方面进行升级。
 
 [☞点击阅读文档了解更多](https://yunzai-org.github.io/docs/)
-
-## 使用教程
-
-- 安装源码
-
-```sh
-git clone --depth=1 https://github.com/yunzai-org/yunzaijs.git
-```
-
-- 进入目录
-
-```sh
-cd yunzaijs
-```
-
-- 安装依赖
-
-```sh
-npm install pnpm -g
-pnpm install
-```
-
-或
-
-> yarn不能使用最新版
-
-```sh
-npm install yarn@1.12.1 -g
-yarn
-```
-
-- 启动
-
-```sh
-npm run app # yarn app
-```
-
-- 重新登录
-
-```sh
-npm run login # yarn login
-```
-
-## 依赖
-
-添加依赖不能使用npm模式
-
-需要使用pnpm或yarn@1.12.1
-
-- pnpm
-
-```sh
-pnpm install ioredis -w
-```
-
-- yarn
-
-```sh
-yarn add ioreids
-```
 
 ## 贡献
 
@@ -78,6 +14,7 @@ yarn add ioreids
 
 |                           Nickname                            | Contribution         |
 | :-----------------------------------------------------------: | -------------------- |
+| [TRSS-Yunzai](https://github.com/TimeRainStarSky/Yunzai)  | 时雨的Yunzai-Bot V3  |
 | [Yunzai v3.0](https://github.com/yoimiya-kokomi/Miao-Yunzai)  | 喵喵的Yunzai-Bot V3  |
 |      [Yunzai v3.0](https://gitee.com/le-niao/Yunzai-Bot)      | 乐神的Yunzai-Bot V3  |
 | [GardenHamster](https://github.com/GardenHamster/GenshinPray) | 模拟抽卡背景素材来源 |
