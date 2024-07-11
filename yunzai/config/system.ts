@@ -12,15 +12,9 @@ export const MIDDLEWARE_PATH = 'middleware'
 export const SQLITE_DB_DIR = '/data/db'
 // 机器人名称
 export const BOT_NAME = 'Yunzai'
-// redis root
-export const REDIS_ROOT_KEY = 'Yz:cache:'
-// redis 机器人登录控制key
-export const REDIS_BOT_LOGIN_KEY = 'Yz:loginMsg:'
-//
-export const REDIS_COUNT_KEY = 'Yz:count:'
-//
-export const REDIS_CHROMIUM_KEY = 'Yz:chromium:'
-
-// import { dirname, join } from 'path'
-// import { fileURLToPath } from 'url'
-// export const config = join(dirname(fileURLToPath(import.meta.url)), 'config')
+// 机器人登录控制key
+export const BOT_LOGIN_KEY = 'Yz:loginMsg:'
+// 机器计数key
+export const BOT_COUNT_KEY = 'Yz:count:'
+// 机器人浏览器存储key   -- levelStorage
+export const BOT_CHROMIUM_KEY = 'Yz:chromium:'

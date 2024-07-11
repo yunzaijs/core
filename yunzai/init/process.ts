@@ -30,9 +30,8 @@ process.on('unhandledRejection', error => {
  * 退出事件
  */
 process.on('exit', async () => {
-  if (typeof redis != 'undefined') {
-    await redis.save()
-  }
+  // 退出之前，保存redis
+  if (typeof redis != 'undefined') await redis.save()
   if (typeof logger == 'undefined') {
     console.log(`${BOT_NAME} 已停止运行`)
   } else {

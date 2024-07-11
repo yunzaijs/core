@@ -1,7 +1,7 @@
 import moment from 'moment'
 import BaseModel from './BaseModel.js'
 import MysUtil from './MysUtil.js'
-import { REDIS_ROOT_KEY } from '../config/system.js'
+import { BOT_ROOT_KEY } from './system.js'
 
 /**
  *
@@ -12,11 +12,6 @@ const servs = ['mys', 'hoyolab']
  * 超时时间不必精确，直接定24小时即可
  */
 const EX = 3600 * 24
-
-/**
- *
- */
-const redisKeyRoot = REDIS_ROOT_KEY
 
 /**
  * ************
@@ -41,7 +36,7 @@ export default class DailyCache extends BaseModel {
     if (self) {
       return self
     }
-    this.keyPre = `${redisKeyRoot}${storeKey}`
+    this.keyPre = `${BOT_ROOT_KEY}${storeKey}`
     return this._cacheThis()
   }
 
@@ -95,12 +90,12 @@ export default class DailyCache extends BaseModel {
    * 删除过期的DailyCache
    */
   static async clearOutdatedData() {
-    let keys = await redis.keys(`${redisKeyRoot}*`)
+    let keys = await redis.keys(`${BOT_ROOT_KEY}*`)
     const date = moment().format('MM-DD')
     const testReg = new RegExp(
-      `^${redisKeyRoot}(mys|hoyolab|config)-\\d{2}-\\d{2}`
+      `^${BOT_ROOT_KEY}(mys|hoyolab|config)-\\d{2}-\\d{2}`
     )
-    const todayReg = new RegExp(`^${redisKeyRoot}(mys|hoyolab|config)-${date}`)
+    const todayReg = new RegExp(`^${BOT_ROOT_KEY}(mys|hoyolab|config)-${date}`)
     for (let key of keys) {
       if (testReg.test(key) && !todayReg.test(key)) {
         await redis.del(key)

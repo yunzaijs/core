@@ -1,22 +1,5 @@
-import { EventType } from '../types.js'
 import { Plugin } from './plugin.js'
-import { EventMap, PrivateMessageEvent, DiscussMessageEvent } from 'icqq'
-
-// 可去除的keys
-type OmitKeys<T, K extends keyof T> = {
-  [Key in keyof T as Key extends K ? never : Key]: T[Key]
-}
-
-// 去除 'message.group' 键
-type PersonWithoutEmail = OmitKeys<EventMap, 'message.group' | 'message'>
-
-// 扩展
-interface EventEmun extends PersonWithoutEmail {
-  'message.group': (event: EventType) => void
-  'message': (
-    event: EventType
-  ) => void | PrivateMessageEvent | DiscussMessageEvent
-}
+import { EventEmun } from '../types.js'
 
 /**
  * 消息
@@ -26,9 +9,9 @@ export class Messages<T extends keyof EventEmun> {
     event: T
     priority?: number
   } = {
-    event: 'message.group' as T,
-    priority: 9999
-  }
+      event: 'message.group' as T,
+      priority: 9999
+    }
 
   /**
    * 初始化配置

@@ -76,6 +76,7 @@ export class Client extends IcqqClient {
 
 /**
  * 机器人客户端
+ * 是一个Proxy对象
  */
 export const Bot: typeof global.Bot = new Proxy({} as any, {
   get(_, property) {

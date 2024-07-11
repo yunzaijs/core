@@ -154,5 +154,7 @@ public/
 
 /plugins/
 
+/localStorage/
+/levelStorage/
 
 yarn.lock

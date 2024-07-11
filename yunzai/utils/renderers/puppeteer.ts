@@ -3,7 +3,9 @@ import lodash from "lodash"
 import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer"
 import Renderer from "../renderer/Renderer.js"
 import cfg from "../../config/config.js"
-import { REDIS_CHROMIUM_KEY } from "../../config/system.js"
+import { BOT_CHROMIUM_KEY } from "../../config/system.js"
+import { levelStorage } from '../../config/local.js'
+
 const _path = process.cwd()
 let mac = ""
 /**
@@ -68,10 +70,10 @@ export default class Puppeteer extends Renderer {
       // 获取Mac地址
       if (!mac) {
         mac = await this.getMac()
-        this.browserMacKey = `${REDIS_CHROMIUM_KEY}browserWSEndpoint:${mac}`
+        this.browserMacKey = `${BOT_CHROMIUM_KEY}browserWSEndpoint:${mac}`
       }
       // 是否有browser实例
-      const browserUrl = (await redis.get(this.browserMacKey)) || this.config.wsEndpoint
+      const browserUrl = (await levelStorage.get(this.browserMacKey).then(res => res.toString())) || this.config.wsEndpoint
       if (browserUrl) {
         try {
           const browserWSEndpoint = await puppeteer.connect({ browserWSEndpoint: browserUrl })
@@ -82,7 +84,7 @@ export default class Puppeteer extends Renderer {
           }
           logger.info(`puppeteer Chromium 连接成功 ${browserUrl}`)
         } catch (err) {
-          await redis.del(this.browserMacKey)
+          await levelStorage.del(this.browserMacKey)
         }
       }
     } catch (err) { }
@@ -121,7 +123,7 @@ export default class Puppeteer extends Renderer {
       if (this.browserMacKey) {
         // 缓存一下实例30天
         const expireTime = 60 * 60 * 24 * 30
-        await redis.set(this.browserMacKey, this.browser.wsEndpoint(), { EX: expireTime })
+        await levelStorage.put(this.browserMacKey, this.browser.wsEndpoint(), { EX: expireTime })
       }
     }
 
@@ -234,7 +236,7 @@ export default class Puppeteer extends Renderer {
         this.renderNum++
         /** 计算图片大小 */
         const kb = (buff.length / 1024).toFixed(2) + "KB"
-        logger.mark(`[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`)
+        logger.mark(`[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.chalk.green(`${Date.now() - start}ms`)}`)
         ret.push(buff)
       } else {
         // 分片截图

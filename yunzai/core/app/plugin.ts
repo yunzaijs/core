@@ -1,89 +1,13 @@
 import { render } from './render.js'
 import { EventType } from '../types.js'
 import { type EventMap } from 'icqq'
+import { PluginSuperType, RuleType } from '../types.js'
 
 const State = {}
 const SymbolTimeout = Symbol('Timeout')
 const SymbolResolve = Symbol('Resolve')
 
-/**
- * 插件类基础参数
- */
-type PluginSuperType = {
-  /**
-   * @param name 插件名称
-   * @deprecated 已废弃
-   */
-  name?: string
-  /**
-   * @param dsc 插件描述
-   * @deprecated 已废弃
-   */
-  dsc?: string
-  /**
-   * namespace，设置handler时建议设置
-   * @deprecated 已废弃
-   */
-  namespace?: any
-  /**
-   * @param handler handler配置
-   * @param handler.key handler支持的事件key
-   * @param handler.fn handler的处理func
-   * @deprecated 已废弃
-   */
-  handler?: any
-  /**
-   *  task
-   *  task.name 定时任务名称
-   *  task.cron 定时任务cron表达式
-   *  task.fnc 定时任务方法名
-   *  task.log  false时不显示执行日志
-   * @deprecated 已废弃
-   */
-  task?: any
-  /**
-   * 优先级
-   */
-  priority?: number
-  /**
-   * 事件
-   */
-  event?: keyof EventMap
-  /**
-   *  rule
-   *  rule.reg 命令正则
-   *  rule.fnc 命令执行方法
-   *  rule.event 执行事件，默认message
-   *  rule.log  false时不显示执行日志
-   *  rule.permission 权限 master,owner,admin,all
-   */
-  rule?: RuleType
-}
-
-type RuleType = {
-  /**
-   * 正则
-   */
-  reg?: RegExp | string
-  /**
-   * 函数名
-   */
-  fnc?: string
-  /**
-   * 事件
-   */
-  event?: keyof EventMap
-  /**
-   * 是否打印log
-   */
-  log?: boolean
-  /**
-   * 权限
-   */
-  permission?: 'master' | 'owner' | 'admin' | 'all'
-}[]
-
-export class BasePlugin {
+class BasePlugin {
   /**
    * 指令集
    */
@@ -305,6 +229,7 @@ export class Plugin extends BasePlugin {
 
 /**
  *
+ * @deprecated 已废弃
  */
 export const plugin = Plugin
 
