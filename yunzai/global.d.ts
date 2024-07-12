@@ -1,17 +1,9 @@
 import { segment as se } from 'icqq'
 import { RedisClientType } from 'redis'
 import chalk, { type ChalkInstance } from 'chalk'
-import { Client, plugin as p } from '../core/index.js'
-import { Renderer } from '../utils/index.js'
-
-/**
- *
- */
+import { Client, plugin as p } from './core'
+import { Renderer as Ren } from './utils'
 type LogType = string | Error | unknown
-
-/**
- *
- */
 type LoggerType = {
   /**
    *痕迹

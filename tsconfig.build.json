@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "noImplicitAny": false,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "typeRoots": ["node_modules/@types"],
+    "declaration": true
+    // "declarationDir": "yunzai/types",
+    // "outDir": "yunzai/types"
+  },
+  "include": ["yunzai/**/*"],
+  "exclude": ["node_modules"]
+}

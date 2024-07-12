@@ -26,6 +26,7 @@ declare module '*.jfif' {
   export default src
 }
 declare module '*.pjpeg' {
+  2
   const src: string
   export default src
 }

@@ -158,3 +158,5 @@ public/
 /levelStorage/
 
 yarn.lock
+
+/yunzai/**/*.js

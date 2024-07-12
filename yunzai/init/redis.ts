@@ -24,12 +24,11 @@ async function aarch64() {
   })
 }
 
-
 /**
  * 错误结束进程
- * @param err 
+ * @param err
  */
-const Error = async (err) => {
+const Error = async err => {
   logger.error(`Redis 错误：${logger.chalk.red(err)}`)
   const os = await aarch64()
   const cmd = `redis-server --save 900 1 --save 300 10 --daemonize yes ${os}`

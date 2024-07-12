@@ -1,10 +1,27 @@
 {
   "name": "yunzai",
-  "version": "4.0.0-rc.0",
-  "author": "Yoimiya-Kokomi, Le-niao",
+  "version": "1.0.0-rc.0",
+  "author": "Yoimiya-Kokomi, Le-niao, ningmengchongshui",
   "description": "QQ Group Bot",
   "main": "./index.js",
   "type": "module",
+  "files": [
+    "css.url.js",
+    "index.js",
+    "config/**/*.js",
+    "core/**/*.js",
+    "db/**/*.js",
+    "image/**/*.js",
+    "init/**/*.js",
+    "mys/**/*.js",
+    "tsconfig/**/*.js",
+    "utils/**/*.js",
+    ".puppeteerrc.cjs",
+    "main.css",
+    "yunzai-env.d.ts",
+    "global.d.ts",
+    "tsconfig/tsconfig.json"
+  ],
   "exports": {
     ".": {
       "import": "./index.js"
@@ -30,12 +47,24 @@
     "./image": {
       "import": "./image/index.js"
     },
-    "./tsconfig.json": {
-      "import": "./tsconfig.json",
-      "require": "./tsconfig.json"
+    "./.puppeteerrc": {
+      "require": "./.puppeteerrc.cjs"
     },
     "./env": {
-      "types": "./types/yunzai-env.d.ts"
+      "types": "./yunzai-env.d.ts"
+    },
+    "./global": {
+      "types": "./global.d.ts"
+    },
+    "./tsconfig/tsconfig.json": {
+      "import": "./tsconfig/tsconfig.json",
+      "require": "./tsconfig/tsconfig.json"
     }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=16.14.0"
   }
 }

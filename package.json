@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "4.0.21",
+  "version": "4.0.22",
   "author": "Yoimiya-Kokomi, Le-niao",
   "description": "QQ Group Bot",
   "main": "./app.js",
@@ -17,6 +17,7 @@
     "pm2": "pm2",
     "image": "node image.js",
     "build": "rollup --config rollup.config.js",
+    "builder": "tsc -p tsconfig.build.json",
     "css:watch": "tailwindcss -i ./src/input.css -o ./public/output.css --watch  -m",
     "css": "tailwindcss -i ./src/input.css -o ./public/output.css -m",
     "version": "node --no-warnings=ExperimentalWarning --loader ts-node/esm  src/version.ts",
