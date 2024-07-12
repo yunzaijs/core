@@ -1,2 +1,2 @@
-import { createServer } from 'yunzai/image'
+import { createServer } from 'yunzai'
 await createServer()

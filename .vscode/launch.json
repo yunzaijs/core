@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "command": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/main.ts",
+      "command": "node app.js --run index.ts",
       "name": "Debug",
       "request": "launch",
       "type": "node-terminal"

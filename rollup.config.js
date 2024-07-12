@@ -1,5 +1,4 @@
 import typescript from '@rollup/plugin-typescript'
-import { copyFileSync, mkdirSync } from 'fs'
 /**
  * @type {import("rollup").RollupOptions[]}
  */
@@ -8,14 +7,31 @@ export default [
   {
     input: 'yunzai/index.ts',
     output: {
-      dir: 'yunzai/dist',
+      file: 'yunzai/index.js',
       format: 'es',
       sourcemap: false
     },
     plugins: [
       typescript({
-        // 这里指定了 tsconfig 文件的位置
-        tsconfig: 'tsconfig.build.json'
+        compilerOptions: {
+          target: 'ESNext',
+          module: 'ESNext',
+          jsx: 'react',
+          strict: false,
+          esModuleInterop: true,
+          skipLibCheck: true,
+          allowJs: false,
+          noImplicitAny: false,
+          moduleResolution: 'bundler',
+          allowImportingTsExtensions: true,
+          noEmit: true,
+          typeRoots: ['node_modules/@types'],
+          declaration: true,
+          declarationDir: 'yunzai/types',
+          outDir: 'yunzai/types'
+        },
+        include: ['yunzai/**/*'],
+        exclude: ['node_modules']
       })
     ],
     onwarn: (warning, warn) => {
@@ -26,12 +42,3 @@ export default [
     }
   }
 ]
-
-mkdirSync('./yunzai/dist', {
-  recursive: true
-})
-
-// 复制文件
-copyFileSync('./yunzai/main.css', './yunzai/dist/main.css')
-
-// rm -rf ./yunzai/**/*.js

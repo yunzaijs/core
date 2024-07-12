@@ -10,6 +10,8 @@ module.exports = {
   },
   rules: {
     'prefer-const': ['off'],
-    'arrow-body-style': 'off'
+    'arrow-body-style': 'off',
+    ' space-before-function-paren': 'off',
+    'space-before-function-paren': 'off'
   }
 }

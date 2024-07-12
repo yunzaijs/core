@@ -3,6 +3,7 @@ import yaml from 'yaml'
 import lodash from 'lodash'
 import { ConfigController as cfg } from '../../config/index.js'
 import { join } from 'node:path'
+import rendererFn from '../renderers/index.js'
 
 /**
  * 加载渲染器
@@ -42,7 +43,6 @@ class RendererLoader {
     for (const subFolder of subFolders) {
       const name = subFolder.name
       try {
-        const rendererFn = await import('../renderers/index.js')
         const configFile = join(
           process.cwd(),
           'config',
@@ -52,7 +52,7 @@ class RendererLoader {
         const rendererCfg = existsSync(configFile)
           ? yaml.parse(readFileSync(configFile, 'utf8'))
           : {}
-        const renderer = rendererFn.default(rendererCfg)
+        const renderer = rendererFn(rendererCfg)
         if (
           !renderer.id ||
           !renderer.type ||

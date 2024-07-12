@@ -1,15 +1,7 @@
-/**
- * ***********
- * 消息中间件
- * **********
- * 星铁中间件
- * 对msg进行代理和裁剪
- */
-import { type EventType } from 'yunzai/core'
 export default class StarRail {
   static names = ['isSr', 'isGs', 'game', 'msg']
 
-  e: EventType
+  e
 
   // 识别正则
   srReg = /^#?(\*|星铁|星轨|穹轨|星穹|崩铁|星穹铁道|崩坏星穹铁道|铁道)+/

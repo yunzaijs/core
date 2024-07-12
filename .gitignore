@@ -160,3 +160,6 @@ public/
 yarn.lock
 
 /yunzai/**/*.js
+/yunzai/types
+
+/.cache/

@@ -1,20 +1,17 @@
-/**
- * ***********
- * 消息中间件
- * ************
- * 原神中间件 -
- * **********
- * 当消息来临时
- * 对消息字段进行扩展
- * *********
- */
 import { filter, repeat } from 'lodash-es'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { BOT_NAME, ConfigController as CFG } from 'yunzai/config'
-import { puppeteer } from 'yunzai/utils'
-import * as common from 'yunzai/utils'
-import { handler as Handler, type EventType } from 'yunzai/core'
-import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
+import * as common from 'yunzai'
+import {
+  BOT_NAME,
+  ConfigController as CFG,
+  handler as Handler,
+  puppeteer,
+  GSCfg as gsCfg,
+  MysApi,
+  MysInfo,
+  NoteUser,
+  MysUser
+} from 'yunzai'
 /**
  * yunzai-runtime
  * *********
@@ -25,7 +22,7 @@ export default class Runtime {
   //
   static names = ['user', 'runtime']
   //
-  e: EventType
+  e
 
   //
   _mysInfo = {}
@@ -45,7 +42,7 @@ export default class Runtime {
       if (user) {
         // 对象代理
         this.e.user = new Proxy(user, {
-          get(self, key: string) {
+          get(self, key) {
             const fnMap = {
               uid: 'getUid',
               uidList: 'getUidList',
@@ -241,22 +238,7 @@ export default class Runtime {
    * @param cfg.beforeRender({data}) 可改写渲染的data数据
    * @returns {Promise<boolean>}
    */
-  async render(
-    plugin_name: string,
-    basePath: string,
-    data: {
-      [key: string]: any
-      saveId?: any
-      save_id?: any
-      _htmlPath?: any
-    } = {},
-    cfg: {
-      [key: string]: any
-      retType?: any
-      recallMsg?: any
-      beforeRender?: any
-    } = {}
-  ) {
+  async render(pluginName, basePath, data = {}, cfg = {}) {
     // 处理传入的path
     basePath = basePath.replace(/.html$/, '')
     let paths = filter(basePath.split('/'), p => !!p)
@@ -276,9 +258,9 @@ export default class Runtime {
 
     const PName = 'miao-plugin'
 
-    mkdir(`html/${plugin_name}/${basePath}`)
+    mkdir(`html/${pluginName}/${basePath}`)
     // 自动计算pluResPath
-    const pluResPath = `../../../${repeat('../', paths.length)}plugins/${plugin_name}/resources/`
+    const pluResPath = `../../../${repeat('../', paths.length)}plugins/${pluginName}/resources/`
     const miaoResPath = `../../../${repeat('../', paths.length)}plugins/${PName}/resources/`
     const layoutPath = `${process.cwd()}/plugins/${PName}/resources/common/layout/`
     // 渲染data
@@ -297,10 +279,10 @@ export default class Runtime {
       ...data,
 
       /** 默认参数 **/
-      _plugin: plugin_name,
+      _plugin: pluginName,
       _htmlPath: basePath,
       pluResPath,
-      tplFile: `./plugins/${plugin_name}/resources/${basePath}.html`,
+      tplFile: `./plugins/${pluginName}/resources/${basePath}.html`,
       saveId: data.saveId || data.save_id || paths[paths.length - 1],
       pageGotoParams: {
         waitUntil: 'networkidle2'
@@ -314,15 +296,12 @@ export default class Runtime {
     if (process.argv.includes('dev')) {
       // debug下保存当前页面的渲染数据，方便模板编写与调试
       // 由于只用于调试，开发者只关注自己当时开发的文件即可，暂不考虑app及plugin的命名冲突
-      const saveDir = mkdir(`ViewData/${plugin_name}`)
+      const saveDir = mkdir(`ViewData/${pluginName}`)
       const file = `${saveDir}/${data._htmlPath.split('/').join('_')}.json`
       writeFileSync(file, JSON.stringify(data))
     }
     // 截图
-    const base64 = await puppeteer.screenshot(
-      `${plugin_name}/${basePath}`,
-      data
-    )
+    const base64 = await puppeteer.screenshot(`${pluginName}/${basePath}`, data)
     if (cfg.retType === 'base64') {
       return base64
     }

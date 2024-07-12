@@ -6,13 +6,6 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
 import { CONFIG_DEFAULT_PATH, CONFIG_INIT_PATH } from './system.js'
 
 /**
- * **********
- * 初始化阶段,config无法使用logger
- * logger依赖于config的调用
- * ********************
- */
-
-/**
  * ********
  * 配置文件
  * ********

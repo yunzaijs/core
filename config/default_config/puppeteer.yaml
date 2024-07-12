@@ -9,7 +9,7 @@ puppeteerWS:
 
 # 废弃
 # headless
-headless: "new"
+headless: 'new'
 
 # 废弃
 # puppeteer启动args，注意args的--前缀

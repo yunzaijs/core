@@ -2,7 +2,7 @@ import EventListener from './listener.js'
 import cfg from '../../config/config.js'
 import { relpyPrivate } from '../app/common.js'
 import { BOT_NAME, BOT_LOGIN_KEY } from '../../config/system.js'
-import { levelStorage } from '../../config/local.js'
+import { levelStorage } from '../../db/local.js'
 
 /**
  * 监听上线事件

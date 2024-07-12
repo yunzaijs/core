@@ -14,7 +14,7 @@ Yunzai Next 即下一个Yunzai机器人，它是基于Icqq协议所构建的机�
 
 |                           Nickname                            | Contribution         |
 | :-----------------------------------------------------------: | -------------------- |
-| [TRSS-Yunzai](https://github.com/TimeRainStarSky/Yunzai)  | 时雨的Yunzai-Bot V3  |
+|   [TRSS-Yunzai](https://github.com/TimeRainStarSky/Yunzai)    | 时雨的Yunzai-Bot V3  |
 | [Yunzai v3.0](https://github.com/yoimiya-kokomi/Miao-Yunzai)  | 喵喵的Yunzai-Bot V3  |
 |      [Yunzai v3.0](https://gitee.com/le-niao/Yunzai-Bot)      | 乐神的Yunzai-Bot V3  |
 | [GardenHamster](https://github.com/GardenHamster/GenshinPray) | 模拟抽卡背景素材来源 |

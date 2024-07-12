@@ -1,6 +1,5 @@
-import 'yunzai/init'
-import { Client, MiddlewareStore, loader } from 'yunzai/core'
-import { createLogin } from 'yunzai/config'
+import { Client, MiddlewareStore, loader } from 'yunzai'
+import { createLogin } from 'yunzai'
 /**
  * *********************
  * 确保所有微任务做好准备后
