@@ -26,7 +26,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "yunzai": "link:yunzai"
+    "yunzai": "link:yunzai",
+    "yz-mw-runtime": "link:./middleware/runtime",
+    "yz-mw-star-rail": "link:./middleware/star-rail"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",

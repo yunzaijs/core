@@ -15,6 +15,8 @@ setTimeout(async () => {
    * run
    */
   await Client.run().then(async () => {
+    // 读取yunzai.config.js
+
     /**
      * 自动识别中间件
      * middlewares
