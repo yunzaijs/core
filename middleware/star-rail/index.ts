@@ -1,3 +1,5 @@
+import { type EventType } from 'yunzai'
+
 /**
  *
  */
@@ -10,7 +12,7 @@ export default () => {
 
     static names = ['isSr', 'isGs', 'game', 'msg']
 
-    e
+    e: EventType
 
     // 识别正则
     srReg = /^#?(\*|星铁|星轨|穹轨|星穹|崩铁|星穹铁道|崩坏星穹铁道|铁道)+/

@@ -162,6 +162,10 @@ yarn.lock
 /yunzai/**/*.js
 /yunzai/types
 
+/middleware/**/*.js
+
+/src/**/*.js
+
 /.cache/
 
 log.md

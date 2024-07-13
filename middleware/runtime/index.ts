@@ -1,6 +1,7 @@
 import { filter, repeat } from 'lodash-es'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import * as common from 'yunzai'
+import { EventType } from 'yunzai'
 import {
   BOT_NAME,
   ConfigController as CFG,
@@ -18,7 +19,7 @@ import {
  * 中间件设计处于实验阶段，。。。
  * *********
  */
-export default config => {
+export default () => {
   // 处理配置
   return class Runtime {
     //
@@ -28,7 +29,7 @@ export default config => {
     //
     static names = ['user', 'runtime']
     //
-    e
+    e: EventType
 
     //
     _mysInfo = {}
@@ -48,7 +49,7 @@ export default config => {
         if (user) {
           // 对象代理
           this.e.user = new Proxy(user, {
-            get(self, key) {
+            get(self, key: string) {
               const fnMap = {
                 uid: 'getUid',
                 uidList: 'getUidList',
@@ -244,7 +245,7 @@ export default config => {
      * @param cfg.beforeRender({data}) 可改写渲染的data数据
      * @returns {Promise<boolean>}
      */
-    async render(pluginName, basePath, data = {}, cfg = {}) {
+    async render(pluginName, basePath, data: any = {}, cfg: any = {}) {
       // 处理传入的path
       basePath = basePath.replace(/.html$/, '')
       let paths = filter(basePath.split('/'), p => !!p)

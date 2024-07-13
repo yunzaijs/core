@@ -9,7 +9,7 @@ export const PLUGINS_PATH = 'plugins'
 // 中间件目录
 export const MIDDLEWARE_PATH = 'middleware'
 // 数据文件存储目录
-export const SQLITE_DB_DIR = '/.cache/storage/sqlite'
+export const SQLITE_DB_DIR = '/data/storage/sqlite'
 // 机器人名称
 export const BOT_NAME = 'Yunzai'
 // 机器人登录控制key

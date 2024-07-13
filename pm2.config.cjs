@@ -5,7 +5,7 @@ module.exports = {
   apps: [
     {
       name: 'yunzaijs',
-      script: './app.js',
+      script: './src/main.js',
       args: [...process.argv].slice(4),
       // 超时时间内进程仍未终止，则 PM2 将强制终止该进程
       kill_timeout: 5000,
