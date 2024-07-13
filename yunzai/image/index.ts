@@ -1,11 +1,11 @@
-import '../init/index'
 import Koa from 'koa'
 import KoaStatic from 'koa-static'
 import Router from 'koa-router'
-import { Dirent, readdirSync } from 'fs'
+import { readdirSync } from 'fs'
 import { join } from 'path'
 import mount from 'koa-mount'
 import { Component } from '../utils/index.js'
+//
 export * from './types.js'
 
 const PATH = process.cwd().replace(/\\/g, '\\\\')
@@ -15,13 +15,13 @@ const PATH = process.cwd().replace(/\\/g, '\\\\')
  * @param Router
  * @returns
  */
-const Dynamic = async (Router: Dirent) => {
+const Dynamic = async (Router: { parentPath: string; name: string }) => {
   const modulePath = `file://${join(Router.parentPath, Router.name)}?update=${Date.now()}`
   return (await import(modulePath))?.default
 }
 
 /**
- *
+ * 废弃
  * @param Port
  */
 export async function createServer(Port = 8080) {

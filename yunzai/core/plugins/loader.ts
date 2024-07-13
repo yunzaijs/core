@@ -108,7 +108,7 @@ class Loader {
   /**
    * 分离 handler 机制
    * @deprecated 已废弃
-   * import { handler } from 'yunzai/core'
+   * import { handler } from 'yunzai'
    */
   get handler() {
     return Handler
@@ -148,6 +148,64 @@ class Loader {
    * @param isRefresh 是否刷新
    */
   async load(isRefresh = false) {
+    /**
+     * 需不需要加载插件
+     *
+     * 不需要。
+     *
+     * 因为插件再那时候就已经排序好了 class
+     *
+     * 用户可以自行决定排序的顺序。
+     *
+     *
+     * 需要new吗
+     *
+     * for(const key in  app.apps){
+     *    const x = new app.apps[key]()
+     *
+     *    // 全部  new 成 class ?
+     *
+     *    其实在开始，插件就应该new好了
+     *
+     *    #data
+     *
+     *    #open = false
+     *
+     *
+     *    // 插件名
+     *    stattu = 'system'
+     *
+     *
+     *    //
+     *    create(){
+     *        // 仅触发一次的行为
+     *    }
+     *
+     *    // 每次消息来都会触发该行为。
+     *    update(){
+     *        // 什么也不做。如果想刷新 data
+     *        if(this.open) return
+     *        //
+     *        for(const item of main){
+     *           // 所以应该如何排序。完全是插件作者说了算。
+     *           this.#data[key] = main[key]()
+     *        }
+     *    }
+     *
+     *    // update之后执行
+     *
+     *    // 响应
+     *    reposont(){
+     *        // 必须是new过后的。
+     *        // 插件可以自行控制自己的规则
+     *        // 以及调整触发顺序
+     *        return this.#data
+     *    }
+     *
+     * }
+     *
+     */
+
     // 重置
     this.delCount()
     // 累计

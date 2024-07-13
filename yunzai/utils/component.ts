@@ -80,7 +80,7 @@ export class Component {
    *
    */
   constructor() {
-    this.#dir = join(process.cwd(), '.html')
+    this.#dir = join(process.cwd(), 'data', 'component')
     mkdirSync(join(this.#dir, 'css'), {
       recursive: true
     })

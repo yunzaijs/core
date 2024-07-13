@@ -1,4 +1,4 @@
 {
-  "include": ["src", "yunzai", "plugins", "lib", "renderers", "middleware"],
+  "include": ["src", "yunzai", "plugins", "middleware"],
   "extends": "yunzai/tsconfig/tsconfig.json"
 }

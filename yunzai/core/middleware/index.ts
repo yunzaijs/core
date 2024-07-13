@@ -1,6 +1,4 @@
-import { join } from 'path'
-import { MIDDLEWARE_PATH } from '../../config/system.js'
-import { readdirSync } from 'fs'
+import { Processor } from '../processor/index.js'
 
 /**
  * 中间件类型
@@ -21,10 +19,7 @@ class Middleware {
    * @param middlewares
    */
   async install() {
-    const js = join(process.cwd(), 'yunzai.config.js')
-    const config = (await import(`file://${js}`)).default
-    const middleware = config.middlewares
-    for (const item of middleware) {
+    for (const item of Processor.middlewares) {
       this.use({
         typing: item.typing,
         // 中间件名称

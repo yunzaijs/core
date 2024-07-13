@@ -288,3 +288,12 @@ export interface EventType extends GroupMessage {
    */
   friend?: any
 }
+
+/**
+ * 配置选择
+ */
+export type ConifigOptions = {
+  plugins?: any[]
+  applications?: any[]
+  middlewares?: any[]
+}

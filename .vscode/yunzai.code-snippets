@@ -2,7 +2,7 @@
   "Test Plugin Class": {
     "prefix": "plugin",
     "body": [
-      "import { Plugin } from 'yunzai/core'",
+      "import { Plugin } from 'yunzai'",
       "export class App extends Plugin {",
       "    constructor() {",
       "        super()",

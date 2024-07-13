@@ -82,23 +82,23 @@ declare global {
   /**
    * 键值对型数据库
    * @deprecated 不推荐使用，未来将废弃
-   * import { Redis } from 'yunzai/core'
+   * import { Redis } from 'yunzai'
    */
   var redis: RedisClientType
   /**
    * 机器人客户端
    * @deprecated 不推荐使用，未来将废弃
-   * import { Bot } from 'yunzai/core'
+   * import { Bot } from 'yunzai'
    */
   var Bot: typeof Client.prototype
   /**
-   * import { Segment } from 'yunzai/core'
+   * import { Segment } from 'yunzai'
    * @deprecated 不推荐使用，未来将废弃
    */
   var segment: typeof se
   /**
    * @deprecated 不推荐使用，未来将废弃
-   * import { Plugin } from 'yunzai/core'
+   * import { Plugin } from 'yunzai'
    */
   var plugin: typeof p
   /**

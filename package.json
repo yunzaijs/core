@@ -27,7 +27,8 @@
   "dependencies": {
     "yunzai": "link:yunzai",
     "yz-mw-runtime": "link:./middleware/runtime",
-    "yz-mw-star-rail": "link:./middleware/star-rail"
+    "yz-mw-star-rail": "link:./middleware/star-rail",
+    "yz-system": "^1.0.0-rc.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",

@@ -1,8 +1,5 @@
 import { EventEmun, RuleType } from '../types.js'
-
-const State = {}
-const SymbolTimeout = Symbol('Timeout')
-const SymbolResolve = Symbol('Resolve')
+import { State, SymbolResolve, SymbolTimeout } from './storage.js'
 
 /**
  * tudo
