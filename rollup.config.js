@@ -20,22 +20,28 @@ const cfg = [
   {
     input: 'src/main.ts',
     file: 'src/main.js',
-    include: ['src/**/*']
+    include: ['src/main.ts'],
+    declaration: false
   },
   {
     input: 'src/version.ts',
     file: 'src/version.js',
-    include: ['src/**/*']
+    include: ['src/version.ts'],
+    declaration: false
   },
   {
     input: 'middleware/runtime/index.ts',
     file: 'middleware/runtime/index.js',
-    include: ['middleware/**/*']
+    include: ['middleware/runtime/index.ts'],
+    declaration: true,
+    declarationDir: 'middleware/runtime/types'
   },
   {
     input: 'middleware/star-rail/index.ts',
     file: 'middleware/star-rail/index.js',
-    include: ['middleware/**/*']
+    include: ['middleware/star-rail/index.ts'],
+    declaration: true,
+    declarationDir: 'middleware/star-rail/types'
   }
 ]
 
@@ -54,18 +60,6 @@ export default [
     plugins: [
       typescript({
         compilerOptions: {
-          target: 'ESNext',
-          module: 'ESNext',
-          jsx: 'react',
-          strict: false,
-          esModuleInterop: true,
-          skipLibCheck: true,
-          allowJs: false,
-          noImplicitAny: false,
-          moduleResolution: 'bundler',
-          allowImportingTsExtensions: true,
-          noEmit: true,
-          typeRoots: ['node_modules/@types'],
           declaration: true,
           declarationDir: 'yunzai/types',
           outDir: 'yunzai/types'
@@ -88,20 +82,8 @@ export default [
       plugins: [
         typescript({
           compilerOptions: {
-            target: 'ESNext',
-            module: 'ESNext',
-            jsx: 'react',
-            strict: false,
-            esModuleInterop: true,
-            skipLibCheck: true,
-            allowJs: false,
-            noImplicitAny: false,
-            moduleResolution: 'bundler',
-            allowImportingTsExtensions: true,
-            noEmit: true,
-            typeRoots: ['node_modules/@types']
-            // declaration: true,
-            // declarationDir: 'yunzai/types',
+            declaration: item.declaration,
+            declarationDir: item?.declarationDir
             // outDir: 'yunzai/types'
           },
           include: item.include,

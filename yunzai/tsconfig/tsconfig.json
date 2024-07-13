@@ -1,38 +1,77 @@
 {
   "compilerOptions": {
+    // 目标书写的模块
     "target": "ESNext",
+
+    // 指定生成什么模块代码
     "module": "ESNext",
+
+    // 为带有隐含的表达式和声明启用错误报告any type
     "noImplicitAny": false,
+
+    // 释放额外的JavaScript，以简化对导入CommonJS模块的支持。这将启用allowSyntheticDefaultImports以实现类型兼容性。
     "esModuleInterop": true,
-    "moduleResolution": "bundler",
+
+    // 禁用发布评论。
     "removeComments": true,
+    // 禁用擦除const enum生成代码中的声明。
     "preserveConstEnums": true,
-    "ignoreDeprecations": "5.0",
+
+    // 指定生成什么 JSX 代码
     "jsx": "react",
-    "noEmit": true,
+
+    "moduleResolution": "bundler",
+
+    // 允许导入包含 TypeScript 文件扩展名。需要设置“--moduleResolution bundler”和“--noEmit”或“--emitDeclarationOnly”。
     "allowImportingTsExtensions": true,
+
+    // 禁用从编译中发出文件
+    "noEmit": true,
+
+    // 允许 JavaScript 文件成为程序的一部分。使用checkJS从这些文件中获取错误的选项。
     "allowJs": false,
+
+    // Suppress noImplicitAny索引缺少索引签名的对象时会出现错误。
     "suppressImplicitAnyIndexErrors": true,
+
+    // 指定多个文件夹，其作用类似于
     "typeRoots": ["node_modules/@types"],
 
+    // 发出符合 ECMAScript 标准的类字段。
     "useDefineForClassFields": true,
+
+    // 指定一组描述目标运行时环境的捆绑库声明文件。
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // 跳过所有.d.ts文件的类型检查。
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    // 启用导入.json文件
     "resolveJsonModule": true,
+
+    // 确保每个文件都可以安全地转换，而不依赖于其他导入。
     "isolatedModules": true,
 
-    /* Linting */
+    // 无未使用的电话
     "noUnusedLocals": true,
+
+    // 未读取函数参数时引发错误
     "noUnusedParameters": true,
+
+    //为 switch 语句中的失败情况启用错误报告
     "noFallthroughCasesInSwitch": true,
 
-    "forceConsistentCasingInFileNames": true
+    // 确保进口套管正确。
+    "forceConsistentCasingInFileNames": true,
+
+    "ignoreDeprecations": "5.0"
   },
   "ts-node": {
+    // 启用本机 ESM 支持.
     "esm": true,
+    // 使用 TypeScript 更快transpileModule.
     "transpileOnly": true,
+    // 就像节点的--experimental-specifier-resolution
     "experimentalSpecifierResolution": "node"
   }
 }

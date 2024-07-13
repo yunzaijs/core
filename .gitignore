@@ -164,8 +164,12 @@ yarn.lock
 
 /middleware/**/*.js
 
+types
+
 /src/**/*.js
 
 /.cache/
+
+
 
 log.md

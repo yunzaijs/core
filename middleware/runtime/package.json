@@ -16,7 +16,7 @@
   "exports": {
     ".": {
       "import": "./index.js",
-      "types": "./index.d.ts"
+      "types": "./types/index.d.ts"
     }
   },
   "publishConfig": {
