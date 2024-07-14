@@ -16,6 +16,7 @@ import cfg from '../../config/config.js'
 // 中间件
 import { MiddlewareStore } from '../middleware/index.js'
 import { PLUGINS_PATH, BOT_COUNT_KEY } from '../../config/system.js'
+import { Processor } from '../processor/index.js'
 
 /**
  *
@@ -407,6 +408,18 @@ class Loader {
     // 消息中间件 - 重新构造 e.reply 衍生了  e.replyNew
     this.reply(e)
 
+    /**
+     * beforeMount
+     */
+    if (Array.isArray(Processor.applications)) {
+      // 处理
+      for (const app of Processor.applications) {
+        if (typeof app?.beforeMount == 'function') {
+          await app.beforeMount(e)
+        }
+      }
+    }
+
     // 消息处理中间件
     const map = MiddlewareStore.value('message')
     for (const [_, middleware] of map) {
@@ -424,6 +437,48 @@ class Loader {
         }
       }
     }
+
+    const Promises = []
+    if (Array.isArray(Processor.applications)) {
+      for (const app of Processor.applications) {
+        // 进入一步任务
+        Promises.push(
+          new Promise(async resolve => {
+            if (typeof app?.mounted == 'function') {
+              // 得到执行
+              const data = await app.mounted(e)
+              // data 都是 new好的。
+              for (const plugin of data) {
+                for (const v of plugin.rule) {
+                  // 不是函数。
+                  if (typeof plugin[v.fnc] !== 'function') continue
+                  // 校验正则
+                  if (!new RegExp(v.reg).test(e.msg)) continue
+                  // 开始时间
+                  const start = Date.now()
+                  //
+                  const res = await plugin[v.fnc](e)
+                  // 不是 bool 而且 不为true  直接结束
+                  if (typeof res != 'boolean' && res !== true) {
+                    // 设置冷却cd
+                    this.setLimit(e)
+                    // 打印
+                    if (v.log !== false) {
+                      logger.mark(
+                        `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
+                      )
+                    }
+                    break
+                  }
+                }
+              }
+            }
+            resolve(true)
+          })
+        )
+      }
+    }
+    Promise.allSettled(Promises)
 
     // 被new 起来的 priority
     const priority = []

@@ -51,6 +51,11 @@ class ProcessorCore {
     this.#applications = config.applications
     this.#middlewares = config.middlewares
     this.#plugins = config.plugins
+    if (Array.isArray(this.#applications)) {
+      for (const app of this.#applications) {
+        if (typeof app?.create == 'function') app.create(config)
+      }
+    }
   }
 
   //
