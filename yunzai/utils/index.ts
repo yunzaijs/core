@@ -1,11 +1,9 @@
-export * from './config.js'
 export * from './puppeteer.js'
 export * from './types.js'
 export * from './common.js'
 export * from './component.js'
 export * from './module.js'
 export * from './picture.js'
-export * from './puppeteer.config.js'
 /**
  * 旧版本兼容性方法
  */
