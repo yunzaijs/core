@@ -9,11 +9,7 @@ import Puppeteer from './lib/puppeteer.js'
  * @returns renderer.render 渲染入口
  * @deprecated 已废弃
  */
-export default function (config?: PuppeteerLaunchOptions & {
-  chromiumPath?: string;
-  puppeteerWS?: any;
-  puppeteerTimeout?: any;
-}) {
+export default function (config) {
   // TODO Puppeteer待简化重构
   return new Puppeteer(config)
 }

@@ -4,7 +4,7 @@ import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer"
 import Renderer from "../renderer/Renderer.js"
 import cfg from "../../config/config.js"
 import { BOT_CHROMIUM_KEY } from "../../config/system.js"
-import { levelStorage } from '../../config/local.js'
+import { levelStorage } from '../../db/local.js'
 
 const _path = process.cwd()
 let mac = ""

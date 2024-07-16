@@ -2,7 +2,6 @@ import { type PuppeteerLaunchOptions } from 'puppeteer'
 import puppeteer, { Browser } from 'puppeteer'
 import { ScreenshotFileOptions } from './types.js'
 import CFG from '../config/config.js'
-import { PuppeteerLunchConfig } from './puppeteer.config.js'
 
 /**
  * 无头浏览器
@@ -15,7 +14,24 @@ export class Puppeteer {
   // 状态
   #isBrowser = false
   // 配置
-  #launch: PuppeteerLaunchOptions = PuppeteerLunchConfig.all()
+  #launch: PuppeteerLaunchOptions = {
+    // 禁用超时
+    timeout: 0, //otocolTimeout: 0,
+    // 请求头
+    headless: true,
+    //
+    args: [
+      '--disable-gpu',
+      '--disable-dev-shm-usage',
+      '--disable-setuid-sandbox',
+      '--no-first-run',
+      '--no-sandbox',
+      '--no-zygote',
+      '--single-process'
+    ]
+    // executablePath: ''
+    // BOT浏览器默认尺寸 753 X 1180
+  }
 
   // 应用缓存
   browser: Browser | null = null

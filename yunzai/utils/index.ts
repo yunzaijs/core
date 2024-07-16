@@ -5,7 +5,7 @@ export * from './common.js'
 export * from './component.js'
 export * from './module.js'
 export * from './picture.js'
-export * from './puppeteer.config.js'
+export * from './components/index.js'
 /**
  * 旧版本兼容性方法
  */
