@@ -23,3 +23,4 @@ export { Renderers, renderers, Renderer, renderer }
  * 是兼容性目录
  * 已废弃
  */
+export * from './components/index.js'
