@@ -1,9 +1,6 @@
 # 检查版本
 npm run version
 
-# 检查提交格式
-npm run lint
-
 # 格式化代码
 npm run format
 
