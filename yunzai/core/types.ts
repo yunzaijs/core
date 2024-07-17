@@ -297,3 +297,43 @@ export type ConifigOptions = {
   applications?: any[]
   middlewares?: any[]
 }
+
+export type MiddlewareOptoins = {
+  typing: 'message' | 'event'
+  // 插件名
+  name: string
+  // 修饰 属性名
+  on: (e: EventType) => any
+}
+
+/**
+ *
+ */
+export type ApplicationOptions = {
+  /**
+   * 插件创建时
+   * 处理的函数
+   * @param config
+   * @returns
+   */
+  create?: (config: ConifigOptions) => any
+  /**
+   * 安装中间件之前的函数
+   */
+  beforeMount?: (event: EventType) => any
+  /**
+   * 安装中间件之上会执行的函数
+   * 也就是响应前处理的函数
+   * @returns
+   */
+  mounted: (event: EventType) => any
+  /**
+   * 每条响应时会都处理的函数
+   * @returns
+   */
+  response?: () => any
+  /**
+   * 响应后
+   */
+  afterResponse?: () => any
+}
