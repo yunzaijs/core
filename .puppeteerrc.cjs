@@ -1,4 +1,4 @@
 /**
  * @type {import("puppeteer").Configuration}
  */
-module.exports = require('yunzai/.puppeteerrc')
+module.exports = require('react-puppeteer/.puppeteerrc')

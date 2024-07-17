@@ -54,12 +54,6 @@
       "import": "./index.js",
       "types": "./types/index.d.ts"
     },
-    "./.puppeteerrc": {
-      "require": "./.puppeteerrc.cjs"
-    },
-    "./env": {
-      "types": "./yunzai-env.d.ts"
-    },
     "./global": {
       "types": "./global.d.ts"
     },

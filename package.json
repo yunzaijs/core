@@ -16,8 +16,6 @@
     "monit": "pm2 monit",
     "pm2": "pm2",
     "build": "rollup --config rollup.config.js",
-    "css:watch": "tailwindcss -i ./src/input.css -o ./public/output.css --watch  -m",
-    "css": "tailwindcss -i ./src/input.css -o ./public/output.css -m",
     "version": "node src/version.js",
     "lint": "commitlint --config .commitlint.config.cjs -e -V",
     "format": "prettier --write .",
@@ -25,6 +23,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "react-puppeteer": "^1.0.0-rc.3",
     "yunzai": "link:yunzai",
     "yz-mw-runtime": "link:./middleware/runtime",
     "yz-mw-star-rail": "link:./middleware/star-rail",

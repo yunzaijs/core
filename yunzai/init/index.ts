@@ -1,4 +1,3 @@
-import './require.js'
 import './env'
 import './run.js'
 import './config.js'

@@ -1,5 +1,5 @@
 /**
- * @type {import("./src/yunzai-pm2.d.ts").AppsStartOptions}
+ * @type {import("./src/type/pm2.d.ts").AppsStartOptions}
  */
 module.exports = {
   apps: [
