@@ -14,7 +14,6 @@ import Handler from './handler.js'
 // config
 import cfg from '../../config/config.js'
 // 中间件
-import { MiddlewareStore } from '../middleware/index.js'
 import { PLUGINS_PATH, BOT_COUNT_KEY } from '../../config/system.js'
 import { Processor } from '../processor/index.js'
 
@@ -415,25 +414,20 @@ class Loader {
       // 处理
       for (const app of Processor.applications) {
         if (typeof app?.beforeMount == 'function') {
+          // 确保是等待的
           await app.beforeMount(e)
         }
       }
     }
 
-    // 消息处理中间件
-    const map = MiddlewareStore.value('message')
-    for (const [_, middleware] of map) {
-      if (Array.isArray(middleware.names)) {
-        const c = new middleware(e)
-        // 赋值 e
-        c.e = e
-        // 初始化方法
-        if (typeof c?.callNames?.init === 'function') {
+    /**
+     * middlewares
+     */
+    if (Array.isArray(Processor.middlewares)) {
+      for (const mw of Processor.middlewares) {
+        if (typeof mw?.on === 'function') {
           // 确保是等待的
-          await c.callNames.init()
-        }
-        for (const name of middleware.names) {
-          e[name] = await c.callNames[name]()
+          await mw.on(e)
         }
       }
     }

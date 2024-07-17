@@ -17,6 +17,7 @@
     "pm2": "pm2",
     "build": "rollup --config rollup.config.js",
     "version": "node src/version.js",
+    "test": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/main.ts",
     "format": "prettier --write .",
     "check-format": "git diff --exit-code",
     "prepare": "husky"

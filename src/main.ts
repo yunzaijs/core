@@ -1,4 +1,4 @@
-import { Client, MiddlewareStore, loader, createLogin, Processor } from 'yunzai'
+import { Client, loader, createLogin, Processor } from 'yunzai'
 /**
  * *********************
  * 确保所有微任务做好准备后
@@ -16,12 +16,6 @@ setTimeout(async () => {
   await Client.run().then(async () => {
     // 读取yunzai.config.js
     await Processor.install()
-
-    /**
-     * 加载中间
-     * middlewares
-     */
-    await MiddlewareStore.install()
 
     /**
      * 加载插件
