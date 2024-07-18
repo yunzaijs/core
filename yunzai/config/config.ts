@@ -14,23 +14,12 @@ export class ProcessConfig {
   #config = {}
   #watcher = { config: {}, defSet: {} }
   #package = null
-
-  /**
-   * init
-   */
   constructor() {
-    // 得到文件
-    const files = readdirSync(CONFIG_DEFAULT_PATH).filter(file =>
-      file.endsWith('.yaml')
-    )
-    //
-    mkdirSync(join(process.cwd(), CONFIG_INIT_PATH), {
-      recursive: true
-    })
-    //
+    const files = readdirSync(CONFIG_DEFAULT_PATH).filter(file => file.endsWith('.yaml'))
+    mkdirSync(CONFIG_INIT_PATH, { recursive: true })
     for (const file of files) {
-      if (!existsSync(`${CONFIG_INIT_PATH}${file}`)) {
-        copyFileSync(`${CONFIG_DEFAULT_PATH}${file}`, `${CONFIG_INIT_PATH}${file}`)
+      if (!existsSync(join(CONFIG_INIT_PATH, file))) {
+        copyFileSync(join(CONFIG_DEFAULT_PATH, file), join(CONFIG_INIT_PATH, file))
       }
     }
   }
@@ -160,7 +149,10 @@ export class ProcessConfig {
    * @param name 名称
    */
   getYaml(type: 'config' | 'default_config', name: string) {
-    const file = `config/${type}/${name}.yaml`
+    let file = join(CONFIG_INIT_PATH, `${name}.yaml`)
+    if (type == 'default_config') {
+      file = (join(CONFIG_DEFAULT_PATH, `${name}.yaml`))
+    }
     const key = `${type}.${name}`
     // 存在则读取
     if (this.#config[key]) return this.#config[key]

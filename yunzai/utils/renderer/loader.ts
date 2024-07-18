@@ -1,7 +1,10 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs'
 import yaml from 'yaml'
 import lodash from 'lodash'
-import { ConfigController as cfg } from '../../config/index.js'
+import {
+  ConfigController as cfg,
+  CONFIG_INIT_PATH
+} from '../../config/index.js'
 import { join } from 'node:path'
 import rendererFn from '../renderers/index.js'
 
@@ -19,7 +22,7 @@ class RendererLoader {
   /**
    *
    */
-  dir = './renderers'
+  dir = join(process.cwd(), 'renderers')
   /**
    *
    */
@@ -37,18 +40,14 @@ class RendererLoader {
    *
    */
   async load() {
+    mkdirSync(this.dir, { recursive: true })
     const subFolders = readdirSync(this.dir, { withFileTypes: true }).filter(
       dirent => dirent.isDirectory()
     )
     for (const subFolder of subFolders) {
       const name = subFolder.name
       try {
-        const configFile = join(
-          process.cwd(),
-          'config',
-          'config',
-          'puppeteer.yaml'
-        )
+        const configFile = join(CONFIG_INIT_PATH, 'puppeteer.yaml')
         const rendererCfg = existsSync(configFile)
           ? yaml.parse(readFileSync(configFile, 'utf8'))
           : {}
@@ -61,7 +60,7 @@ class RendererLoader {
         ) {
           logger.warn('渲染后端 ' + (renderer.id || subFolder.name) + ' 不可用')
         }
-        this.renderers.set(renderer.id, renderer)
+        this.renderers.set(renderer.id ?? 'puppeteer', renderer)
         logger.info(`加载渲染器:`, renderer.id)
       } catch (err) {
         logger.error(`渲染后端 ${name} 加载失败`)

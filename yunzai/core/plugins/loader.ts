@@ -245,9 +245,9 @@ class Loader {
       // 是文件
       if (val.isFile()) continue
       try {
-        let dir = `${PLUGINS_PATH}/${val.name}/index.ts`
+        let dir = join(PLUGINS_PATH, val.name, 'index.ts')
         if (!existsSync(dir)) {
-          dir = `${PLUGINS_PATH}/${val.name}/index.js`
+          dir = join(PLUGINS_PATH, val.name, 'index.js')
         }
         if (await stat(dir)) {
           ret.push({
@@ -276,7 +276,7 @@ class Loader {
     packageErr?: any
   ) => {
     try {
-      const app = await import(`file://${join(process.cwd(), file.path)}`)
+      const app = await import(`file://${file.path}`)
       const pluginArray = []
       for (const key in app.apps) {
         pluginArray.push(this.#loadPlugin(file, app.apps[key], key))

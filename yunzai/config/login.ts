@@ -7,6 +7,7 @@ import {
   CONFIG_INIT_PATH,
 } from './system.js'
 import cfg from './config.js'
+import { join } from 'path'
 
 /**
  * 
@@ -116,33 +117,33 @@ export async function createLogin() {
   /**
    * 读取配置
    */
-  let qq = readFileSync(`./${CONFIG_DEFAULT_PATH}qq.yaml`, 'utf8')
+  let qq = readFileSync(join(CONFIG_DEFAULT_PATH, 'qq.yaml'), 'utf8')
 
   qq = qq.replace(/qq:/g, 'qq: ' + ret.QQ)
   qq = qq.replace(/pwd:/g, `pwd:  '${ret.pwd}'`)
   qq = qq.replace(/platform: [1-6]/g, 'platform: ' + Number(ret.platform))
 
   // 写入
-  writeFileSync(`./${CONFIG_INIT_PATH}qq.yaml`, qq, 'utf8')
+  writeFileSync(join(CONFIG_INIT_PATH, 'qq.yaml'), qq, 'utf8')
 
 
   /**
    * 读取配置
    */
-  let bot = readFileSync(`./${CONFIG_DEFAULT_PATH}bot.yaml`, 'utf8')
+  let bot = readFileSync(join(CONFIG_DEFAULT_PATH, 'bot.yaml'), 'utf8')
   if (ret.signAPI) {
     bot = bot.replace(/sign_api_addr:/g, `sign_api_addr: ${ret.signAPI}`)
   }
-  writeFileSync(`./${CONFIG_INIT_PATH}bot.yaml`, bot, 'utf8')
+  writeFileSync(join(CONFIG_INIT_PATH, 'bot.yaml'), bot, 'utf8')
 
   /**
    *
    */
   if (ret.masterQQ) {
     // 修改主人QQ配置
-    let other = readFileSync(`./${CONFIG_DEFAULT_PATH}other.yaml`, 'utf8')
+    let other = readFileSync(join(CONFIG_DEFAULT_PATH, 'other.yaml'), 'utf8')
     other = other.replace(/masterQQ:/g, `masterQQ:\n  - ${ret.masterQQ}`)
-    writeFileSync(`./${CONFIG_INIT_PATH}other.yaml`, other, 'utf8')
+    writeFileSync(join(CONFIG_INIT_PATH, 'other.yaml'), other, 'utf8')
   }
 
 

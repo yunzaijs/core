@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.4",
   "author": "Yoimiya-Kokomi, Le-niao, ningmengchongshui",
   "description": "QQ Group Bot",
   "main": "./index.js",
@@ -37,6 +37,7 @@
   "files": [
     "index.js",
     "types",
+    "yaml",
     "global.d.ts",
     "tsconfig/tsconfig.json"
   ],
