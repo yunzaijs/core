@@ -4,22 +4,23 @@
  */
 
 import { join } from 'path'
+import { ConifigOptions } from '../types'
 
 class ProcessorCore {
   /**
    *
    */
-  #applications = null
+  #applications: ConifigOptions['applications'] = null
 
   /**
    *
    */
-  #middlewares = null
+  #middlewares: ConifigOptions['middlewares'] = null
 
   /**
    *
    */
-  #plugins = null
+  #plugins: ConifigOptions['plugins'] = null
 
   /**
    *
@@ -47,7 +48,7 @@ class ProcessorCore {
    */
   async install(configdir = 'yunzai.config.js') {
     const js = join(process.cwd(), configdir)
-    const config = (await import(`file://${js}`)).default
+    const config: ConifigOptions = (await import(`file://${js}`)).default
     this.#applications = config.applications
     this.#middlewares = config.middlewares
     this.#plugins = config.plugins

@@ -294,8 +294,8 @@ export interface EventType extends GroupMessage {
  */
 export type ConifigOptions = {
   plugins?: any[]
-  applications?: any[]
-  middlewares?: any[]
+  applications?: ApplicationOptions[]
+  middlewares?: MiddlewareOptoins[]
 }
 
 export type MiddlewareOptoins = {

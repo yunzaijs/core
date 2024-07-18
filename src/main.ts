@@ -1,4 +1,4 @@
-import { Client, loader, createLogin, Processor } from 'yunzai'
+import { Client, Loader, createLogin, Processor } from 'yunzai'
 /**
  * *********************
  * 确保所有微任务做好准备后
@@ -20,6 +20,6 @@ setTimeout(async () => {
     /**
      * 加载插件
      */
-    await loader.load()
+    await Loader.load()
   })
 }, 0)

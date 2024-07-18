@@ -5,7 +5,7 @@ import * as common from 'yunzai'
 import {
   BOT_NAME,
   ConfigController as CFG,
-  handler as Handler,
+  Handler,
   puppeteer,
   GSCfg as gsCfg,
   MysApi,

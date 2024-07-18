@@ -442,7 +442,8 @@ class Loader {
               // 得到执行
               const data = await app.mounted(e)
               // data 都是 new好的。
-              for (const plugin of data) {
+              back: for (const plugin of data) {
+                plugin.e = e
                 for (const v of plugin.rule) {
                   // 不是函数。
                   if (typeof plugin[v.fnc] !== 'function') continue
@@ -452,17 +453,17 @@ class Loader {
                   const start = Date.now()
                   //
                   const res = await plugin[v.fnc](e)
+                  // 打印
+                  if (v.log !== false) {
+                    logger.mark(
+                      `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
+                    )
+                  }
                   // 不是 bool 而且 不为true  直接结束
                   if (typeof res != 'boolean' && res !== true) {
                     // 设置冷却cd
                     this.setLimit(e)
-                    // 打印
-                    if (v.log !== false) {
-                      logger.mark(
-                        `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
-                      )
-                    }
-                    break
+                    break back
                   }
                 }
               }
@@ -563,16 +564,16 @@ class Loader {
           const start = Date.now()
           // 执行
           const res = await plugin[v.fnc](e)
+          // 打印
+          if (v.log !== false) {
+            logger.mark(
+              `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
+            )
+          }
           // 不是 bool 而且 不为true  直接结束
           if (typeof res != 'boolean' && res !== true) {
             // 设置冷却cd
             this.setLimit(e)
-            // 打印
-            if (v.log !== false) {
-              logger.mark(
-                `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
-              )
-            }
             break
           }
           //
@@ -763,6 +764,8 @@ class Loader {
     if (e.user_id && cfg.masterQQ.includes(String(e.user_id))) {
       // 是主人
       e.isMaster = true
+    } else {
+      e.isMaster = false
     }
 
     /**
