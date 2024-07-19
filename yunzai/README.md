@@ -22,12 +22,6 @@ npm install yunzai
 /// <reference types="yunzai/global" />
 ```
 
-- yunzai-env.d.ts
-
-```ts
-/// <reference types="yunzai/env" />
-```
-
 - tsconfig.json
 
 ```json

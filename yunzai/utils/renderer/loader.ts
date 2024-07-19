@@ -44,14 +44,17 @@ class RendererLoader {
     const subFolders = readdirSync(this.dir, { withFileTypes: true }).filter(
       dirent => dirent.isDirectory()
     )
+    const configFile = join(CONFIG_INIT_PATH, 'puppeteer.yaml')
+    const rendererCfg = existsSync(configFile)
+      ? yaml.parse(readFileSync(configFile, 'utf8'))
+      : {}
+    const renderer = rendererFn(rendererCfg)
+    if (!this.renderers.has('puppeteer')) {
+      this.renderers.set('puppeteer', renderer)
+    }
     for (const subFolder of subFolders) {
       const name = subFolder.name
       try {
-        const configFile = join(CONFIG_INIT_PATH, 'puppeteer.yaml')
-        const rendererCfg = existsSync(configFile)
-          ? yaml.parse(readFileSync(configFile, 'utf8'))
-          : {}
-        const renderer = rendererFn(rendererCfg)
         if (
           !renderer.id ||
           !renderer.type ||
