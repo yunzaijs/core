@@ -4,6 +4,11 @@ import { join } from 'node:path'
 import { readFileSync } from 'node:fs'
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
 import { CONFIG_DEFAULT_PATH, CONFIG_INIT_PATH } from './system.js'
+import { createRequire } from 'module'
+import { app } from '../config.js'
+
+//
+const require = createRequire(import.meta.url)
 
 /**
  * ********
@@ -202,6 +207,13 @@ export class ProcessConfig {
         version: '4'
       }
     }
+  }
+
+
+  get pm2() {
+    const dir = join(process.cwd(), 'pm2.config.cjs')
+    const dir2 = join(app.cwd(), 'pm2', 'config.cjs')
+    return existsSync(dir) ? require(dir) : require(dir2)
   }
 
 

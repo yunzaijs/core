@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "author": "Yoimiya-Kokomi, Le-niao, ningmengchongshui",
   "description": "QQ Group Bot",
   "main": "./index.js",
@@ -37,6 +37,7 @@
   "files": [
     "index.js",
     "types",
+    "pm2",
     "yaml",
     "global.d.ts",
     "tsconfig/tsconfig.json"
@@ -53,6 +54,10 @@
     "./tsconfig/tsconfig.json": {
       "import": "./tsconfig/tsconfig.json",
       "require": "./tsconfig/tsconfig.json"
+    },
+    "./pm2": {
+      "require": "./pm2/config.cjs",
+      "types": "./pm2/config.d.ts"
     }
   },
   "publishConfig": {

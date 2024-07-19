@@ -1,6 +1,6 @@
 import './env'
-import './run.js'
 import './config.js'
+import './run.js'
 import './logger.js'
 import './redis.js'
 import './process.js'

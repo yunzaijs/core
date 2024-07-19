@@ -1,10 +1,5 @@
-import { join } from 'path'
-import { createRequire } from 'module'
-import { existsSync } from 'fs'
 import pm2 from 'pm2'
-
-//
-const require = createRequire(import.meta.url)
+import config from '../config/config.js'
 
 /**
  * 询问运行情况
@@ -12,13 +7,7 @@ const require = createRequire(import.meta.url)
  */
 function inquiryProcess() {
   return new Promise((resolve, reject) => {
-    // 开始询问是否有正在运行的同实例进程
-    const dir = join(process.cwd(), 'pm2.config.cjs')
-    if (!existsSync(dir)) {
-      // 不存在配置，错误
-      reject(false)
-    }
-    const cfg = require(dir)
+    const cfg = config.pm2
     pm2.connect(err => {
       if (err) {
         reject(err)
