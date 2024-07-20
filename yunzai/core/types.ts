@@ -1,14 +1,17 @@
-import { Sendable, type GroupMessage } from 'icqq'
+import { PrivateMessage, Sendable, type GroupMessage } from 'icqq'
 import { Client } from 'icqq'
 import { EventMap, PrivateMessageEvent, DiscussMessageEvent } from 'icqq'
 
 // 可去除的keys
-type OmitKeys<T, K extends keyof T> = {
+export type OmitKeys<T, K extends keyof T> = {
   [Key in keyof T as Key extends K ? never : Key]: T[Key]
 }
 
 // 去除 'message.group' 键
-type PersonWithoutEmail = OmitKeys<EventMap, 'message.group' | 'message'>
+type PersonWithoutEmail = OmitKeys<
+  EventMap,
+  'message.group' | 'message' | 'message.private'
+>
 
 // 扩展
 export interface EventEmun extends PersonWithoutEmail {
@@ -16,6 +19,7 @@ export interface EventEmun extends PersonWithoutEmail {
   'message': (
     event: EventType
   ) => void | PrivateMessageEvent | DiscussMessageEvent
+  'message.private': (event: PrivateMessageType) => void
 }
 
 // 插件类基础参数
@@ -70,6 +74,8 @@ export type PluginSuperType = {
   rule?: RuleType
 }
 
+export type PermissionEnum = 'master' | 'owner' | 'admin' | 'all'
+
 //
 export type RuleType = {
   /**
@@ -91,13 +97,10 @@ export type RuleType = {
   /**
    * 权限
    */
-  permission?: 'master' | 'owner' | 'admin' | 'all'
+  permission?: PermissionEnum
 }[]
 
-/**
- * 消息事件体
- */
-export interface EventType extends GroupMessage {
+export interface PrivateMessageType extends PrivateMessage {
   /**
    * 支持扩展属性
    */
@@ -290,50 +293,196 @@ export interface EventType extends GroupMessage {
 }
 
 /**
- * 配置选择
+ * 消息事件体
  */
-export type ConifigOptions = {
-  plugins?: any[]
-  applications?: ApplicationOptions[]
-  middlewares?: MiddlewareOptoins[]
-}
+export interface EventType extends GroupMessage {
+  /**
+   * 支持扩展属性
+   */
+  [key: string]: any
+  /**
+   *  'group' | 'private'
+   * @deprecated 已废弃
+   */
+  message_type: any
+  /**
+   * 是否是机器人主人
+   */
+  isMaster: boolean
+  /**
+   * 是否是机器人管理员
+   */
+  // isAdmin: boolean;
+  /**
+   * 是否是群里
+   */
+  isGroup: boolean
+  /**
+   * 是否是群管理
+   */
+  // isGroupAdmin:boolean
+  /**
+   * 是私聊
+   */
+  isPrivate: boolean
+  /**
+   * 是频道
+   */
+  isGuild: boolean
+  /**
+   * 用户名
+   */
+  user_id: number
+  /**
+   * 用户名
+   */
+  user_name: string
+  /**
+   * 用户头像
+   */
+  user_avatar: string
+  /**
+   * 用户消息
+   */
+  msg: string
+  /**
+   * 图片
+   * @deprecated 已废弃
+   */
+  img: string[]
+  /**
+   * 群号
+   */
+  group_id: number
+  /**
+   * 群名
+   */
+  group_name: string
+  /**
+   *  群头像
+   */
+  group_avatar: string
+  /**
+   * 是否存在at
+   */
+  at?: any
+  /**
+   * 是否at了机器人
+   */
+  atBot: boolean
+  /**
+   * 携带的文件
+   */
+  file: any
+  /**
+   * 被执行的地址
+   */
+  logText: string
+  /**
+   * 被执行的方法
+   */
+  logFnc: string
+  /**
+   * 消息发送
+   * @param arg
+   * @returns
+   */
+  reply: (
+    msg: Sendable,
+    quote?: boolean,
+    data?: {
+      recallMsg?: number
+      at?: any
+    }
+  ) => Promise<any>
+  /**
+   *
+   * 这是被重置的了的reply
+   * 不可使用
+   * @deprecated 已废弃
+   */
+  replyNew?: any
 
-export type MiddlewareOptoins = {
-  typing: 'message' | 'event'
-  // 插件名
-  name: string
-  // 修饰 属性名
-  on: (e: EventType) => any
-}
+  /**
+   *
+   */
 
-/**
- *
- */
-export type ApplicationOptions = {
   /**
-   * 插件创建时
-   * 处理的函数
-   * @param config
-   * @returns
+   * @deprecated 已废弃
    */
-  create?: (config: ConifigOptions) => any
+  notice_type: any
   /**
-   * 安装中间件之前的函数
+   * @deprecated 已废弃
    */
-  beforeMount?: (event: EventType) => any
+  group: {
+    /**
+     * @deprecated 已废弃
+     */
+    is_owner: any
+    /**
+     * @deprecated 已废弃
+     */
+    recallMsg: (...arg: any[]) => any
+    /**
+     * @deprecated 已废弃
+     */
+    getMemberMap: any
+    /**
+     * @deprecated 已废弃
+     */
+    quit: any
+    /**
+     * @deprecated 已废弃
+     */
+    mute_left: any
+    /**
+     * @deprecated 已废弃
+     */
+    pickMember: any
+    /**
+     * @deprecated 已废弃
+     */
+    sendMsg: any
+    /**
+     * @deprecated 已废弃
+     */
+    name: any
+    /**
+     * @deprecated 已废弃
+     */
+    makeForwardMsg: any
+  }
   /**
-   * 安装中间件之上会执行的函数
-   * 也就是响应前处理的函数
-   * @returns
+   * @deprecated 已废弃
    */
-  mounted: (event: EventType) => any
+  bot: typeof Client.prototype
   /**
-   * 每条响应时会都处理的函数
-   * @returns
+   *
+   * @deprecated 已废弃
    */
-  response?: () => any
+  approve: any
   /**
-   * 响应后
+   *
+   * @deprecated 已废弃
    */
-  afterResponse?: () => any
+  member: any
+  /**
+   *
+   * @deprecated 已废弃
+   */
+  self_id?: any
+  /**
+   *
+   * @deprecated 已废弃
+   */
+  detail_type?: any
+  /**
+   *
+   * @deprecated 已废弃
+   */
+  hasAlias?: any
+  /**
+   * @deprecated 已废弃
+   */
+  friend?: any
 }

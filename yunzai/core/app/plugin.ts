@@ -2,7 +2,10 @@ import { render } from './render.js'
 import { EventType } from '../types.js'
 import { type EventMap } from 'icqq'
 import { PluginSuperType, RuleType } from '../types.js'
-import { State, SymbolResolve, SymbolTimeout } from './storage.js'
+
+const State = {}
+const SymbolTimeout = Symbol('Timeout')
+const SymbolResolve = Symbol('Resolve')
 
 class BasePlugin {
   /**

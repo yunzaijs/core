@@ -1,54 +1,61 @@
-import { Plugin } from './plugin.js'
-import { EventEmun } from '../types.js'
+import { Application } from './Application.js'
+import { EventEmun, PermissionEnum } from '../types.js'
 
 /**
  * 消息
  */
 export class Messages<T extends keyof EventEmun> {
-  #init: {
-    event: T
-    priority?: number
-  } = {
-    event: 'message.group' as T,
-    priority: 9999
-  }
+  #event = 'message.group' as T
+
+  /**
+   *
+   */
+  #count = 0
+
+  /**
+   *
+   */
+  #rule: {
+    /**
+     * 正则
+     */
+    reg?: RegExp | string
+    /**
+     * 函数名
+     */
+    fnc?: string
+    /**
+     * 权限
+     */
+    permission?: PermissionEnum
+  }[] = []
 
   /**
    * 初始化配置
    * @param init
    */
-  constructor(init?: { event?: T; priority?: number }) {
-    for (const key in init) {
-      // 存在的才能获取
-      if (Object.prototype.hasOwnProperty.call(this.#init, key)) {
-        this.#init[key] = init[key]
-      }
-    }
+  constructor(event?: T) {
+    this.#event = event
   }
-
-  #count = 0
-  #rule: {
-    reg: RegExp
-    fnc: string
-  }[] = []
 
   /**
    *
    * @param reg
    * @param fnc
    */
-  response(
-    reg: RegExp,
+  use(
     fnc: (
       ...arg: Parameters<EventEmun[T]>
-    ) => Promise<boolean | undefined | void>
+    ) => Promise<boolean | void> | boolean | void,
+    values: [] | [RegExp] | [RegExp, PermissionEnum] = []
   ) {
     this.#count++
     const propName = `prop_${this.#count}`
     this[propName] = fnc
     this.#rule.push({
-      reg,
-      fnc: propName
+      fnc: propName,
+      reg: values[0],
+      permission: values[1] ?? 'all'
     })
   }
 
@@ -57,18 +64,15 @@ export class Messages<T extends keyof EventEmun> {
    */
   get ok() {
     const App = this
-    class Children extends Plugin {
+    class Children extends Application<any> {
       constructor() {
         // init
-        super()
-        // 丢给this
-        const init = {
-          ...App.#init,
-          rule: App.#rule
-        }
-        for (const key in init) {
-          this[key] = init[key]
-        }
+        super(App.#event)
+        //
+        this.event = App.#event
+        //
+        this.rule = App.#rule
+
         for (const key of App.#rule) {
           // 确认存在该函数
           if (App[key.fnc] instanceof Function) {
@@ -79,29 +83,5 @@ export class Messages<T extends keyof EventEmun> {
       }
     }
     return Children
-  }
-}
-
-/**
- * 事件
- */
-export class Events {
-  #count = 0
-  #data: {
-    [key: string]: typeof Plugin
-  } = {}
-  /**
-   *
-   * @param val
-   */
-  use(val: typeof Plugin) {
-    this.#count++
-    this.#data[this.#count] = val
-  }
-  /**
-   *
-   */
-  get ok() {
-    return this.#data
   }
 }

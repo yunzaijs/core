@@ -8,7 +8,7 @@ import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import { stat, readdir } from 'node:fs/promises'
 // types
-import { EventType } from '../types.js'
+import { EventType, PermissionEnum } from '../types.js'
 // handler
 import Handler from './handler.js'
 // config
@@ -16,6 +16,8 @@ import cfg from '../../config/config.js'
 // 中间件
 import { PLUGINS_PATH, BOT_COUNT_KEY } from '../../config/system.js'
 import { Processor } from '../processor/index.js'
+import { observerHandle } from '../observer/headle.js'
+import { EventTypeMap, EventTypeMapFilter } from '../client/event.js'
 
 /**
  *
@@ -137,11 +139,7 @@ class Loader {
   /**
    * 事件
    */
-  eventMap = {
-    message: ['post_type', 'message_type', 'sub_type'],
-    notice: ['post_type', 'notice_type', 'sub_type'],
-    request: ['post_type', 'request_type', 'sub_type']
-  }
+  eventMap = EventTypeMap
 
   /**
    * 监听事件加载
@@ -432,6 +430,13 @@ class Loader {
       }
     }
 
+    // 是否只关注主动at
+    if (!this.onlyReplyAt(e)) return
+
+    // 订阅拦截
+    const T = observerHandle(e)
+    if (!T) return
+
     const Promises = []
     if (Array.isArray(Processor.applications)) {
       for (const app of Processor.applications) {
@@ -443,27 +448,26 @@ class Loader {
               const data = await app.mounted(e)
               // data 都是 new好的。
               back: for (const plugin of data) {
+                // 非常规事件
+                if (plugin.event && !this.filtEvent(e as any, plugin)) continue
                 plugin.e = e
                 for (const v of plugin.rule) {
+                  // 存在正则即校验 校验正则
+                  if (v?.reg && !new RegExp(v.reg).test(e.msg)) continue
+                  // 权限不足
+                  if (!this.filtPermission(e, v)) continue
+                  const FUNC = plugin[v.fnc]
                   // 不是函数。
-                  if (typeof plugin[v.fnc] !== 'function') continue
-                  // 校验正则
-                  if (!new RegExp(v.reg).test(e.msg)) continue
-                  // 开始时间
-                  const start = Date.now()
-                  //
-                  const res = await plugin[v.fnc](e)
-                  // 打印
-                  if (v.log !== false) {
-                    logger.mark(
-                      `${e.logFnc} ${lodash.truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
-                    )
-                  }
-                  // 不是 bool 而且 不为true  直接结束
-                  if (typeof res != 'boolean' && res !== true) {
-                    // 设置冷却cd
-                    this.setLimit(e)
-                    break back
+                  if (typeof FUNC == 'function') {
+                    const res = await FUNC.call(plugin, e)
+                    // 不是 bool 而且 不为true  直接结束
+                    if (typeof res != 'boolean' && res !== true) {
+                      // 设置冷却cd
+                      this.setLimit(e)
+                      break back
+                    }
+                  } else {
+                    continue
                   }
                 }
               }
@@ -486,7 +490,7 @@ class Loader {
       p._name = i.name
       p.e = e
       //判断是否启用功能，过滤事件
-      if (this.checkDisable(p) && this.filtEvent(e, p)) priority.push(p)
+      if (this.checkDisable(p) && this.filtEvent(e as any, p)) priority.push(p)
     }
 
     // 开始上下文执行
@@ -518,9 +522,6 @@ class Loader {
       if (typeof ret != 'boolean' && ret !== true) break
     }
 
-    // 是否只关注主动at
-    if (!this.onlyReplyAt(e)) return
-
     // 优先执行 accept 。不进行匹配就会执行的方法
     for (const plugin of priority) {
       if (!plugin.accept) continue
@@ -539,7 +540,7 @@ class Loader {
       //
       for (const v of plugin.rule) {
         // 判断事件 不是过滤的
-        if (v.event && !this.filtEvent(e, v)) continue
+        if (v.event && !this.filtEvent(e as any, v)) continue
         // 不是函数。
         if (typeof plugin[v.fnc] !== 'function') continue
         // 校验正则
@@ -992,7 +993,7 @@ class Loader {
    * @param e
    * @param msg
    */
-  count(e, msg) {
+  count(e: EventType, msg) {
     //
     let screenshot = false
     //
@@ -1018,7 +1019,7 @@ class Loader {
    * @param type
    * @param groupId
    */
-  saveCount(type, groupId = '') {
+  saveCount(type: string, groupId = 0) {
     //
     let key = BOT_COUNT_KEY
     //
@@ -1199,7 +1200,12 @@ class Loader {
    * @param p
    * @returns
    */
-  checkDisable(p: any) {
+  checkDisable(p: {
+    name: string
+    e: {
+      group_id: number
+    }
+  }) {
     const groupCfg = cfg.getGroup(p.e.group_id)
     if (groupCfg.disable?.length && groupCfg.disable.includes(p.name))
       return false
@@ -1214,24 +1220,7 @@ class Loader {
    * @param v
    * @returns
    */
-  filtEvent(
-    e: EventType,
-    v: {
-      event: string
-    }
-  ) {
-    if (!v.event) return false
-    const event = v.event.split('.')
-    const eventMap = this.eventMap[e.post_type] || []
-    const newEvent = []
-    //
-    for (const i in event) {
-      if (event[i] == '*') newEvent.push(event[i])
-      else newEvent.push(e[eventMap[i]])
-    }
-    //
-    return v.event == newEvent.join('.')
-  }
+  filtEvent = EventTypeMapFilter
 
   /**
    * 判断权限
@@ -1239,7 +1228,12 @@ class Loader {
    * @param v
    * @returns
    */
-  filtPermission(e: EventType, v) {
+  filtPermission(
+    e: EventType,
+    v: {
+      permission?: PermissionEnum
+    }
+  ) {
     if (v.permission == 'all' || !v.permission) return true
     if (v.permission == 'master') {
       if (e.isMaster) {
