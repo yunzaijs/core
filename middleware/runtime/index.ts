@@ -6,16 +6,11 @@ import {
   ConfigController as CFG,
   Handler,
   puppeteer,
-  middlewareOptions, useEvent,
+  middlewareOptions,
+  useEvent,
   type EventEmun
 } from 'yunzai'
-import {
-  GSCfg as gsCfg,
-  MysApi,
-  MysInfo,
-  NoteUser,
-  MysUser,
-} from 'yunzai-mys'
+import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai-mys'
 
 export class Runtime {
   #mysInfo = {}

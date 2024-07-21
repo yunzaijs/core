@@ -52,33 +52,33 @@ export default class apiTool {
         /** 体力接口fp参数用于避开验证码 */
         ...(['cn_gf01', 'cn_qd01'].includes(this.server)
           ? {
-            getFp: {
-              url: `${hostPublicData}device-fp/api/getFp`,
-              body: {
-                seed_id: data.seed_id,
-                device_id: data.deviceId.toUpperCase(),
-                platform: '1',
-                seed_time: new Date().getTime() + '',
-                ext_fields: `{"proxyStatus":"0","accelerometer":"-0.159515x-0.830887x-0.682495","ramCapacity":"3746","IDFV":"${data.deviceId.toUpperCase()}","gyroscope":"-0.191951x-0.112927x0.632637","isJailBreak":"0","model":"iPhone12,5","ramRemain":"115","chargeStatus":"1","networkType":"WIFI","vendor":"--","osVersion":"17.0.2","batteryStatus":"50","screenSize":"414×896","cpuCores":"6","appMemory":"55","romCapacity":"488153","romRemain":"157348","cpuType":"CPU_TYPE_ARM64","magnetometer":"-84.426331x-89.708435x-37.117889"}`,
-                app_name: 'bbs_cn',
-                device_fp: '38d7ee834d1e9'
+              getFp: {
+                url: `${hostPublicData}device-fp/api/getFp`,
+                body: {
+                  seed_id: data.seed_id,
+                  device_id: data.deviceId.toUpperCase(),
+                  platform: '1',
+                  seed_time: new Date().getTime() + '',
+                  ext_fields: `{"proxyStatus":"0","accelerometer":"-0.159515x-0.830887x-0.682495","ramCapacity":"3746","IDFV":"${data.deviceId.toUpperCase()}","gyroscope":"-0.191951x-0.112927x0.632637","isJailBreak":"0","model":"iPhone12,5","ramRemain":"115","chargeStatus":"1","networkType":"WIFI","vendor":"--","osVersion":"17.0.2","batteryStatus":"50","screenSize":"414×896","cpuCores":"6","appMemory":"55","romCapacity":"488153","romRemain":"157348","cpuType":"CPU_TYPE_ARM64","magnetometer":"-84.426331x-89.708435x-37.117889"}`,
+                  app_name: 'bbs_cn',
+                  device_fp: '38d7ee834d1e9'
+                }
               }
             }
-          }
           : {
-            getFp: {
-              url: `${hostPublicData}device-fp/api/getFp`,
-              body: {
-                seed_id: data.seed_id,
-                device_id: data.deviceId.toUpperCase(),
-                platform: '5',
-                seed_time: new Date().getTime() + '',
-                ext_fields: `{"userAgent":"Mozilla/5.0 (Linux; Android 11; J9110 Build/55.2.A.4.332; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.179 Mobile Safari/537.36 miHoYoBBSOversea/2.55.0","browserScreenSize":"387904","maxTouchPoints":"5","isTouchSupported":"1","browserLanguage":"zh-CN","browserPlat":"Linux aarch64","browserTimeZone":"Asia/Shanghai","webGlRender":"Adreno (TM) 640","webGlVendor":"Qualcomm","numOfPlugins":"0","listOfPlugins":"unknown","screenRatio":"2.625","deviceMemory":"4","hardwareConcurrency":"8","cpuClass":"unknown","ifNotTrack":"unknown","ifAdBlock":"0","hasLiedLanguage":"0","hasLiedResolution":"1","hasLiedOs":"0","hasLiedBrowser":"0","canvas":"${randomRange()}","webDriver":"0","colorDepth":"24","pixelRatio":"2.625","packageName":"unknown","packageVersion":"2.27.0","webgl":"${randomRange()}"}`,
-                app_name: 'hk4e_global',
-                device_fp: '38d7f2364db95'
+              getFp: {
+                url: `${hostPublicData}device-fp/api/getFp`,
+                body: {
+                  seed_id: data.seed_id,
+                  device_id: data.deviceId.toUpperCase(),
+                  platform: '5',
+                  seed_time: new Date().getTime() + '',
+                  ext_fields: `{"userAgent":"Mozilla/5.0 (Linux; Android 11; J9110 Build/55.2.A.4.332; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.179 Mobile Safari/537.36 miHoYoBBSOversea/2.55.0","browserScreenSize":"387904","maxTouchPoints":"5","isTouchSupported":"1","browserLanguage":"zh-CN","browserPlat":"Linux aarch64","browserTimeZone":"Asia/Shanghai","webGlRender":"Adreno (TM) 640","webGlVendor":"Qualcomm","numOfPlugins":"0","listOfPlugins":"unknown","screenRatio":"2.625","deviceMemory":"4","hardwareConcurrency":"8","cpuClass":"unknown","ifNotTrack":"unknown","ifAdBlock":"0","hasLiedLanguage":"0","hasLiedResolution":"1","hasLiedOs":"0","hasLiedBrowser":"0","canvas":"${randomRange()}","webDriver":"0","colorDepth":"24","pixelRatio":"2.625","packageName":"unknown","packageVersion":"2.27.0","webgl":"${randomRange()}"}`,
+                  app_name: 'hk4e_global',
+                  device_fp: '38d7f2364db95'
+                }
               }
-            }
-          }),
+            }),
         /** 首页宝箱 */
         index: {
           url: `${hostRecord}game_record/app/genshin/api/index`,
@@ -157,43 +157,43 @@ export default class apiTool {
       honkaisr: {
         ...(['prod_gf_cn', 'prod_qd_cn'].includes(this.server)
           ? {
-            UserGame: {
-              url: `${host}binding/api/getUserGameRolesByCookie`,
-              query: `game_biz=hkrpg_cn&region=${this.server}&game_uid=${this.uid}`
-            },
-            /** 体力接口fp参数用于避开验证码 */
-            getFp: {
-              url: `${hostPublicData}device-fp/api/getFp`,
-              body: {
-                seed_id: data.seed_id,
-                device_id: data.deviceId.toUpperCase(),
-                platform: '1',
-                seed_time: new Date().getTime() + '',
-                ext_fields: `{"proxyStatus":"0","accelerometer":"-0.159515x-0.830887x-0.682495","ramCapacity":"3746","IDFV":"${data.deviceId.toUpperCase()}","gyroscope":"-0.191951x-0.112927x0.632637","isJailBreak":"0","model":"iPhone12,5","ramRemain":"115","chargeStatus":"1","networkType":"WIFI","vendor":"--","osVersion":"17.0.2","batteryStatus":"50","screenSize":"414×896","cpuCores":"6","appMemory":"55","romCapacity":"488153","romRemain":"157348","cpuType":"CPU_TYPE_ARM64","magnetometer":"-84.426331x-89.708435x-37.117889"}`,
-                app_name: 'bbs_cn',
-                device_fp: '38d7ee834d1e9'
+              UserGame: {
+                url: `${host}binding/api/getUserGameRolesByCookie`,
+                query: `game_biz=hkrpg_cn&region=${this.server}&game_uid=${this.uid}`
+              },
+              /** 体力接口fp参数用于避开验证码 */
+              getFp: {
+                url: `${hostPublicData}device-fp/api/getFp`,
+                body: {
+                  seed_id: data.seed_id,
+                  device_id: data.deviceId.toUpperCase(),
+                  platform: '1',
+                  seed_time: new Date().getTime() + '',
+                  ext_fields: `{"proxyStatus":"0","accelerometer":"-0.159515x-0.830887x-0.682495","ramCapacity":"3746","IDFV":"${data.deviceId.toUpperCase()}","gyroscope":"-0.191951x-0.112927x0.632637","isJailBreak":"0","model":"iPhone12,5","ramRemain":"115","chargeStatus":"1","networkType":"WIFI","vendor":"--","osVersion":"17.0.2","batteryStatus":"50","screenSize":"414×896","cpuCores":"6","appMemory":"55","romCapacity":"488153","romRemain":"157348","cpuType":"CPU_TYPE_ARM64","magnetometer":"-84.426331x-89.708435x-37.117889"}`,
+                  app_name: 'bbs_cn',
+                  device_fp: '38d7ee834d1e9'
+                }
               }
             }
-          }
           : {
-            UserGame: {
-              url: `${host}binding/api/getUserGameRolesByCookie`,
-              query: `game_biz=hkrpg_global&region=${this.server}&game_uid=${this.uid}`
-            },
-            /** 体力接口fp参数用于避开验证码 */
-            getFp: {
-              url: `${hostPublicData}device-fp/api/getFp`,
-              body: {
-                seed_id: data.seed_id,
-                device_id: data.deviceId.toUpperCase(),
-                platform: '5',
-                seed_time: new Date().getTime() + '',
-                ext_fields: `{"userAgent":"Mozilla/5.0 (Linux; Android 11; J9110 Build/55.2.A.4.332; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.179 Mobile Safari/537.36 miHoYoBBSOversea/2.55.0","browserScreenSize":"387904","maxTouchPoints":"5","isTouchSupported":"1","browserLanguage":"zh-CN","browserPlat":"Linux aarch64","browserTimeZone":"Asia/Shanghai","webGlRender":"Adreno (TM) 640","webGlVendor":"Qualcomm","numOfPlugins":"0","listOfPlugins":"unknown","screenRatio":"2.625","deviceMemory":"4","hardwareConcurrency":"8","cpuClass":"unknown","ifNotTrack":"unknown","ifAdBlock":"0","hasLiedLanguage":"0","hasLiedResolution":"1","hasLiedOs":"0","hasLiedBrowser":"0","canvas":"${randomRange()}","webDriver":"0","colorDepth":"24","pixelRatio":"2.625","packageName":"unknown","packageVersion":"2.27.0","webgl":"${randomRange()}"}`,
-                app_name: 'hkrpg_global',
-                device_fp: '38d7f2364db95'
+              UserGame: {
+                url: `${host}binding/api/getUserGameRolesByCookie`,
+                query: `game_biz=hkrpg_global&region=${this.server}&game_uid=${this.uid}`
+              },
+              /** 体力接口fp参数用于避开验证码 */
+              getFp: {
+                url: `${hostPublicData}device-fp/api/getFp`,
+                body: {
+                  seed_id: data.seed_id,
+                  device_id: data.deviceId.toUpperCase(),
+                  platform: '5',
+                  seed_time: new Date().getTime() + '',
+                  ext_fields: `{"userAgent":"Mozilla/5.0 (Linux; Android 11; J9110 Build/55.2.A.4.332; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.179 Mobile Safari/537.36 miHoYoBBSOversea/2.55.0","browserScreenSize":"387904","maxTouchPoints":"5","isTouchSupported":"1","browserLanguage":"zh-CN","browserPlat":"Linux aarch64","browserTimeZone":"Asia/Shanghai","webGlRender":"Adreno (TM) 640","webGlVendor":"Qualcomm","numOfPlugins":"0","listOfPlugins":"unknown","screenRatio":"2.625","deviceMemory":"4","hardwareConcurrency":"8","cpuClass":"unknown","ifNotTrack":"unknown","ifAdBlock":"0","hasLiedLanguage":"0","hasLiedResolution":"1","hasLiedOs":"0","hasLiedBrowser":"0","canvas":"${randomRange()}","webDriver":"0","colorDepth":"24","pixelRatio":"2.625","packageName":"unknown","packageVersion":"2.27.0","webgl":"${randomRange()}"}`,
+                  app_name: 'hkrpg_global',
+                  device_fp: '38d7f2364db95'
+                }
               }
-            }
-          }),
+            }),
         /** 首页宝箱 */
         index: {
           url: `${hostRecord}game_record/app/hkrpg/api/index`,
