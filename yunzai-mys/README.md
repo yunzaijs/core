@@ -1,4 +1,4 @@
-# YunzaiJS
+# YunzaiMYS
 
 > 必要环境 Windows/Linux + Chrome/Chromium/Edge
 
