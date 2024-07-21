@@ -2,7 +2,7 @@ import { Sequelize, DataTypes, Model } from 'sequelize'
 
 // Data.createDir
 import { createDir } from '../utils/Data.js'
-import { SQLITE_DB_DIR } from '../config/system.js'
+import { SQLITE_DB_DIR } from 'yunzai'
 import { join } from 'path'
 
 createDir(SQLITE_DB_DIR, 'root')

@@ -1,6 +1,6 @@
 import BaseModel from './BaseModel.js'
 import lodash from 'lodash'
-import MysUtil from '../mys/MysUtil.js'
+import MysUtil from '../MysUtil.js'
 
 const { Types } = BaseModel
 

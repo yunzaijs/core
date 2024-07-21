@@ -1,6 +1,6 @@
 import md5 from 'md5'
 import fetch from 'node-fetch'
-import cfg from '../config/config.js'
+import { ConfigController as cfg } from 'yunzai'
 import apiTool from './apiTool.js'
 import { BOT_MYS_GENSHIN } from './system.js'
 

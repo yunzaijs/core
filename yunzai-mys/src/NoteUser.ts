@@ -3,9 +3,9 @@ import lodash from 'lodash'
 // tudp 循环引用
 import MysUser from './MysUser.js'
 import MysUtil from './MysUtil.js'
-import { UserDB } from '../db/index.js'
+import { UserDB } from './db/index.js'
 // Data.forEach
-import * as Data from '../utils/Data.js'
+import * as Data from './utils/Data.js'
 import { BOT_NOTE_USER } from './system.js'
 /**
  * *******************

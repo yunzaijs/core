@@ -69,6 +69,26 @@ export default [
       })
     ],
     onwarn
+  },
+  {
+    input: 'yunzai-mys/index.ts',
+    output: {
+      file: 'yunzai-mys/index.js',
+      format: 'es',
+      sourcemap: false
+    },
+    plugins: [
+      typescript({
+        compilerOptions: {
+          declaration: true,
+          declarationDir: 'yunzai-mys/types',
+          outDir: 'yunzai-mys/types'
+        },
+        include: ['yunzai-mys/**/*'],
+        exclude: ['node_modules']
+      })
+    ],
+    onwarn
   }
 ].concat(
   cfg.map(item => {

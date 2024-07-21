@@ -7,7 +7,6 @@ import MysInfo from './mysInfo.js'
 import MysUser from './MysUser.js'
 import MysUtil from './MysUtil.js'
 import NoteUser from './NoteUser.js'
-export * from './system.js'
 export { BaseModel, DailyCache, MysUser, MysUtil, NoteUser }
 export { ApiTool, GSCfg, MysApi, MysInfo }
 /**
@@ -26,3 +25,7 @@ export const mysApi = MysApi
  * @deprecated 已废弃
  */
 export const mysInfo = MysInfo
+/**
+ * 
+ */
+export * from './system.js'

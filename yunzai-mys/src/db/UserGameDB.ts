@@ -34,7 +34,7 @@ const COLUMNS = {
 }
 
 //
-class UserGameDB extends BaseModel {}
+class UserGameDB extends BaseModel { }
 
 //
 BaseModel.initDB(UserGameDB, COLUMNS)

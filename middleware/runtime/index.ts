@@ -1,20 +1,21 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { filter, repeat } from 'lodash-es'
-import { middlewareOptions } from 'yunzai'
 import * as common from 'yunzai'
 import {
   BOT_NAME,
   ConfigController as CFG,
   Handler,
   puppeteer,
+  middlewareOptions, useEvent,
+  type EventEmun
+} from 'yunzai'
+import {
   GSCfg as gsCfg,
   MysApi,
   MysInfo,
   NoteUser,
   MysUser,
-  type EventEmun
-} from 'yunzai'
-import { useEvent } from 'yunzai'
+} from 'yunzai-mys'
 
 export class Runtime {
   #mysInfo = {}

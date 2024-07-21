@@ -13,19 +13,5 @@
 - install
 
 ```sh
-npm install yunzai
-```
-
-- global.d.ts
-
-```ts
-/// <reference types="yunzai/global" />
-```
-
-- tsconfig.json
-
-```json
-{
-  "extends": "yunzai/tsconfig/tsconfig.json"
-}
+npm install yunzai yunzai-mys
 ```

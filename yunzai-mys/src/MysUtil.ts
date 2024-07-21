@@ -1,5 +1,5 @@
 // Data.forEach
-import * as Data from '../utils/Data.js'
+import * as Data from './utils/Data.js'
 
 /**
  *
