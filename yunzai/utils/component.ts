@@ -6,7 +6,6 @@ import { getLink } from './link.tsx'
 import { createHash } from 'crypto'
 import { ComponentCreateOpsionType } from './types.ts'
 
-
 export function PathsCss(htmlContent) {
   const regex = /(src|href|url)\s*=\s*["']([^"']*\\[^"']*)["']/g
   htmlContent = htmlContent.replace(regex, (_, p1, p2) => {

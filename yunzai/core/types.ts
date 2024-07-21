@@ -70,8 +70,7 @@ export type PluginSuperType = {
   rule?: RuleType
 }
 
-
-// 
+//
 export type RuleType = {
   /**
    * 正则

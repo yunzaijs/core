@@ -36,7 +36,10 @@ export class EventOnline extends EventListener {
     const online_msg_exp = cfg.bot?.online_msg_exp ?? 86400
     let val = 0
     try {
-      const str = await levelStorage.get(key).then(res => res.toString()).catch(() => '0')
+      const str = await levelStorage
+        .get(key)
+        .then(res => res.toString())
+        .catch(() => '0')
       const n = Number(str)
       val = isNaN(n) ? 0 : n
     } catch {

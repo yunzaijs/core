@@ -5,7 +5,7 @@
  * 星铁中间件
  * 对msg进行代理和裁剪
  */
-import { type EventType } from 'yunzai/core'
+import { type EventType } from 'yunzai'
 export default class StarRail {
   static names = ['isSr', 'isGs', 'game', 'msg']
 

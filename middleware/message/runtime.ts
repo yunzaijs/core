@@ -10,90 +10,18 @@
  */
 import { filter, repeat } from 'lodash-es'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { BOT_NAME, ConfigController as CFG } from 'yunzai/config'
-import { puppeteer } from 'yunzai/utils'
-import * as common from 'yunzai/utils'
-import { handler as Handler, type EventType } from 'yunzai/core'
-import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai/mys'
-/**
- * yunzai-runtime
- * *********
- * 中间件设计处于实验阶段，。。。
- * *********
- */
-export default class Runtime {
-  //
-  static names = ['user', 'runtime']
-  //
-  e: EventType
+import { BOT_NAME, ConfigController as CFG } from 'yunzai'
+import { puppeteer } from 'yunzai'
+import * as common from 'yunzai'
+import { handler as Handler, type EventType } from 'yunzai'
+import { GSCfg as gsCfg, MysApi, MysInfo, NoteUser, MysUser } from 'yunzai'
 
+export class RuntimeBase {
   //
   _mysInfo = {}
 
   //
-  get handler() {
-    return Handler
-  }
-
-  callNames = {
-    init: async () => {
-      // 初始化缓存
-      await MysInfo.initCache()
-    },
-    user: async () => {
-      const user = await NoteUser.create(this.e)
-      if (user) {
-        // 对象代理
-        this.e.user = new Proxy(user, {
-          get(self, key: string) {
-            const fnMap = {
-              uid: 'getUid',
-              uidList: 'getUidList',
-              mysUser: 'getMysUser',
-              ckUidList: 'getCkUidList'
-            }
-            if (fnMap[key]) {
-              return self[fnMap[key]](this.e.game)
-            }
-            if (key === 'uidData') {
-              return self.getUidData('', this.e.game)
-            }
-            const list = [
-              'getUid',
-              'getUidList',
-              'getMysUser',
-              'getCkUidList',
-              'getUidMapList',
-              'getGameDs'
-            ]
-            if (list.includes(key)) {
-              return (_game, arg2) => {
-                return self[key](_game || this.e.game, arg2)
-              }
-            }
-            const list2 = [
-              'getUidData',
-              'hasUid',
-              'addRegUid',
-              'delRegUid',
-              'setMainUid'
-            ]
-            if (list2.includes(key)) {
-              return (uid, _game = '') => {
-                return self[key](uid, _game || this.e.game)
-              }
-            }
-            return self[key]
-          }
-        })
-      }
-      return this.e.user
-    },
-    runtime: () => {
-      //
-      return this
-    }
-  }
+  e: EventType
 
   /**
    *
@@ -335,5 +263,81 @@ export default class Runtime {
       }
     }
     return cfg.retType === 'msgId' ? ret : true
+  }
+}
+
+/**
+ * yunzai-runtime
+ * *********
+ * 中间件设计处于实验阶段，。。。
+ * *********
+ */
+export default class Runtime extends RuntimeBase {
+  //
+  static names = ['user', 'runtime']
+
+  //
+  get handler() {
+    return Handler
+  }
+
+  callNames = {
+    init: async () => {
+      // 初始化缓存
+      await MysInfo.initCache()
+    },
+    user: async () => {
+      const user = await NoteUser.create(this.e)
+      if (user) {
+        // 对象代理
+        this.e.user = new Proxy(user, {
+          get(self, key: string) {
+            const fnMap = {
+              uid: 'getUid',
+              uidList: 'getUidList',
+              mysUser: 'getMysUser',
+              ckUidList: 'getCkUidList'
+            }
+            if (fnMap[key]) {
+              return self[fnMap[key]](this.e.game)
+            }
+            if (key === 'uidData') {
+              return self.getUidData('', this.e.game)
+            }
+            const list = [
+              'getUid',
+              'getUidList',
+              'getMysUser',
+              'getCkUidList',
+              'getUidMapList',
+              'getGameDs'
+            ]
+            if (list.includes(key)) {
+              return (_game, arg2) => {
+                return self[key](_game || this.e.game, arg2)
+              }
+            }
+            const list2 = [
+              'getUidData',
+              'hasUid',
+              'addRegUid',
+              'delRegUid',
+              'setMainUid'
+            ]
+            if (list2.includes(key)) {
+              return (uid, _game = '') => {
+                return self[key](uid, _game || this.e.game)
+              }
+            }
+            return self[key]
+          }
+        })
+      }
+      return this.e.user
+    },
+    runtime: () => {
+      //
+      return this
+    }
   }
 }

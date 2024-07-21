@@ -9,9 +9,9 @@ export class Messages<T extends keyof EventEmun> {
     event: T
     priority?: number
   } = {
-      event: 'message.group' as T,
-      priority: 9999
-    }
+    event: 'message.group' as T,
+    priority: 9999
+  }
 
   /**
    * 初始化配置

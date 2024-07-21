@@ -22,10 +22,10 @@ export class Picture {
   }
 
   /**
-   * 
-   * @param element 
-   * @param options 
-   * @returns 
+   *
+   * @param element
+   * @param options
+   * @returns
    */
   async screenshot(
     element: React.ReactNode,
