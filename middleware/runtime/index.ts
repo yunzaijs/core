@@ -249,7 +249,7 @@ export default (config?: options) => {
     name: config?.name ?? 'Runtime',
     // 监听事件
     on: async event => {
-      useEvent(
+      await useEvent(
         async e => {
           // init
           await MysInfo.initCache()

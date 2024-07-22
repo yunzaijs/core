@@ -8,11 +8,4 @@ import Puppeteer from './lib/puppeteer.js'
  * @returns renderer.render 渲染入口
  * @deprecated 已废弃
  */
-<<<<<<< HEAD
-export default function (config) {
-  // TODO Puppeteer待简化重构
-  return new Puppeteer(config)
-}
-=======
 export default config => new Puppeteer(config)
->>>>>>> dev

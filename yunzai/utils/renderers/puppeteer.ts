@@ -95,7 +95,7 @@ export default class Puppeteer extends Renderer {
           await levelStorage.del(this.browserMacKey)
         }
       }
-    } catch (err) { }
+    } catch (err) {}
 
     if (!this.browser || !connectFlag) {
       const Error = (err: any, trace: any) => {
@@ -166,7 +166,7 @@ export default class Puppeteer extends Renderer {
           break
         }
       }
-    } catch (e) { }
+    } catch (e) {}
     mac = mac.replace(/:/g, '')
     return mac
   }
