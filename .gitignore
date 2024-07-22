@@ -160,6 +160,8 @@ yarn.lock
 
 /yunzai/**/*.js
 /yunzai/types
+/yunzai-mys/**/*.js
+/yunzai-mys/types
 
 /middleware/**/*.js
 
