@@ -1,4 +1,4 @@
-import { PuppeteerLaunchOptions } from 'puppeteer';
+import { PuppeteerLaunchOptions } from 'puppeteer'
 import Puppeteer from './puppeteer.js'
 /**
  *
@@ -11,11 +11,13 @@ import Puppeteer from './puppeteer.js'
  * @returns renderer.type 渲染类型，保留字段，暂时支持image
  * @returns renderer.render 渲染入口
  */
-export default function (config?: PuppeteerLaunchOptions & {
-  chromiumPath?: string;
-  puppeteerWS?: any;
-  puppeteerTimeout?: any;
-}) {
+export default function (
+  config?: PuppeteerLaunchOptions & {
+    chromiumPath?: string
+    puppeteerWS?: any
+    puppeteerTimeout?: any
+  }
+) {
   // TODO Puppeteer待简化重构
   return new Puppeteer(config)
 }

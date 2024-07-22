@@ -152,9 +152,29 @@ public/
 /html/
 /.html/
 
-/plugins/
 
 /localStorage/
 /levelStorage/
 
 yarn.lock
+
+/yunzai/**/*.js
+/yunzai/types
+/yunzai-mys/**/*.js
+/yunzai-mys/types
+
+/middleware/**/*.js
+
+types
+
+/src/**/*.js
+
+/.cache/
+
+
+
+log.md
+
+/config
+
+test.ts

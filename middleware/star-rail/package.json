@@ -1,0 +1,26 @@
+{
+  "name": "yz-mw-star-rail",
+  "version": "1.0.0-rc.0",
+  "author": "ningmengchongshui",
+  "description": "yunzai中间件",
+  "main": "./index.js",
+  "type": "module",
+  "dependencies": {},
+  "files": [
+    "index.js",
+    "types"
+  ],
+  "types": "types",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "types": "./types/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=16.14.0"
+  }
+}

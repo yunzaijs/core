@@ -1,41 +1,69 @@
 {
   "name": "yunzai",
-  "version": "4.0.0-rc.0",
-  "author": "Yoimiya-Kokomi, Le-niao",
+  "version": "1.0.1-rc.1",
+  "author": "Yoimiya-Kokomi, Le-niao, ningmengchongshui",
   "description": "QQ Group Bot",
   "main": "./index.js",
   "type": "module",
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "chalk": "^5.3.0",
+    "chokidar": "^3.6.0",
+    "dotenv": "^16.4.5",
+    "https-proxy-agent": "7.0.4",
+    "icqq": "^0.6.10",
+    "image-size": "^1.1.1",
+    "inquirer": "^9.2.16",
+    "leveldown": "^6.1.1",
+    "levelup": "^5.1.1",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "log4js": "^6.9.1",
+    "md5": "^2.3.0",
+    "moment": "^2.30.1",
+    "node-fetch": "^3.3.2",
+    "node-localstorage": "^3.0.5",
+    "node-schedule": "^2.1.1",
+    "oicq": "^2.3.1",
+    "pm2": "^5.3.1",
+    "puppeteer": "^22.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "redis": "^4.6.13",
+    "sequelize": "^6.37.1",
+    "sqlite3": "5.1.6",
+    "yaml": "^2.4.1"
+  },
+  "files": [
+    "index.js",
+    "types",
+    "pm2",
+    "yaml",
+    "global.d.ts",
+    "tsconfig/tsconfig.json"
+  ],
+  "types": "types",
   "exports": {
     ".": {
-      "import": "./index.js"
+      "import": "./index.js",
+      "types": "./types/index.d.ts"
     },
-    "./config": {
-      "import": "./config/index.js"
+    "./global": {
+      "types": "./global.d.ts"
     },
-    "./db": {
-      "import": "./db/index.js"
+    "./tsconfig/tsconfig.json": {
+      "import": "./tsconfig/tsconfig.json",
+      "require": "./tsconfig/tsconfig.json"
     },
-    "./mys": {
-      "import": "./mys/index.js"
-    },
-    "./utils": {
-      "import": "./utils/index.js"
-    },
-    "./core": {
-      "import": "./core/index.js"
-    },
-    "./init": {
-      "import": "./init/index.js"
-    },
-    "./image": {
-      "import": "./image/index.js"
-    },
-    "./tsconfig.json": {
-      "import": "./tsconfig.json",
-      "require": "./tsconfig.json"
-    },
-    "./env": {
-      "types": "./types/yunzai-env.d.ts"
+    "./pm2": {
+      "require": "./pm2/config.cjs",
+      "types": "./pm2/config.d.ts"
     }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=16.14.0"
   }
 }

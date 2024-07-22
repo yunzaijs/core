@@ -1,15 +1,15 @@
+import { join } from "node:path"
+import { app } from "../config"
 // 生成式配置
-export const CONFIG_INIT_PATH = 'config/config/'
+export const CONFIG_INIT_PATH = join(process.cwd(), 'config', 'config')
 // 默认配置
-export const CONFIG_DEFAULT_PATH = 'config/default_config/'
-// 插件配置
-export const CONFIG_PLUGINS_PATH = 'config/plugins/'
+export const CONFIG_DEFAULT_PATH = join(app.cwd(), 'yaml')
 // 插件目录
-export const PLUGINS_PATH = 'plugins'
+export const PLUGINS_PATH = join(process.cwd(), 'plugins')
 // 中间件目录
 export const MIDDLEWARE_PATH = 'middleware'
 // 数据文件存储目录
-export const SQLITE_DB_DIR = '/data/db'
+export const SQLITE_DB_DIR = '/data/storage/sqlite'
 // 机器人名称
 export const BOT_NAME = 'Yunzai'
 // 机器人登录控制key

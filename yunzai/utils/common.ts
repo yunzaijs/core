@@ -3,15 +3,8 @@ import { promisify } from 'util'
 import fetch from 'node-fetch'
 import { exec } from 'child_process'
 import { dirname, join } from 'path'
+import crypto from 'crypto'
 import { createWriteStream, existsSync, mkdirSync, readFileSync } from 'fs'
-
-/**
- * 休眠函数
- * @param ms 毫秒
- */
-export function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 /**
  * 下载保存文件
@@ -36,23 +29,22 @@ export async function downFile(fileUrl: string, savePath: string, param = {}) {
 /**
  *  目录
  * @param name
+ * @deprecated 已废弃，这是一个没有辅助意义的函数。
  * @returns
  */
 export function mkdirs(name: string) {
-  if (existsSync(name)) {
-    return true
-  } else {
-    if (mkdirs(dirname(name))) {
-      mkdirSync(name)
-      return true
-    }
-  }
-  return false
+  if (existsSync(name)) return true
+  if (!mkdirs(dirname(name))) return false
+  mkdirSync(name, {
+    recursive: true
+  })
+  return true
 }
 
 /**
  * 异步执行cmd
  * @param cmd
+ * @deprecated 已废弃，这是一个没有辅助意义的函数。
  * @returns
  */
 export function execAsync(cmd: string): Promise<{
@@ -70,6 +62,7 @@ export function execAsync(cmd: string): Promise<{
 /**
  * 读取json配置
  * @param dir
+ * @deprecated 已废弃，这是一个没有辅助意义的函数。
  * @returns
  */
 export function readJSON(dir: string) {
@@ -83,14 +76,25 @@ export function readJSON(dir: string) {
 
 /**
  * 随机字符串
+ * @deprecated 已废弃，请改用
  * @returns
+ * ***
+ * import crypto from 'crypto';
+ * ***
+ * crypto.randomBytes(32).toString('hex')
  */
 export function randomRange() {
-  let randomStr = ''
-  let charStr = 'abcdef0123456789'
-  for (let i = 0; i < 64; i++) {
-    let index = Math.round(Math.random() * (charStr.length - 1))
-    randomStr += charStr.substring(index, index + 1)
-  }
-  return randomStr
+  const randomBytes = crypto.randomBytes(32)
+  return randomBytes.toString('hex')
 }
+
+/**
+ * 休眠函数
+ * @param ms 毫秒
+ * @deprecated 已废弃. 请改用
+ * ***
+ * import { promisify } from 'util'
+ * *****
+ * const sleep = promisify(setTimeout)
+ */
+export const sleep = promisify(setTimeout)

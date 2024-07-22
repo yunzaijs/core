@@ -3,14 +3,14 @@ import { orderBy } from 'lodash-es'
 
 class Handler {
   /**
-   * 
+   *
    */
   #events = {}
 
   /**
-   * 
-   * @param cfg 
-   * @returns 
+   *
+   * @param cfg
+   * @returns
    */
   add(cfg) {
     const { ns, fn, self, property = 50 } = cfg
@@ -30,10 +30,10 @@ class Handler {
   }
 
   /**
-   * 
-   * @param ns 
-   * @param key 
-   * @returns 
+   *
+   * @param ns
+   * @param key
+   * @returns
    */
   del(ns, key = '') {
     if (!key) {
@@ -53,10 +53,10 @@ class Handler {
   }
 
   /**
-   * 
-   * @param key 
-   * @param e 
-   * @param args 
+   *
+   * @param key
+   * @param e
+   * @param args
    */
   async callAll(key, e, args) {
     // 暂时屏蔽调用
@@ -64,12 +64,12 @@ class Handler {
   }
 
   /**
-   * 
-   * @param key 
-   * @param e 
-   * @param args 
-   * @param allHandler 
-   * @returns 
+   *
+   * @param key
+   * @param e
+   * @param args
+   * @param allHandler
+   * @returns
    */
   async call(key, e, args, allHandler = false) {
     let ret
@@ -95,9 +95,9 @@ class Handler {
   }
 
   /**
-   * 
-   * @param key 
-   * @returns 
+   *
+   * @param key
+   * @returns
    */
   has(key) {
     return !!this.#events[key]
@@ -105,6 +105,6 @@ class Handler {
 }
 
 /**
- * 
+ *
  */
 export default new Handler()

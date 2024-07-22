@@ -1,9 +1,4 @@
 {
-  "ts-node": {
-    "esm": true,
-    "transpileOnly": true,
-    "experimentalSpecifierResolution": "node"
-  },
-  "include": ["src", "yunzai", "plugins", "lib", "renderers", "middleware"],
-  "extends": "yunzai/tsconfig.json"
+  "include": ["src", "yunzai", "yunzai-mys", "plugins", "middleware"],
+  "extends": "yunzai/tsconfig/tsconfig.json"
 }

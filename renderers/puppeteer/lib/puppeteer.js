@@ -1,4 +1,4 @@
-import { Renderers } from 'yunzai/utils'
+import { Renderers } from 'yunzai'
 /**
  * @deprecated 已废弃
  */

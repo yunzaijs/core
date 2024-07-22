@@ -93,7 +93,6 @@ function createLog() {
 mkdirSync('./logs', {
   recursive: true
 })
-
 /**
  * 全局变量 logger
  */

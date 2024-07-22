@@ -1,6 +1,6 @@
 // 插件 handler
-import handler from './handler.js'
+import Handler from './handler.js'
 // 插件loader
-import loader from './loader.js'
-export { loader }
-export { handler }
+import Loader from './loader.js'
+export { Loader }
+export { Handler }

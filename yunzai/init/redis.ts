@@ -36,27 +36,21 @@ const Error = async err => {
   process.exit()
 }
 
+//
 const rc = cfg.redis
 const redisUn = rc.username || ''
 let redisPw = rc.password ? `:${rc.password}` : ''
-
 if (rc.username || rc.password) redisPw += '@'
-
 const redisUrl = `redis://${redisUn}${redisPw}${rc.host}:${rc.port}/${rc.db}`
-
 const redis = createClient({ url: redisUrl })
-
 try {
   logger.info(`正在连接 ${logger.chalk.blue(redisUrl)}`)
   await redis.connect()
 } catch (err) {
   Error(err)
 }
-
 redis.on('error', Error)
-
 /** 全局变量 redis */
 global.redis = redis as any
-
 //
 logger.info('Redis 连接成功')
