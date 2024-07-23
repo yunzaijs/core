@@ -243,9 +243,9 @@ class Loader {
       // 是文件
       if (val.isFile()) continue
       try {
-        let dir = join(PLUGINS_PATH, val.name, 'index.ts')
+        let dir = join(PLUGINS_PATH, val.name, 'index.js')
         if (!existsSync(dir)) {
-          dir = join(PLUGINS_PATH, val.name, 'index.js')
+          continue
         }
         if (await stat(dir)) {
           ret.push({

@@ -56,7 +56,6 @@ export const useEvent = <T extends keyof EventEmun>(
   ) => boolean | void | Promise<boolean | void>,
   keys: [Parameters<EventEmun[keyof EventEmun]>[0], ...Array<T>]
 ): boolean | void | Promise<boolean | void> => {
-  const KEYS = keys.slice(1, keys.length - 1)
-
+  // const KEYS = keys.slice(1, keys.length - 1)
   return func(keys[0])
 }
