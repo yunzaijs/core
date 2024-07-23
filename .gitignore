@@ -152,10 +152,6 @@ public/
 /html/
 /.html/
 
-
-/localStorage/
-/levelStorage/
-
 yarn.lock
 
 /yunzai/**/*.js

@@ -4,10 +4,12 @@ import puppeteer, { Browser, PuppeteerLaunchOptions } from 'puppeteer'
 import Renderer from '../renderer/Renderer.js'
 import cfg from '../../config/config.js'
 import { BOT_CHROMIUM_KEY } from '../../config/system.js'
-import { levelStorage } from '../../db/local.js'
-
 const _path = process.cwd()
+/**
+ * mac地址
+ */
 let mac = ''
+
 /**
  * 这是被废弃的截图工具
  * 请积极使用最新版
@@ -77,9 +79,7 @@ export default class Puppeteer extends Renderer {
       }
       // 是否有browser实例
       const browserUrl =
-        (await levelStorage
-          .get(this.browserMacKey)
-          .then(res => res.toString())) || this.config.wsEndpoint
+        (await redis.get(this.browserMacKey)) || this.config.wsEndpoint
       if (browserUrl) {
         try {
           const browserWSEndpoint = await puppeteer.connect({
@@ -92,7 +92,7 @@ export default class Puppeteer extends Renderer {
           }
           logger.info(`puppeteer Chromium 连接成功 ${browserUrl}`)
         } catch (err) {
-          await levelStorage.del(this.browserMacKey)
+          await redis.del(this.browserMacKey)
         }
       }
     } catch (err) {}
@@ -133,7 +133,7 @@ export default class Puppeteer extends Renderer {
       if (this.browserMacKey) {
         // 缓存一下实例30天
         const expireTime = 60 * 60 * 24 * 30
-        await levelStorage.put(this.browserMacKey, this.browser.wsEndpoint(), {
+        await redis.set(this.browserMacKey, this.browser.wsEndpoint(), {
           EX: expireTime
         })
       }
@@ -255,7 +255,7 @@ export default class Puppeteer extends Renderer {
         /** 计算图片大小 */
         const kb = (buff.length / 1024).toFixed(2) + 'KB'
         logger.mark(
-          `[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.chalk.green(`${Date.now() - start}ms`)}`
+          `[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`
         )
         ret.push(buff)
       } else {
