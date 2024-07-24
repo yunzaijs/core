@@ -200,6 +200,21 @@ class Loader {
         logger.error(err)
       }
     }
+    const examples = await readdir(join(PLUGINS_PATH, 'example'), {
+      withFileTypes: true
+    })
+    for (const val of examples) {
+      // 去除目录
+      if (!val.isFile()) continue
+      if (!val?.path) val.path = val.parentPath
+      if (await stat(val.path)) {
+        ret.push({
+          name: val.name,
+          path: val.path
+        })
+        continue
+      }
+    }
     return ret
   }
 
