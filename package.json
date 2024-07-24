@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "4.1.5",
+  "version": "4.1.6",
   "author": "Yoimiya-Kokomi, Le-niao",
   "description": "QQ Group Bot",
   "main": "./src/main.js",
