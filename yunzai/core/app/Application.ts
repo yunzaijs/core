@@ -21,7 +21,7 @@ type RulesType = {
 
 export class Application<T extends keyof EventEmun = 'message.group'> {
   [key: string]:
-    | (() => Promise<boolean | void> | boolean | void)
+    | ((...arg: any) => Promise<boolean | void> | boolean | void)
     | RulesType
     | Parameters<EventEmun[T]>[0]
 

@@ -35,8 +35,10 @@ class ProcessorCore {
    * 输入配置参数
    */
   async install(configdir = 'yunzai.config.js') {
-    const js = join(process.cwd(), configdir)
-    const config: ConifigOptions = (await import(`file://${js}`)).default
+    const jsDir = join(process.cwd(), configdir)
+    const config: ConifigOptions = (
+      await import(`file://${jsDir}?t=${Date.now()}`)
+    ).default
     this.#applications = config.applications
     this.#middlewares = config.middlewares
     if (Array.isArray(this.#applications)) {
