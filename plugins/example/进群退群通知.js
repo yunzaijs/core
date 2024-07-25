@@ -1,13 +1,8 @@
-import { plugin } from 'yunzai'
-export class newcomer extends plugin {
+import { Plugin } from 'yunzai'
+export class newcomer extends Plugin {
   constructor() {
     super({
-      /** 插件名字 */
       name: '欢迎新人',
-      /** 插件描述 */
-      dsc: '新人入群欢迎',
-      /** https://oicqjs.github.io/oicq/#events */
-      /** 插件触发事件 */
       event: 'notice.group.increase',
       priority: 5000
     })
@@ -36,7 +31,7 @@ export class newcomer extends plugin {
   }
 }
 
-export class outNotice extends plugin {
+export class outNotice extends Plugin {
   constructor() {
     super({
       name: '退群通知',

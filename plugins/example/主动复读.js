@@ -1,18 +1,12 @@
-import { plugin } from 'yunzai'
-
-export class example2 extends plugin {
+import { Plugin } from 'yunzai'
+export class example2 extends Plugin {
   constructor() {
     super({
       name: '复读',
-      dsc: '复读用户发送的内容，然后撤回',
-      /** https://oicqjs.github.io/oicq/#events */
-      event: 'message',
       priority: 5000,
       rule: [
         {
-          /** 命令正则匹配 */
           reg: '^#复读$',
-          /** 执行方法 */
           fnc: 'repeat'
         }
       ]
