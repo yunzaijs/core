@@ -25,8 +25,9 @@ export interface EventEmun extends PersonWithoutEmail {
 // 插件类基础参数
 export type PluginSuperType = {
   /**
-   * @param name 插件名称
-   * @deprecated 已废弃
+   * 应用名
+   * 用于过滤功能启动和关闭
+   * @param name
    */
   name?: string
   /**
@@ -71,13 +72,12 @@ export type PluginSuperType = {
    *  rule.log  false时不显示执行日志
    *  rule.permission 权限 master,owner,admin,all
    */
-  rule?: RuleType
+  rule?: RulesType
 }
 
 export type PermissionEnum = 'master' | 'owner' | 'admin' | 'all'
 
-//
-export type RuleType = {
+export type RulesType = {
   /**
    * 正则
    */
@@ -188,9 +188,10 @@ export interface PrivateMessageType extends PrivateMessage {
    */
   logFnc: string
   /**
-   * 消息发送
-   * @param arg
-   * @returns
+   * @param msg 发送的消息
+   * @param quote 是否引用回复
+   * @param data.recallMsg 群聊是否撤回消息，0-120秒，0不撤回
+   * @param data.at 是否at用户
    */
   reply: (
     msg: Sendable,
@@ -201,16 +202,10 @@ export interface PrivateMessageType extends PrivateMessage {
     }
   ) => Promise<any>
   /**
-   *
-   * 这是被重置的了的reply
-   * 不可使用
-   * @deprecated 已废弃
+   * @param msg 发送的消息
+   * @param quote 是否引用回复
    */
-  replyNew?: any
-
-  /**
-   *
-   */
+  send: (msg: Sendable, quote?: boolean) => Promise<any>
 
   /**
    * @deprecated 已废弃
@@ -383,9 +378,10 @@ export interface EventType extends GroupMessage {
    */
   logFnc: string
   /**
-   * 消息发送
-   * @param arg
-   * @returns
+   * @param msg 发送的消息
+   * @param quote 是否引用回复
+   * @param data.recallMsg 群聊是否撤回消息，0-120秒，0不撤回
+   * @param data.at 是否at用户
    */
   reply: (
     msg: Sendable,
@@ -396,17 +392,10 @@ export interface EventType extends GroupMessage {
     }
   ) => Promise<any>
   /**
-   *
-   * 这是被重置的了的reply
-   * 不可使用
-   * @deprecated 已废弃
+   * @param msg 发送的消息
+   * @param quote 是否引用回复
    */
-  replyNew?: any
-
-  /**
-   *
-   */
-
+  send: (msg: Sendable, quote?: boolean) => Promise<any>
   /**
    * @deprecated 已废弃
    */
