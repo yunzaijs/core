@@ -8,16 +8,8 @@ import {
 } from './system.js'
 import cfg from './config.js'
 import { join } from 'path'
-
-/**
- * 
- * @param ms 
- * @returns 
- */
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
+import { promisify } from 'util'
+const sleep = promisify(setTimeout)
 /**
  * 创建登录配置询问输入流
  * Git Bash 运行npm命令会无法选择列表
