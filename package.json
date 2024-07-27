@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "4.1.11",
+  "version": "4.1.12",
   "author": "Yoimiya-Kokomi, Le-niao",
   "description": "QQ Group Bot",
   "main": "./src/main.js",
@@ -28,7 +28,7 @@
     "yunzai-mys": "link:yunzai-mys",
     "yz-mw-runtime": "link:middleware/runtime",
     "yz-mw-star-rail": "link:middleware/star-rail",
-    "yz-system": "^1.0.1-rc.2"
+    "yz-system": "^1.0.1-rc.3"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
