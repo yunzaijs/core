@@ -91,13 +91,13 @@ class Loader {
         if (!existsSync(dir)) {
           continue
         }
-        if (await stat(dir)) {
-          ret.push({
-            name: val.name,
-            path: dir
-          })
-          continue
-        }
+        const T = await stat(dir)
+        if (!T) continue
+        //
+        ret.push({
+          name: val.name,
+          path: dir
+        })
       } catch (err) {
         logger.error(err)
       }
@@ -109,13 +109,12 @@ class Loader {
       // 去除目录
       if (!val.isFile()) continue
       if (!val?.path) val.path = val.parentPath
-      if (await stat(val.path)) {
-        ret.push({
-          name: val.name,
-          path: val.path
-        })
-        continue
-      }
+      const T = await stat(val.path)
+      if (!T) continue
+      ret.push({
+        name: val.name,
+        path: val.path
+      })
     }
     return ret
   }
