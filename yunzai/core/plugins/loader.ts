@@ -1,7 +1,7 @@
 import lodash from 'lodash'
 import { segment } from 'icqq'
 import { join } from 'node:path'
-import { existsSync } from 'node:fs'
+import { existsSync, mkdirSync } from 'node:fs'
 import { stat, readdir } from 'node:fs/promises'
 import { EventType, RulesType } from '../types.js'
 import Handler from './handler.js'
@@ -88,9 +88,7 @@ class Loader {
       if (val.isFile()) continue
       try {
         let dir = join(PLUGINS_PATH, val.name, 'index.js')
-        if (!existsSync(dir)) {
-          continue
-        }
+        if (!existsSync(dir)) continue
         const T = await stat(dir)
         if (!T) continue
         //
@@ -102,14 +100,17 @@ class Loader {
         logger.error(err)
       }
     }
-    const examples = await readdir(join(PLUGINS_PATH, 'example'), {
+    // 创建 example 目录
+    const _example = join(PLUGINS_PATH, 'example')
+    mkdirSync(_example, { recursive: true })
+    // 便利
+    const examples = await readdir(_example, {
       withFileTypes: true
     })
+    //
     for (const val of examples) {
-      // 去除目录
       if (!val.isFile()) continue
-      // 不存在，则
-      const dir = join(val.parentPath, val.name)
+      const dir = join(val?.parentPath ?? _example, val.name)
       const T = await stat(dir)
       if (!T) continue
       ret.push({

@@ -316,8 +316,12 @@ class GsCfg {
     if (isSr) this.isSr = isSr
     if (!isNaN(keyword)) keyword = Number(keyword)
     this._getAbbr()
-    let roelId = this[this.isSr ? 'sr_nameID' : 'nameID'].get(String(keyword))
-    return roelId || false
+    const key = this.isSr ? 'sr_nameID' : 'nameID'
+    if (typeof this[key] != 'boolean') {
+      let roelId = this[key].get(String(keyword))
+      return roelId || false
+    }
+    return false
   }
 
   /**
