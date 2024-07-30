@@ -109,13 +109,12 @@ class Loader {
       // 去除目录
       if (!val.isFile()) continue
       // 不存在，则
-      if (!val?.path || val?.path == '')
-        val.path = join(val.parentPath, val.name)
-      const T = await stat(val.path)
+      const dir = join(val.parentPath, val.name)
+      const T = await stat(dir)
       if (!T) continue
       ret.push({
         name: val.name,
-        path: val.path
+        path: dir
       })
     }
     return ret
