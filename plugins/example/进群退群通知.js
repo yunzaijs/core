@@ -1,4 +1,12 @@
 import { Plugin } from 'yunzai'
+
+const tips = '退群了'
+
+/**
+ * *****
+ * 欢迎新人
+ * ****
+ */
 export class newcomer extends Plugin {
   constructor() {
     super({
@@ -8,7 +16,10 @@ export class newcomer extends Plugin {
     })
   }
 
-  /** 接受到消息都会执行一次 */
+  /**
+   * 接受到消息都会执行一次
+   * @returns
+   */
   async accept() {
     /** 定义入群欢迎内容 */
     let msg = '欢迎新人！'
@@ -23,14 +34,15 @@ export class newcomer extends Plugin {
     redis.set(key, '1', { EX: cd })
 
     /** 回复 */
-    await this.reply([
-      segment.at(this.e.user_id),
-      // segment.image(),
-      msg
-    ])
+    await this.reply([global.segment.at(this.e.user_id), msg])
   }
 }
 
+/**
+ * ******
+ * 退群通知
+ * ****
+ */
 export class outNotice extends Plugin {
   constructor() {
     super({
@@ -38,24 +50,15 @@ export class outNotice extends Plugin {
       dsc: 'xx退群了',
       event: 'notice.group.decrease'
     })
-
-    /** 退群提示词 */
-    this.tips = '退群了'
   }
 
+  /**
+   *
+   * @returns
+   */
   async accept() {
     if (this.e.user_id == this.e.bot.uin) return
-
-    let name, msg
-    if (this.e.member) {
-      name = this.e.member.card || this.e.member.nickname
-    }
-
-    if (name) {
-      msg = `${name}(${this.e.user_id}) ${this.tips}`
-    } else {
-      msg = `${this.e.user_id} ${this.tips}`
-    }
+    const msg = `${this.e?.user_name ?? ''}(${this.e.user_id}) ${tips}`
     logger.mark(`[退出通知]${this.e.logText} ${msg}`)
     await this.reply(msg)
   }

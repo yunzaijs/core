@@ -174,3 +174,8 @@ log.md
 /config
 
 test.ts
+
+
+# mac
+
+.DS_Store

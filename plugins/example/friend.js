@@ -1,16 +1,24 @@
 import { ConfigController as cfg } from 'yunzai'
 import { Plugin } from 'yunzai'
-import { sleep } from 'yunzai'
+import { promisify } from 'util'
+const sleep = promisify(setTimeout)
 
+/**
+ * ******
+ * 自动同意好友
+ * *****
+ */
 export class friend extends Plugin {
   constructor() {
     super({
       name: 'autoFriend',
-      // dsc: '自动同意好友',
       event: 'request.friend'
     })
   }
 
+  /**
+   *
+   */
   async accept() {
     if (this.e.sub_type == 'add' || this.e.sub_type == 'single') {
       if (cfg.other.autoFriend == 1) {

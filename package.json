@@ -1,9 +1,10 @@
 {
   "name": "yunzai",
-  "version": "4.1.14",
+  "version": "4.1.16",
   "author": "Yoimiya-Kokomi, Le-niao",
   "description": "QQ Group Bot",
   "main": "./src/main.js",
+  "private": true,
   "type": "module",
   "scripts": {
     "app": "node src/main.js",
@@ -28,7 +29,7 @@
     "yunzai-mys": "link:yunzai-mys",
     "yz-mw-runtime": "link:middleware/runtime",
     "yz-mw-star-rail": "link:middleware/star-rail",
-    "yz-system": "^1.0.3"
+    "yz-system": "^1.0.4"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
@@ -44,14 +45,15 @@
     "@types/react-dom": "^18.2.22",
     "@types/redis": "^4.0.11",
     "@types/ws": "^8.5.7",
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-promise": "^6.1.1",
     "husky": "^9.1.1",
     "prettier": "^3.3.3",
     "rollup": "^4.16.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
-  }
+  },
+  "workspaces": [
+    "plugins/**",
+    "middleware/**",
+    "renderers/**"
+  ]
 }

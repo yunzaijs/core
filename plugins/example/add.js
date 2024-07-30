@@ -10,11 +10,24 @@ import { makeForwardMsg } from 'yunzai'
 
 let textArr = {}
 
+const path = './data/textJson/'
+const facePath = './data/face/'
+
+if (!fs.existsSync(path)) {
+  fs.mkdirSync(path)
+}
+if (!fs.existsSync(facePath)) {
+  fs.mkdirSync(facePath)
+}
+
+/**
+ * 添加表情，文字等
+ */
+
 export class add extends Plugin {
   constructor() {
     super({
       name: '添加表情',
-      // dsc: '添加表情，文字等',
       priority: 50000,
       rule: [
         {
@@ -43,18 +56,11 @@ export class add extends Plugin {
 
     this.path = './data/textJson/'
     this.facePath = './data/face/'
-    /** 全局表情标记 */
+    // 全局表情标记
     this.isGlobal = false
   }
 
-  async init() {
-    if (!fs.existsSync(this.path)) {
-      fs.mkdirSync(this.path)
-    }
-    if (!fs.existsSync(this.facePath)) {
-      fs.mkdirSync(this.facePath)
-    }
-  }
+  async init() {}
 
   async accept() {
     /** 处理消息 */

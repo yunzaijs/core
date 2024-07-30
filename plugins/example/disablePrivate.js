@@ -1,14 +1,17 @@
 import { ConfigController as cfg } from 'yunzai'
 import { Plugin } from 'yunzai'
 
+/**
+ * 对私聊禁用做处理当开启私聊禁用时只接收cookie以及抽卡链接
+ */
+
 export class disPri extends Plugin {
   constructor() {
     super({
       name: '禁止私聊',
-      // dsc: '对私聊禁用做处理当开启私聊禁用时只接收cookie以及抽卡链接',
+      priority: 0,
       event: 'message.private'
     })
-    this.priority = 0
   }
 
   async accept() {
@@ -48,6 +51,10 @@ export class disPri extends Plugin {
     }
   }
 
+  /**
+   *
+   * @returns
+   */
   async sendTips() {
     /** 冷却cd 10s */
     let cd = 10

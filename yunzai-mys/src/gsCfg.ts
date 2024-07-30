@@ -22,8 +22,8 @@ if (existsSync(dir)) {
  * ***********
  */
 class GsCfg {
-  nameID = new Map()
-  sr_nameID = new Map()
+  nameID: typeof Map.prototype | false = new Map()
+  sr_nameID: typeof Map.prototype | false = new Map()
   isSr = false
   /** 默认设置 */
   defSetPath = './plugins/genshin/defSet/'
