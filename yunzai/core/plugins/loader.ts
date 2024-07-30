@@ -108,7 +108,9 @@ class Loader {
     for (const val of examples) {
       // 去除目录
       if (!val.isFile()) continue
-      if (!val?.path) val.path = val.parentPath
+      // 不存在，则
+      if (!val?.path || val?.path == '')
+        val.path = join(val.parentPath, val.name)
       const T = await stat(val.path)
       if (!T) continue
       ret.push({
