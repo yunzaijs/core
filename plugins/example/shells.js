@@ -28,7 +28,7 @@ export class ShellsTests extends Plugin {
   }
 
   async start() {
-    const shell = this.e.msg.replace(/^shell/, '')
+    const shell = this.e.msg.replace(/^#shell/, '')
     getCommandOutput(shell)
       .then(res => {
         this.e.reply(res.toString())
