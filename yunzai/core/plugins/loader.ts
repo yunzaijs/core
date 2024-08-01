@@ -190,10 +190,16 @@ class Loader {
     if (plugin.init && (await plugin.init()) == 'return') return
     // 收集定时器
     this.Timer.collectTask(plugin.task)
+    // 初始化正则表达式
+    if (plugin.rule)
+      for (const i of plugin.rule)
+        if (!(i.reg instanceof RegExp)) i.reg = new RegExp(i.reg)
     // 收集指令
     this.priority.push({
-      // tudo 不标准写法 - -- 使用 关键词
-      plugin: p,
+      // 插件缓存实例
+      plugin,
+      // 插件类
+      class: p,
       // 插件名
       key: file.name,
       // 单例名
@@ -353,25 +359,23 @@ class Loader {
 
     // 开始 new
     for (const i of this.priority) {
-      const p = new i.plugin(e)
-      // 现在给e，后续e将无法访问新增字段
-      p._key = i.key
-      p._name = i.name
-      p.e = e
       //判断是否启用功能，过滤事件
-      if (this.checkDisable(p) && EventTypeMapFilter(e as any, p))
-        priority.push(p)
+      if (
+        this.checkDisable(Object.assign(i.plugin, { e })) &&
+        EventTypeMapFilter(e as any, i.plugin)
+      )
+        priority.push(i)
     }
 
     // 开始上下文执行
-    for (const plugin of priority) {
+    for (const i of priority) {
       // 不存在
-      if (!plugin?.getContext) continue
+      if (!i.plugin?.getContext) continue
 
       //
       const context = {
-        ...plugin.getContext(),
-        ...plugin.getContext(false, true)
+        ...i.plugin.getContext(),
+        ...i.plugin.getContext(false, true)
       }
 
       // 是空的
@@ -383,9 +387,9 @@ class Loader {
       // 从方法里执行
       for (const fnc in context) {
         // 不是函数，错误插件错误写法
-        if (typeof plugin[fnc] !== 'function') continue
+        if (typeof i.plugin[fnc] !== 'function') continue
         // 得到 函数指令的返回值
-        ret = await plugin[fnc](context[fnc])
+        ret = await Object.assign(new i.class(e), { e })[fnc](context[fnc])
       }
 
       // 不是 boolean  而且 不为 true
@@ -393,10 +397,10 @@ class Loader {
     }
 
     // 优先执行 accept 。不进行匹配就会执行的方法
-    for (const plugin of priority) {
-      if (!plugin.accept) continue
+    for (const i of priority) {
+      if (!i.plugin.accept) continue
       //
-      const res = await plugin.accept(e)
+      const res = await Object.assign(new i.class(e), { e }).accept(e)
       // 结束所有
       if (res == 'return') return
       // 结束当前
@@ -404,20 +408,22 @@ class Loader {
     }
 
     //便利执行
-    for (const plugin of priority) {
+    for (const i of priority) {
       // 空的
-      if (!Array.isArray(plugin?.rule) || plugin.rule.length < 1) continue
+      if (!Array.isArray(i.plugin?.rule) || i.plugin.rule.length < 1) continue
       //
-      for (const v of plugin.rule) {
+      for (const v of i.plugin.rule) {
         // 判断事件 不是过滤的
         if (v.event && !EventTypeMapFilter(e as any, v)) continue
         // 不是函数。
-        if (typeof plugin[v.fnc] !== 'function') continue
+        if (typeof i.plugin[v.fnc] !== 'function') continue
         // 校验正则
-        if (!new RegExp(v.reg).test(e.msg)) continue
+        if (!v.reg.test(e.msg)) continue
+        // 实例化插件
+        const plugin = Object.assign(new i.class(e), { e })
 
         // 打印前缀
-        e.logFnc = `[${plugin._key}][${plugin._name}][${v.fnc}]`
+        e.logFnc = `[${plugin.key}][${plugin.name}][${v.fnc}]`
 
         // 打印
         if (v.log !== false) {

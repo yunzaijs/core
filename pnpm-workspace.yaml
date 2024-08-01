@@ -1,4 +1,1 @@
-packages:
-  - 'plugins/**'
-  - 'middleware/**'
-  - 'renderers/**'
+packages: ['**']
