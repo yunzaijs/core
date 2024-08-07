@@ -110,7 +110,7 @@ class Loader {
     //
     for (const val of examples) {
       if (!val.isFile()) continue
-      const dir = join(val?.parentPath ?? _example, val.name)
+      const dir = join(_example, val.name)
       const T = await stat(dir)
       if (!T) continue
       ret.push({
