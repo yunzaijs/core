@@ -1,7 +1,7 @@
 import { render } from './render.js'
 import { EventType } from '../types.js'
 import { type EventMap } from 'icqq'
-import { PluginSuperType, RuleType } from '../types.js'
+import { PluginSuperType, RulesType } from '../types.js'
 
 const State = {}
 const SymbolTimeout = Symbol('Timeout')
@@ -11,7 +11,7 @@ class BasePlugin {
   /**
    * 指令集
    */
-  rule: RuleType = []
+  rule: RulesType = []
   /**
    * 优先级
    */
@@ -104,7 +104,8 @@ class BasePlugin {
 
 export class Plugin extends BasePlugin {
   /**
-   * @deprecated 已废弃
+   * 应用名
+   * 用于过滤功能启动和关闭
    */
   name: PluginSuperType['name'] = 'your-plugin'
   /**

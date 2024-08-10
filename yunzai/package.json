@@ -1,6 +1,6 @@
 {
   "name": "yunzai",
-  "version": "1.0.1-rc.1",
+  "version": "1.0.1-rc.5",
   "author": "Yoimiya-Kokomi, Le-niao, ningmengchongshui",
   "description": "QQ Group Bot",
   "main": "./index.js",
@@ -14,8 +14,6 @@
     "icqq": "^0.6.10",
     "image-size": "^1.1.1",
     "inquirer": "^9.2.16",
-    "leveldown": "^6.1.1",
-    "levelup": "^5.1.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "log4js": "^6.9.1",

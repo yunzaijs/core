@@ -152,10 +152,6 @@ public/
 /html/
 /.html/
 
-
-/localStorage/
-/levelStorage/
-
 yarn.lock
 
 /yunzai/**/*.js
@@ -179,4 +175,7 @@ log.md
 
 test.ts
 
-/plugins
+
+# mac
+
+.DS_Store

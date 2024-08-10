@@ -1,79 +1,19 @@
 import lodash from 'lodash'
-import schedule from 'node-schedule'
 import { segment } from 'icqq'
-// import chokidar from 'chokidar'
-import moment from 'moment'
-// import { basename, join } from 'node:path'
 import { join } from 'node:path'
-import { existsSync } from 'node:fs'
+import { existsSync, mkdirSync } from 'node:fs'
 import { stat, readdir } from 'node:fs/promises'
-// types
-import { EventType, PermissionEnum } from '../types.js'
-// handler
+import { EventType, RulesType } from '../types.js'
 import Handler from './handler.js'
-// config
 import cfg from '../../config/config.js'
-// 中间件
-import { PLUGINS_PATH, BOT_COUNT_KEY } from '../../config/system.js'
+import { PLUGINS_PATH } from '../../config/system.js'
 import { Processor } from '../processor/index.js'
 import { observerHandle } from '../observer/headle.js'
-import { EventTypeMap, EventTypeMapFilter } from '../client/event.js'
-
-/**
- *
- * 定时任务 是 个 无效的 设计，
- * 因为 e 是会丢失的，
- * 但很多开发者 误以为 fnc 和 常规的回调一样能进行，
- * 这对新人开发插件来说是毁灭性的打击，
- * 我们应该避免把所有概念都拥堵在一个pluin里，
- * ********************************
- * 若想设计成定时可指令的方法，
- * 应该采用订阅发布模型，
- * 使用BOT变量去发送消息，
- * 或者对BOT进行二次封装，
- * 让开发更容易理解。
- * ********************************
- */
-class Task {
-  /**
-   * 定时任务
-   */
-  task = []
-
-  /**
-   * 收集定时任务
-   * @param task
-   */
-  collectTask(task) {
-    for (const i of Array.isArray(task) ? task : [task]) {
-      if (i?.cron && i?.name) {
-        this.task.push(i)
-      }
-    }
-  }
-
-  /**
-   * 创建定时任务
-   */
-  createTask() {
-    // 便利存储好的定时任务
-    for (const i of this.task) {
-      // 开始定时
-      i.job = schedule.scheduleJob(i?.cron, async () => {
-        // 指令
-        try {
-          if (i.log == true) logger.mark(`开始定时任务：${i.name}`)
-          await i.fnc()
-          if (i.log == true) logger.mark(`定时任务完成：${i.name}`)
-        } catch (error) {
-          logger.error(`定时任务报错：${i.name}`)
-          logger.error(error)
-        }
-        //
-      })
-    }
-  }
-}
+import { EventTypeMapFilter } from '../client/event.js'
+import { Task } from './task.js'
+import { Count } from './count.js'
+import { Limit } from './limit.js'
+import { Plugin } from '../app/plugin.js'
 
 /**
  * 加载插件
@@ -84,28 +24,10 @@ class Loader {
    * @deprecated 已废弃
    */
   Timer = new Task()
-
-  /**
-   * @deprecated 已废弃
-   * this.Timer.createTask
-   */
-  get task() {
-    return this.Timer.task
-  }
-  /**
-   * @deprecated 已废弃
-   * this.Timer.createTask
-   */
-  get createTask() {
-    return this.Timer.createTask
-  }
-  /**
-   * @deprecated 已废弃
-   * this.Timer.collectTask
-   */
-  get collectTask() {
-    return this.Timer.collectTask
-  }
+  //
+  Count = new Count()
+  //
+  Limit = new Limit()
 
   /**
    * 分离 handler 机制
@@ -120,92 +42,14 @@ class Loader {
    * 指令集
    */
   priority = []
-  /**
-   * 命令冷却cd
-   */
-  groupGlobalCD = {}
-  /**
-   * cd
-   */
-  singleCD = {}
-  /**
-   *  msg
-   */
-  msgThrottle = {}
-  /**
-   * 插件个数
-   */
-  pluginCount = null
-  /**
-   * 事件
-   */
-  eventMap = EventTypeMap
 
   /**
    * 监听事件加载
    * @param isRefresh 是否刷新
    */
   async load(isRefresh = false) {
-    /**
-     * 需不需要加载插件
-     *
-     * 不需要。
-     *
-     * 因为插件再那时候就已经排序好了 class
-     *
-     * 用户可以自行决定排序的顺序。
-     *
-     *
-     * 需要new吗
-     *
-     * for(const key in  app.apps){
-     *    const x = new app.apps[key]()
-     *
-     *    // 全部  new 成 class ?
-     *
-     *    其实在开始，插件就应该new好了
-     *
-     *    #data
-     *
-     *    #open = false
-     *
-     *
-     *    // 插件名
-     *    stattu = 'system'
-     *
-     *
-     *    //
-     *    create(){
-     *        // 仅触发一次的行为
-     *    }
-     *
-     *    // 每次消息来都会触发该行为。
-     *    update(){
-     *        // 什么也不做。如果想刷新 data
-     *        if(this.open) return
-     *        //
-     *        for(const item of main){
-     *           // 所以应该如何排序。完全是插件作者说了算。
-     *           this.#data[key] = main[key]()
-     *        }
-     *    }
-     *
-     *    // update之后执行
-     *
-     *    // 响应
-     *    reposont(){
-     *        // 必须是new过后的。
-     *        // 插件可以自行控制自己的规则
-     *        // 以及调整触发顺序
-     *        return this.#data
-     *    }
-     *
-     * }
-     *
-     */
-
     // 重置
-    this.delCount()
+    this.Count.del()
     // 累计
     if (isRefresh) this.priority = []
     // 如果
@@ -214,14 +58,14 @@ class Loader {
     const files = await this.#getPlugins()
     logger.info(`加载定时器: ...`)
     logger.info('加载插件中: ...')
-    this.pluginCount = 0
+    this.Count.pluginCount = 0
     const packageErr = []
     // 返回成功的
     await Promise.allSettled(
       files.map(file => this.#importPlugin(file, packageErr))
     )
     this.#packageTips(packageErr)
-    logger.info(`插件数[${this.pluginCount}个]`)
+    logger.info(`插件数[${this.Count.pluginCount}个]`)
     this.Timer.createTask()
     logger.info(`定时数[${this.Timer.task.length}个]`)
     /** 优先级排序 */
@@ -244,19 +88,35 @@ class Loader {
       if (val.isFile()) continue
       try {
         let dir = join(PLUGINS_PATH, val.name, 'index.js')
-        if (!existsSync(dir)) {
-          continue
-        }
-        if (await stat(dir)) {
-          ret.push({
-            name: val.name,
-            path: dir
-          })
-          continue
-        }
+        if (!existsSync(dir)) continue
+        const T = await stat(dir)
+        if (!T) continue
+        //
+        ret.push({
+          name: val.name,
+          path: dir
+        })
       } catch (err) {
         logger.error(err)
       }
+    }
+    // 创建 example 目录
+    const _example = join(PLUGINS_PATH, 'example')
+    mkdirSync(_example, { recursive: true })
+    // 便利
+    const examples = await readdir(_example, {
+      withFileTypes: true
+    })
+    //
+    for (const val of examples) {
+      if (!val.isFile()) continue
+      const dir = join(_example, val.name)
+      const T = await stat(dir)
+      if (!T) continue
+      ret.push({
+        name: val.name,
+        path: dir
+      })
     }
     return ret
   }
@@ -274,10 +134,18 @@ class Loader {
     packageErr?: any
   ) => {
     try {
-      const app = await import(`file://${file.path}`)
+      // 得到插件
+      const applications = await import(`file://${file.path}`)
       const pluginArray = []
-      for (const key in app.apps) {
-        pluginArray.push(this.#loadPlugin(file, app.apps[key], key))
+      // 如果是 apps模式
+      if (applications.apps) {
+        for (const key in applications.apps) {
+          pluginArray.push(this.#loadPlugin(file, applications.apps[key], key))
+        }
+      } else {
+        for (const key in applications) {
+          pluginArray.push(this.#loadPlugin(file, applications[key], key))
+        }
       }
       for (const i of await Promise.allSettled(pluginArray))
         if (i?.status && i.status != 'fulfilled') {
@@ -313,7 +181,7 @@ class Loader {
     // 不存在原型链
     if (!p?.prototype) return
     // 记数
-    this.pluginCount++
+    this.Count.pluginCount++
     // 实例化
     const plugin = new p()
     // 打印
@@ -322,10 +190,16 @@ class Loader {
     if (plugin.init && (await plugin.init()) == 'return') return
     // 收集定时器
     this.Timer.collectTask(plugin.task)
+    // 初始化正则表达式
+    if (plugin.rule)
+      for (const i of plugin.rule)
+        if (!(i.reg instanceof RegExp)) i.reg = new RegExp(i.reg)
     // 收集指令
     this.priority.push({
-      // tudo 不标准写法 - -- 使用 关键词
-      plugin: p,
+      // 插件缓存实例
+      plugin,
+      // 插件类
+      class: p,
       // 插件名
       key: file.name,
       // 单例名
@@ -394,7 +268,7 @@ class Loader {
     if (this.checkGuildMsg(e)) return
 
     // 冷却
-    if (!this.checkLimit(e)) return
+    if (!this.Limit.check(e)) return
 
     // 消息处理中间件 - 处理 e 为yunzai 的 e
     this.dealMsg(e)
@@ -449,7 +323,8 @@ class Loader {
               // data 都是 new好的。
               back: for (const plugin of data) {
                 // 非常规事件
-                if (plugin.event && !this.filtEvent(e as any, plugin)) continue
+                if (plugin.event && !EventTypeMapFilter(e as any, plugin))
+                  continue
                 plugin.e = e
                 for (const v of plugin.rule) {
                   // 存在正则即校验 校验正则
@@ -463,7 +338,7 @@ class Loader {
                     // 不是 bool 而且 不为true  直接结束
                     if (typeof res != 'boolean' && res !== true) {
                       // 设置冷却cd
-                      this.setLimit(e)
+                      this.Limit.set(e)
                       break back
                     }
                   } else {
@@ -484,24 +359,23 @@ class Loader {
 
     // 开始 new
     for (const i of this.priority) {
-      const p = new i.plugin(e)
-      // 现在给e，后续e将无法访问新增字段
-      p._key = i.key
-      p._name = i.name
-      p.e = e
       //判断是否启用功能，过滤事件
-      if (this.checkDisable(p) && this.filtEvent(e as any, p)) priority.push(p)
+      if (
+        this.checkDisable(Object.assign(i.plugin, { e })) &&
+        EventTypeMapFilter(e as any, i.plugin)
+      )
+        priority.push(i)
     }
 
     // 开始上下文执行
-    for (const plugin of priority) {
+    for (const i of priority) {
       // 不存在
-      if (!plugin?.getContext) continue
+      if (!i.plugin?.getContext) continue
 
       //
       const context = {
-        ...plugin.getContext(),
-        ...plugin.getContext(false, true)
+        ...i.plugin.getContext(),
+        ...i.plugin.getContext(false, true)
       }
 
       // 是空的
@@ -513,9 +387,9 @@ class Loader {
       // 从方法里执行
       for (const fnc in context) {
         // 不是函数，错误插件错误写法
-        if (typeof plugin[fnc] !== 'function') continue
+        if (typeof i.plugin[fnc] !== 'function') continue
         // 得到 函数指令的返回值
-        ret = await plugin[fnc](context[fnc])
+        ret = await Object.assign(new i.class(e), { e })[fnc](context[fnc])
       }
 
       // 不是 boolean  而且 不为 true
@@ -523,10 +397,10 @@ class Loader {
     }
 
     // 优先执行 accept 。不进行匹配就会执行的方法
-    for (const plugin of priority) {
-      if (!plugin.accept) continue
+    for (const i of priority) {
+      if (!i.plugin.accept) continue
       //
-      const res = await plugin.accept(e)
+      const res = await Object.assign(new i.class(e), { e }).accept(e)
       // 结束所有
       if (res == 'return') return
       // 结束当前
@@ -534,20 +408,22 @@ class Loader {
     }
 
     //便利执行
-    for (const plugin of priority) {
+    for (const i of priority) {
       // 空的
-      if (!Array.isArray(plugin?.rule) || plugin.rule.length < 1) continue
+      if (!Array.isArray(i.plugin?.rule) || i.plugin.rule.length < 1) continue
       //
-      for (const v of plugin.rule) {
+      for (const v of i.plugin.rule) {
         // 判断事件 不是过滤的
-        if (v.event && !this.filtEvent(e as any, v)) continue
+        if (v.event && !EventTypeMapFilter(e as any, v)) continue
         // 不是函数。
-        if (typeof plugin[v.fnc] !== 'function') continue
+        if (typeof i.plugin[v.fnc] !== 'function') continue
         // 校验正则
-        if (!new RegExp(v.reg).test(e.msg)) continue
+        if (!v.reg.test(e.msg)) continue
+        // 实例化插件
+        const plugin = Object.assign(new i.class(e), { e })
 
         // 打印前缀
-        e.logFnc = `[${plugin._key}][${plugin._name}][${v.fnc}]`
+        e.logFnc = `[${plugin.key}][${plugin.name}][${v.fnc}]`
 
         // 打印
         if (v.log !== false) {
@@ -574,7 +450,7 @@ class Loader {
           // 不是 bool 而且 不为true  直接结束
           if (typeof res != 'boolean' && res !== true) {
             // 设置冷却cd
-            this.setLimit(e)
+            this.Limit.set(e)
             break
           }
           //
@@ -802,13 +678,7 @@ class Loader {
       /**
        *
        */
-      e.replyNew = e.reply
-
-      /**
-       * 去除
-       */
-      delete e.reply
-
+      e.send = e.reply
       /**
        * @param msg 发送的消息
        * @param quote 是否引用回复
@@ -877,7 +747,7 @@ class Loader {
 
         //
         try {
-          msgRes = await e.replyNew(msg, quote)
+          msgRes = await e.send(msg, quote)
         } catch (err) {
           // 控制是否打印
           let open = false
@@ -948,7 +818,7 @@ class Loader {
           }
         }
         // ?
-        this.count(e, msg)
+        this.Count.count(e, msg)
         return msgRes
       }
       /**
@@ -961,7 +831,7 @@ class Loader {
         // 不存在消息
         if (!msg) return false
         // ?
-        this.count(e, msg)
+        this.Count.count(e, msg)
         // 群在qunid
         if (e.group_id) {
           return await e.group.sendMsg(msg).catch(err => {
@@ -980,155 +850,10 @@ class Loader {
             })
         }
       }
+      // send
+      e.send = e.reply
     }
   }
-
-  /**
-   * **************
-   * 记数 start
-   */
-
-  /**
-   *
-   * @param e
-   * @param msg
-   */
-  count(e: EventType, msg) {
-    //
-    let screenshot = false
-    //
-    if (msg && msg?.file && Buffer.isBuffer(msg?.file)) {
-      screenshot = true
-    }
-    //
-    this.saveCount('sendMsg')
-    //
-    if (screenshot) this.saveCount('screenshot')
-    //
-    if (e.group_id) {
-      //
-      this.saveCount('sendMsg', e.group_id)
-      //
-      if (screenshot) this.saveCount('screenshot', e.group_id)
-    }
-  }
-
-  /**
-   *
-   * 保持计数
-   * @param type
-   * @param groupId
-   */
-  saveCount(type: string, groupId = 0) {
-    //
-    let key = BOT_COUNT_KEY
-    //
-    if (groupId) {
-      key += `group:${groupId}:`
-    }
-    //
-    const dayKey = `${key}${type}:day:${moment().format('MMDD')}`
-    //
-    const monthKey = `${key}${type}:month:${Number(moment().month()) + 1}`
-    //
-    const totalKey = `${key}${type}:total`
-    //
-    redis.incr(dayKey)
-    //
-    redis.incr(monthKey)
-    //
-    if (!groupId) redis.incr(totalKey)
-    //
-    redis.expire(dayKey, 3600 * 24 * 30)
-    //
-    redis.expire(monthKey, 3600 * 24 * 30)
-  }
-
-  /**
-   * 删除记数
-   */
-  delCount() {
-    //
-    redis.set(`${BOT_COUNT_KEY}sendMsg:total`, '0')
-    //
-    redis.set(`${BOT_COUNT_KEY}screenshot:total`, '0')
-  }
-
-  /**
-   * 记数 end
-   * **************
-   */
-
-  /**
-   * **************
-   * 冷却 start
-   */
-
-  /**
-   * 检查命令冷却cd
-   * @param e
-   * @returns
-   */
-  checkLimit(e: EventType) {
-    /** 禁言中 */
-    if (e.isGroup && e?.group?.mute_left > 0) return false
-    // 消息不存在，或者是私聊
-    if (!e.message || e.isPrivate) return true
-    // 得到群聊配置
-    const config = cfg.getGroup(e.group_id)
-    //
-    if (config.groupGlobalCD && this.groupGlobalCD[e.group_id]) {
-      return false
-    }
-    //
-    if (config.singleCD && this.singleCD[`${e.group_id}.${e.user_id}`]) {
-      return false
-    }
-    //
-    const { msgThrottle } = this
-    //
-    const msgId = e.user_id + ':' + e.raw_message
-    if (msgThrottle[msgId]) return false
-    //
-    msgThrottle[msgId] = true
-    //
-    setTimeout(() => {
-      delete msgThrottle[msgId]
-    }, 200)
-    return true
-  }
-
-  /**
-   * 设置冷却cd
-   * @param e
-   * @returns
-   */
-  setLimit(e: EventType) {
-    // 不存在，且是私聊
-    if (!e.message || e.isPrivate) return
-    // 群聊配置
-    const config = cfg.getGroup(e.group_id)
-    // 锅巴
-    if (config.groupGlobalCD) {
-      this.groupGlobalCD[e.group_id] = true
-      setTimeout(() => {
-        delete this.groupGlobalCD[e.group_id]
-      }, config.groupGlobalCD)
-    }
-    //
-    if (config.singleCD) {
-      const key = `${e.group_id}.${e.user_id}`
-      this.singleCD[key] = true
-      setTimeout(() => {
-        delete this.singleCD[key]
-      }, config.singleCD)
-    }
-  }
-
-  /**
-   * 冷却 end
-   * **************
-   */
 
   /**
    * 是否只关注主动at
@@ -1139,13 +864,13 @@ class Loader {
     if (!e.message || e.isPrivate) return true
     // 群聊配置
     const groupCfg = cfg.getGroup(e.group_id)
-    /** 模式0，未开启前缀 */
+    // 模式0，未开启前缀
     if (groupCfg.onlyReplyAt == 0 || !groupCfg.botAlias) return true
-    /** 模式2，非主人需带前缀或at机器人 */
+    // 模式2，非主人需带前缀或at机器人
     if (groupCfg.onlyReplyAt == 2 && e.isMaster) return true
-    /** at机器人 */
+    // at机器人
     if (e.atBot) return true
-    /** 消息带前缀 */
+    // 消息带前缀
     if (e.hasAlias) return true
     return false
   }
@@ -1156,6 +881,7 @@ class Loader {
    * @returns
    */
   checkGuildMsg(e: EventType) {
+    // 补充  guild
     return cfg.other.disableGuildMsg && e.detail_type == 'guild'
   }
 
@@ -1166,61 +892,59 @@ class Loader {
    */
   checkBlack(e: EventType) {
     const other = cfg.other
-    /** 黑名单qq */
+    // 黑名单qq
     if (other.blackQQ?.length) {
-      if (other.blackQQ.includes(Number(e.user_id) || String(e.user_id)))
+      if (other.blackQQ.includes(Number(e.user_id) || String(e.user_id))) {
         return false
-      if (e.at && other.blackQQ.includes(Number(e.at) || String(e.at)))
+      }
+      if (e.at && other.blackQQ.includes(Number(e.at) || String(e.at))) {
         return false
+      }
     }
-    /** 白名单qq */
-    if (other.whiteQQ?.length)
-      if (!other.whiteQQ.includes(Number(e.user_id) || String(e.user_id)))
+    // 白名单qq
+    if (other.whiteQQ?.length) {
+      if (!other.whiteQQ.includes(Number(e.user_id) || String(e.user_id))) {
         return false
-
+      }
+    }
     if (e.group_id) {
-      /** 黑名单群 */
+      // 黑名单群
       if (
         other.blackGroup?.length &&
         other.blackGroup.includes(Number(e.group_id) || String(e.group_id))
-      )
+      ) {
         return false
-      /** 白名单群 */
+      }
+      // 白名单群
       if (
         other.whiteGroup?.length &&
         !other.whiteGroup.includes(Number(e.group_id) || String(e.group_id))
-      )
+      ) {
         return false
+      }
     }
     return true
   }
 
   /**
    * 判断是否启用功能
+   * 使用名字进行识别的
    * @param p
    * @returns
    */
-  checkDisable(p: {
-    name: string
-    e: {
-      group_id: number
-    }
-  }) {
+  checkDisable(p: typeof Plugin.prototype) {
+    // 得到群
     const groupCfg = cfg.getGroup(p.e.group_id)
-    if (groupCfg.disable?.length && groupCfg.disable.includes(p.name))
+    // 长度存在
+    if (groupCfg?.disable?.length && groupCfg.disable.includes(p.name)) {
       return false
-    if (groupCfg.enable?.length && !groupCfg.enable.includes(p.name))
+    }
+    // 长度存在
+    if (groupCfg?.enable?.length && !groupCfg.enable.includes(p.name)) {
       return false
+    }
     return true
   }
-
-  /**
-   * 过滤事件
-   * @param e
-   * @param v
-   * @returns
-   */
-  filtEvent = EventTypeMapFilter
 
   /**
    * 判断权限
@@ -1228,12 +952,7 @@ class Loader {
    * @param v
    * @returns
    */
-  filtPermission(
-    e: EventType,
-    v: {
-      permission?: PermissionEnum
-    }
-  ) {
+  filtPermission(e: EventType, v: RulesType[0]) {
     if (v.permission == 'all' || !v.permission) return true
     if (v.permission == 'master') {
       if (e.isMaster) {

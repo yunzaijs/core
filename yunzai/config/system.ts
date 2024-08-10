@@ -16,5 +16,5 @@ export const BOT_NAME = 'Yunzai'
 export const BOT_LOGIN_KEY = 'Yz:loginMsg:'
 // 机器计数key
 export const BOT_COUNT_KEY = 'Yz:count:'
-// 机器人浏览器存储key   -- levelStorage
+// 机器人浏览器存储key  
 export const BOT_CHROMIUM_KEY = 'Yz:chromium:'

@@ -4,7 +4,7 @@ import { EventEmun, PermissionEnum } from '../types.js'
  * 什么模型都能使用
  */
 
-type RulesType = {
+export type AppsRulesType = {
   /**
    * 正则
    */
@@ -21,14 +21,14 @@ type RulesType = {
 
 export class Application<T extends keyof EventEmun = 'message.group'> {
   [key: string]:
-    | (() => Promise<boolean | void> | boolean | void)
-    | RulesType
+    | ((...arg: any) => Promise<boolean | void> | boolean | void)
+    | AppsRulesType
     | Parameters<EventEmun[T]>[0]
 
   /**
    * 指令集
    */
-  rule: RulesType = []
+  rule: AppsRulesType = []
 
   /**
    * 事件，默认 message

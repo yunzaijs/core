@@ -6,12 +6,10 @@ import { EventEmun, PermissionEnum } from '../types.js'
  */
 export class Messages<T extends keyof EventEmun> {
   #event = 'message.group' as T
-
   /**
    *
    */
   #count = 0
-
   /**
    *
    */
