@@ -11,7 +11,7 @@ export const MIDDLEWARE_PATH = 'middleware'
 // 数据文件存储目录
 export const SQLITE_DB_DIR = '/data/storage/sqlite'
 // 机器人名称
-export const BOT_NAME = 'Yunzai'
+export const BOT_NAME = 'Yunzai-Next'
 // 机器人登录控制key
 export const BOT_LOGIN_KEY = 'Yz:loginMsg:'
 // 机器计数key
