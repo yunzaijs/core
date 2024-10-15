@@ -1,0 +1,55 @@
+{
+  "name": "yz-system",
+  "version": "1.0.12",
+  "author": "ningmengchongshui",
+  "description": "yz-system",
+  "type": "module",
+  "scripts": {
+    "app": "npx tsx src/main.ts",
+    "img-dev": "npx tsx watch --clear-screen=false routes.server.ts",
+    "build": "npm run css-m && rollup  --config rollup.config.js",
+    "css-app": "tailwindcss -i ./src/input.css -o ./public/output.css",
+    "css-dev": "tailwindcss -i ./src/input.css -o ./public/output.css --watch",
+    "css-m": "tailwindcss -i ./src/input.css -o ./public/output.css -m",
+    "format": "prettier --write .",
+    "check-format": "git diff --exit-code",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "moment": "^2.30.1",
+    "react-puppeteer": "^1.0.7-rc.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-typescript": "^11.1.3",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.8.5",
+    "@types/node-schedule": "^2.1.7",
+    "@types/react": "^18.3.4",
+    "husky": "^9.1.5",
+    "icqq": "^0.6.10",
+    "prettier": "^3.0.3",
+    "rollup": "^4.16.4",
+    "rollup-plugin-dts": "^6.1.1",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.4.5",
+    "yunzai": "^1.1.1"
+  },
+  "types": "lib/types",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/types/index.d.ts"
+    }
+  },
+  "keywords": [
+    "yunzai"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=16.14.0"
+  }
+}
