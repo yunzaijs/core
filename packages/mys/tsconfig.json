@@ -1,0 +1,4 @@
+{
+  "include": ["src/**/*"],
+  "extends": "yunzaijs/tsconfig.json"
+}

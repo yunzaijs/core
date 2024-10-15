@@ -41,6 +41,9 @@
       "import": "./tsconfig.json",
       "require": "./tsconfig.json"
     },
+    "./pm2": {
+      "require": "./pm2.config.cjs"
+    },
     "./rollup": {
       "import": "./lib/rollup.js",
       "types": "./lib/rollup.d.ts"
