@@ -23,7 +23,9 @@ function createLog() {
         type: 'console',
         layout: {
           type: 'pattern',
-          pattern: `%[[${BOT_NAME}@${cfg.package?.version ?? '4'}][%d{hh:mm:ss.SSS}][%4.4p]%] %m`
+          pattern: `%[[${BOT_NAME}@${
+            cfg.package?.version ?? '4'
+          }][%d{hh:mm:ss.SSS}][%4.4p]%] %m`
         }
       },
       command: {

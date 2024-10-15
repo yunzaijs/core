@@ -444,7 +444,9 @@ class Loader {
           // 打印
           if (v.log !== false) {
             logger.mark(
-              `${e.logFnc} ${truncate(e.msg, { length: 100 })} 处理完成 ${Date.now() - start}ms`
+              `${e.logFnc} ${truncate(e.msg, { length: 100 })} 处理完成 ${
+                Date.now() - start
+              }ms`
             )
           }
           // 不是 bool 而且 不为true  直接结束

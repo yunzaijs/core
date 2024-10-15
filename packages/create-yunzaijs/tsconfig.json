@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "preserveConstEnums": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["bin/yunzai.ts"],
+  "exclude": ["node_modules"]
+}

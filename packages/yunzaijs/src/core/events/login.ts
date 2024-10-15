@@ -126,15 +126,21 @@ export class EventLogin extends EventListener {
   async slider(event) {
     inSlider = true
     console.log(
-      `\n\n------------------${logger.chalk.green('↓↓滑动验证链接↓↓')}----------------------\n`
+      `\n\n------------------${logger.chalk.green(
+        '↓↓滑动验证链接↓↓'
+      )}----------------------\n`
     )
     console.log(logger.chalk.green(event.url))
     console.log('\n--------------------------------------------------------')
     console.log(
-      `提示：打开上面链接获取ticket，可使用${logger.chalk.green('【滑动验证app】')}获取`
+      `提示：打开上面链接获取ticket，可使用${logger.chalk.green(
+        '【滑动验证app】'
+      )}获取`
     )
     console.log(
-      `链接存在${logger.chalk.green('有效期')}，请尽快操作，多次操作失败可能会被冻结`
+      `链接存在${logger.chalk.green(
+        '有效期'
+      )}，请尽快操作，多次操作失败可能会被冻结`
     )
     console.log(
       '滑动验证app下载地址：https://wwp.lanzouy.com/i6w3J08um92h 密码:3kuu\n'
@@ -238,7 +244,9 @@ export class EventLogin extends EventListener {
     if (!txhelper.code) return false
 
     console.log(
-      `\n请打开滑动验证app，输入请求码${logger.chalk.green('【' + txhelper.code + '】')}，然后完成滑动验证\n`
+      `\n请打开滑动验证app，输入请求码${logger.chalk.green(
+        '【' + txhelper.code + '】'
+      )}，然后完成滑动验证\n`
     )
 
     await sleep(200)
@@ -278,7 +286,9 @@ export class EventLogin extends EventListener {
   async device(event) {
     global.inputTicket = false
     console.log(
-      `\n\n------------------${logger.chalk.green('↓↓设备锁验证↓↓')}----------------------\n`
+      `\n\n------------------${logger.chalk.green(
+        '↓↓设备锁验证↓↓'
+      )}----------------------\n`
     )
     const ret = await inquirer.prompt([
       {
@@ -323,7 +333,9 @@ export class EventLogin extends EventListener {
       logger.error('QQ密码错误，运行命令重新登录：npm run login')
     if (global.inputTicket && event.code == 237) {
       logger.error(
-        `${logger.chalk.red('ticket')}输入错误或者已失效，已停止运行，请重新登录验证`
+        `${logger.chalk.red(
+          'ticket'
+        )}输入错误或者已失效，已停止运行，请重新登录验证`
       )
     } else if (event?.message.includes('冻结')) {
       logger.error('账号已被冻结，已停止运行')

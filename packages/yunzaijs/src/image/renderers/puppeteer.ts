@@ -209,7 +209,9 @@ export default class Puppeteer extends Renderer {
       overtime = setTimeout(() => {
         if (this.shoting.length) {
           logger.error(
-            `[图片生成][${name}] 截图超时，当前等待队列：${this.shoting.join(',')}`
+            `[图片生成][${name}] 截图超时，当前等待队列：${this.shoting.join(
+              ','
+            )}`
           )
           this.restart(true)
           this.shoting = []
@@ -256,7 +258,9 @@ export default class Puppeteer extends Renderer {
         /** 计算图片大小 */
         const kb = (buff.length / 1024).toFixed(2) + 'KB'
         logger.mark(
-          `[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`
+          `[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.green(
+            `${Date.now() - start}ms`
+          )}`
         )
         ret.push(buff)
       } else {
