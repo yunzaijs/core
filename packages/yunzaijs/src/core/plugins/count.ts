@@ -1,6 +1,6 @@
-import { BOT_COUNT_KEY } from '@/config/system.js'
-import { EventType } from '@/core/types.js'
-import { Redis } from '@/init/redis.js'
+import { BOT_COUNT_KEY } from '../../config/system.js'
+import { EventType } from '../types.js'
+import { Redis } from '../../init/redis.js'
 import moment from 'moment'
 export class Count {
   /**

@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { readFileSync } from 'node:fs'
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
 import { createRequire } from 'module'
-import { CONFIG_DEFAULT_PATH, CONFIG_INIT_PATH } from '@/config/system.js'
+import { CONFIG_DEFAULT_PATH, CONFIG_INIT_PATH } from './system.js'
 const require = createRequire(import.meta.url)
 
 /**

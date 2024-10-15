@@ -1,1 +1,1 @@
-export * from '@/utils/common.js'
+export * from './common.js'

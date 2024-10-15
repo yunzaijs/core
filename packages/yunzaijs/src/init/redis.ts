@@ -1,6 +1,6 @@
 import { createClient } from 'redis'
-import cfg from '@/config/config.js'
-import { execAsync } from '@/utils/common.js'
+import cfg from '../config/config.js'
+import { execAsync } from '../utils/common.js'
 
 /**
  *

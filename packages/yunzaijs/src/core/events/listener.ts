@@ -1,4 +1,4 @@
-import PluginsLoader from '@/core/plugins/loader.js'
+import PluginsLoader from '../plugins/loader.js'
 
 /**
  *

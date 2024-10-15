@@ -1,10 +1,10 @@
 import os from 'node:os'
 import { trim, extend } from 'lodash-es'
 import puppeteer, { Browser, PuppeteerLaunchOptions } from 'puppeteer'
-import cfg from '@/config/config.js'
-import { Redis } from '@/init/redis.js'
-import { BOT_CHROMIUM_KEY } from '@/config/system.js'
-import Renderer from '@/image/renderer/Renderer.js'
+import cfg from '../../config/config.js'
+import { Redis } from '../../init/redis.js'
+import { BOT_CHROMIUM_KEY } from '../../config/system.js'
+import Renderer from '../renderer/Renderer.js'
 const _path = process.cwd()
 /**
  * mac地址

@@ -1,5 +1,5 @@
-import { Application } from '@/core/app/index.js'
-import { EventEmun } from '@/core/types.js'
+import { Application } from '../app/index.js'
+import { EventEmun } from '../types.js'
 import {
   ApplicationOptions,
   ConifigOptions,

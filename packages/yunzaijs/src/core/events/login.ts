@@ -2,7 +2,7 @@ import inquirer from 'inquirer'
 import { trim } from 'lodash-es'
 import fetch from 'node-fetch'
 import { promisify } from 'util'
-import EventListener from '@/core/events/listener.js'
+import EventListener from './listener.js'
 const sleep = promisify(setTimeout)
 /**
  * 监听上线事件

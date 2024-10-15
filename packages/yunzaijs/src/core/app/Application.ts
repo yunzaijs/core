@@ -1,4 +1,4 @@
-import { EventEmun, PermissionEnum } from '@/core/types.js'
+import { EventEmun, PermissionEnum } from '../types.js'
 /**
  * 改成订阅发布
  * 什么模型都能使用

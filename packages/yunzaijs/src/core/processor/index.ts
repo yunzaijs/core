@@ -5,7 +5,7 @@ import {
   ApplicationOptions,
   ConifigOptions,
   MiddlewareOptoins
-} from '@/core/options/types.js'
+} from '../options/types.js'
 
 const require = createRequire(import.meta.url)
 

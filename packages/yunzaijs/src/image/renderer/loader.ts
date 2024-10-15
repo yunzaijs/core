@@ -2,8 +2,11 @@ import yaml from 'yaml'
 import { join } from 'node:path'
 import { isFunction } from 'lodash-es'
 import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs'
-import { ConfigController as cfg, CONFIG_INIT_PATH } from '@/config/index.js'
-import rendererFn from '@/image/renderers/index.js'
+import {
+  ConfigController as cfg,
+  CONFIG_INIT_PATH
+} from '../../config/index.js'
+import rendererFn from '../renderers/index.js'
 
 /**
  * 加载渲染器

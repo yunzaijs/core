@@ -1,5 +1,5 @@
-import { EventEmun } from '@/core/types.js'
-import { middlewareStack } from '@/core/observer/stack.js'
+import { EventEmun } from '../types.js'
+import { middlewareStack } from '../observer/stack.js'
 /**
  *
  * @param key

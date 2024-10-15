@@ -2,7 +2,7 @@ import { type Client } from 'icqq'
 import { isArray } from 'lodash-es'
 
 // 所有事件
-import * as Events from '@/core/events/index.js'
+import * as Events from '../events/index.js'
 
 /**
  * 加载监听事件

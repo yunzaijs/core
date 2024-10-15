@@ -1,5 +1,5 @@
 import { EventMap } from 'icqq'
-import { EventEmun } from '@/core/types.js'
+import { EventEmun } from '../types.js'
 
 /**
  *

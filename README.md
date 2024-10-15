@@ -2,12 +2,12 @@
 
 Yunzai Next 机器人开发框架，可以通过开发个性化应用和集成丰富的生态来扩展机器人的功能。Next 遵循向下兼容，向上扩展的原则来支持更丰富的接口。它是一款追求代码可维护性、可扩展性、稳定性和高性能，提供对用户友好，对开发者友好的机器人开发框架。
 
-[☞ 点击阅读文档了解更多](https://yunzai-org.github.io/docs/)
+[☞ 点击阅读文档了解更多](https://yunzaijs.github.io/docs/)
 
 ## 贡献
 
-<a href="https://github.com/yunzai-org/yunzaijs/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=yunzai-org/yunzaijs" />
+<a href="https://github.com/yunzaijs/core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=yunzaijs/core" />
 </a>
 
 ## 致谢

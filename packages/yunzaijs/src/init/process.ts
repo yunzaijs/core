@@ -1,6 +1,6 @@
-import { BOT_NAME } from '@/config/system.js'
-import config from '@/config/config.js'
-import { Redis } from '@/init/redis.js'
+import { BOT_NAME } from '../config/system.js'
+import config from '../config/config.js'
+import { Redis } from './redis.js'
 /**
  * 设置标题
  */

@@ -3,13 +3,13 @@
  * 配置读取工具
  * **********
  */
-import cfg from '@/config/config.js'
+import cfg from '../../config/config.js'
 /**
  * **********
  * 监听
  * **********
  */
-import ListenerLoader from '@/core/client/loader.js'
+import ListenerLoader from './loader.js'
 
 /**
  * 扩展

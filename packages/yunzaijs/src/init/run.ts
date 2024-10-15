@@ -1,5 +1,5 @@
 import pm2 from 'pm2'
-import config from '@/config/config.js'
+import config from '../config/config.js'
 
 /**
  * 询问运行情况

@@ -1,8 +1,8 @@
-import EventListener from '@/core/events/listener.js'
-import cfg from '@/config/config.js'
-import { relpyPrivate } from '@/core/app/common.js'
-import { BOT_NAME, BOT_LOGIN_KEY } from '@/config/system.js'
-import { Redis } from '@/init/redis.js'
+import EventListener from './listener.js'
+import cfg from '../../config/config.js'
+import { relpyPrivate } from '../app/common.js'
+import { BOT_NAME, BOT_LOGIN_KEY } from '../../config/system.js'
+import { Redis } from '../../init/redis.js'
 /**
  * 监听上线事件
  */

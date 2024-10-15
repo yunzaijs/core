@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { isUndefined, get as lodashGet } from 'lodash-es'
-import ConfigController from '@/config/config.js'
+import ConfigController from '../../config/config.js'
 
 const cfg = {}
 const miaoCfg = {}

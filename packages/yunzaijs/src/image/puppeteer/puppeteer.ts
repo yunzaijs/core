@@ -1,4 +1,4 @@
-import Renderer from '@/image/renderer/loader.js'
+import Renderer from '../renderer/loader.js'
 /**
  * @deprecated 已废弃
  */

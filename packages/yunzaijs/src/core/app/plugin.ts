@@ -1,7 +1,7 @@
-import { render } from '@/core/app/render.js'
-import { EventType } from '@/core/types.js'
+import { render } from './render.js'
+import { EventType } from '../types.js'
 import { type EventMap } from 'icqq'
-import { PluginSuperType, RulesType } from '@/core/types.js'
+import { PluginSuperType, RulesType } from '../types.js'
 
 const State = {}
 const SymbolTimeout = Symbol('Timeout')

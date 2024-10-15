@@ -2,6 +2,5 @@
 /*   
 # 不忽略
 !/lib
-!/pm2
 !/yaml
 !/tsconfig.json

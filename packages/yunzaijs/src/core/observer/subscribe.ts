@@ -1,6 +1,6 @@
-import { getEventPostType } from '@/core/client/event.js'
-import { EventEmun } from '@/core/types.js'
-import { middlewareStack } from '@/core/observer/stack.js'
+import { getEventPostType } from '../client/event.js'
+import { EventEmun } from '../types.js'
+import { middlewareStack } from '../observer/stack.js'
 /**
  * 订阅
  */

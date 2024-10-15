@@ -1,5 +1,5 @@
 import { Sendable } from 'icqq'
-import { EventType } from '@/core/types.js'
+import { EventType } from '../types.js'
 
 /**
  * 发送私聊消息，仅给好友发送
