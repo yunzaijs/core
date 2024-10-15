@@ -42,6 +42,9 @@
       "require": "./pm2.config.cjs"
     }
   },
+  "bin": {
+    "yunzaijs": "bin/index.js"
+  },
   "keywords": [
     "yunzaijs"
   ],

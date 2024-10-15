@@ -6,6 +6,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "routes*"],
+  "include": ["src/**/*", "routes*", "jsxp.config.tsx"],
   "extends": "yunzai/tsconfig.json"
 }

@@ -1,9 +1,4 @@
 # node
 node_modules
 
-# bin
-bin/*.js
-
 yarn.lock
-
-create-yunzai*

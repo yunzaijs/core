@@ -79,8 +79,8 @@ const BuildByName = (name: string) => {
 }
 
 const build = () => {
-  if (process.env.B == 'create-yunzaijs') {
-    BuildByName('create-yunzaijs')
+  if (process.env.B == 'mys') {
+    BuildByName('mys')
   } else {
     BuildByName('yunzaijs')
   }
