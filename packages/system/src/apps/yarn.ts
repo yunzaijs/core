@@ -1,5 +1,5 @@
 import { dirname, join } from 'path'
-import { Application, makeForwardMsg } from 'yunzai'
+import { Application, makeForwardMsg } from 'yunzaijs'
 import {
   existsSync,
   mkdirSync,

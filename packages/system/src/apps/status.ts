@@ -1,4 +1,4 @@
-import { Application, ConfigController as cfg } from 'yunzai'
+import { Application, ConfigController as cfg } from 'yunzaijs'
 import moment from 'moment'
 
 class Count {

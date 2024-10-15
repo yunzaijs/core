@@ -1,4 +1,4 @@
-import { Application, ConfigController, Observer } from 'yunzai'
+import { Application, ConfigController, Observer } from 'yunzaijs'
 import { Store } from '../model/store'
 import pm2 from 'pm2'
 

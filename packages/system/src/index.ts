@@ -1,4 +1,4 @@
-import { Application, applicationOptions, useEvent } from 'yunzai'
+import { Application, applicationOptions, useEvent } from 'yunzaijs'
 import * as apps from './apps.js'
 import { Init } from './model/init.js'
 export default () => {

@@ -1,4 +1,4 @@
-import { Application, Segment } from 'yunzai'
+import { Application, Segment } from 'yunzaijs'
 import { screenshotRender } from '../puppeteer/index'
 import { parse } from 'yaml'
 import { createRequire } from 'react-puppeteer'

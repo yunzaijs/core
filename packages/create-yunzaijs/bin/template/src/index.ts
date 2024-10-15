@@ -1,4 +1,4 @@
-import { Application, applicationOptions, useEvent } from 'yunzai'
+import { Application, applicationOptions, useEvent } from 'yunzaijs'
 import * as apps from '@/apps/index.js'
 export default () => {
   // 预先存储

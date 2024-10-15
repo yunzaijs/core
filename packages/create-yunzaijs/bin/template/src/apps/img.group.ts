@@ -1,4 +1,4 @@
-import { Messages, Segment } from 'yunzai'
+import { Messages, Segment } from 'yunzaijs'
 import { Screenshot } from '@/image/index.js'
 // 群聊
 const Group = new Messages('message.group')

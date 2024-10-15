@@ -1,7 +1,7 @@
-import { Application, makeForwardMsg, execAsync, PLUGINS_PATH } from 'yunzai'
+import { Application, makeForwardMsg, execAsync, PLUGINS_PATH } from 'yunzaijs'
 import { trim } from 'lodash-es'
 import { existsSync, readdirSync } from 'node:fs'
-import { BOT_NAME } from 'yunzai'
+import { BOT_NAME } from 'yunzaijs'
 import { join } from 'node:path'
 
 // id

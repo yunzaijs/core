@@ -1,5 +1,5 @@
 import React from 'react'
-import { BOT_NAME, ConfigController } from 'yunzai'
+import { BOT_NAME, ConfigController } from 'yunzaijs'
 import { createRequire } from 'react-puppeteer'
 import { readFileSync } from 'fs'
 const require = createRequire(import.meta.url)

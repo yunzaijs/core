@@ -8,6 +8,6 @@
     "preserveConstEnums": true,
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["bin/yunzai.ts"],
+  "include": ["bin/yunzaijs.ts"],
   "exclude": ["node_modules"]
 }

@@ -12,7 +12,7 @@ const _path = process.cwd()
 export function getRoot(root = '') {
   if (!root) {
     root = `${_path}/`
-  } else if (root === 'root' || root === 'yunzai') {
+  } else if (root === 'root' || root === 'yunzaijs') {
     root = `${_path}/`
   } else if (root === 'miao') {
     root = `${_path}/plugins/miao-plugin/`

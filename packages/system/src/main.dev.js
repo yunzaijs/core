@@ -1,4 +1,4 @@
-import { Client, createLogin, Processor } from 'yunzai'
+import { Client, createLogin, Processor } from 'yunzaijs'
 setTimeout(async () => {
   await createLogin()
   await Client.run().then(async () => {

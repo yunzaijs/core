@@ -1,4 +1,4 @@
-import { middlewareOptions, useEvent } from 'yunzai'
+import { middlewareOptions, useEvent } from 'yunzaijs'
 const srReg = /^#?(\*|星铁|星轨|穹轨|星穹|崩铁|星穹铁道|崩坏星穹铁道|铁道)+/
 const zzzReg = /^#?(%|zzz|绝区零|ZZZ)+/
 /**

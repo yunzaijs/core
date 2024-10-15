@@ -32,7 +32,7 @@ class Loader {
   /**
    * 分离 handler 机制
    * @deprecated 已废弃
-   * import { handler } from 'yunzai'
+   * import { handler } from 'yunzaijs'
    */
   get handler() {
     return Handler

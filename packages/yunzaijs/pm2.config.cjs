@@ -1,11 +1,30 @@
+const fs = require('fs')
+const path = require('path')
+let config = {}
+const dir = path.join(process.cwd(), 'yunzai.config.json')
+if (fs.existsSync(dir)) {
+  //
+  const db = fs.readFileSync(dir, 'utf-8')
+  try {
+    const cfg = JSON.parse(db)
+    if (cfg.pm2) {
+      config = cfg.pm2
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
 /**
  * @type {{ apps: import("pm2").StartOptions[] }}
  */
 module.exports = {
   apps: [
     {
+      // name
       name: 'yunzai-next',
+      // run script
       script: 'src/main.js',
+      // args
       args: [...process.argv].slice(4),
       // 超时时间内进程仍未终止，则 PM2 将强制终止该进程
       kill_timeout: 5000,
@@ -21,6 +40,8 @@ module.exports = {
       autodump: true,
       // 不监听文件变化
       watch: false,
+      // 扩展
+      ...config,
       env: {
         // 生产环境
         NODE_ENV: 'production'

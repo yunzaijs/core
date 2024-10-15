@@ -87,22 +87,22 @@ declare global {
   /**
    * 键值对型数据库
    * @deprecated 不推荐使用，请从模块中导入
-   * import { Redis } from 'yunzai'
+   * import { Redis } from 'yunzaijs'
    */
   var redis: RedisClientType
   /**
-   * import { Segment } from 'yunzai'
+   * import { Segment } from 'yunzaijs'
    * @deprecated 不推荐使用，请从模块中导入
    */
   var segment: SegmentType
   /**
    * @deprecated 不推荐使用，请从模块中导入
-   * import { Plugin } from 'yunzai'
+   * import { Plugin } from 'yunzaijs'
    */
   var plugin: PluginType
   /**
    * 机器人客户端
-   * import { Bot } from 'yunzai'
+   * import { Bot } from 'yunzaijs'
    */
   var Bot: BotType
   /**

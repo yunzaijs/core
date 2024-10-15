@@ -1,4 +1,4 @@
-import { middlewareOptions, useEvent } from 'yunzai'
+import { middlewareOptions, useEvent } from 'yunzaijs'
 import { MysInfo, Runtime, NoteUser } from 'yunzai-mys'
 export default () => {
   // 返回中间件

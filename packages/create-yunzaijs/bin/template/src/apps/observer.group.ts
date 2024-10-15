@@ -1,4 +1,4 @@
-import { Messages, Observer } from 'yunzai'
+import { Messages, Observer } from 'yunzaijs'
 // 群聊
 const message = new Messages('message.group')
 message.use(

@@ -1,5 +1,5 @@
-import { Application } from 'yunzai'
-import { makeForwardMsg } from 'yunzai'
+import { Application } from 'yunzaijs'
+import { makeForwardMsg } from 'yunzaijs'
 import { readFileSync } from 'node:fs'
 import { slice, isEmpty } from 'lodash-es'
 import moment from 'moment'

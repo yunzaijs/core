@@ -1,5 +1,5 @@
 import { exec } from 'child_process'
-import { Application } from 'yunzai'
+import { Application } from 'yunzaijs'
 
 /**
  *
