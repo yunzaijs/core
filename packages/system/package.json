@@ -1,8 +1,8 @@
 {
-  "name": "yz-system",
-  "version": "1.0.12",
+  "name": "@yunzaijs/system",
+  "version": "1.0.0-rc.0",
   "author": "ningmengchongshui",
-  "description": "yz-system",
+  "description": "system",
   "type": "module",
   "scripts": {
     "app": "npx tsx src/main.ts",

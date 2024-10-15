@@ -78,38 +78,11 @@ const BuildByName = (name: string) => {
   config.push(buildDts(input, dir, inc))
 }
 
-const build1 = () => {
-  const input = `packages/alemonjs/src/plugins/index.ts`
-  const dir = `packages/alemonjs/lib/plugins`
-  const inc = `packages/alemonjs/src/plugins/**/*`
-  config.push(buildJs(input, dir, inc))
-  config.push(buildDts(input, dir, inc))
-}
-
-const build2 = () => {
-  const input = `packages/alemonjs/src/loader/index.ts`
-  const dir = `packages/alemonjs/lib/loader`
-  const inc = `packages/alemonjs/src/loader/**/*`
-  config.push(buildJs(input, dir, inc))
-  config.push(buildDts(input, dir, inc))
-}
-
-const build3 = () => {
-  const input = `packages/alemonjs/src/loader/main.ts`
-  const dir = `packages/alemonjs/lib/loader`
-  const inc = `packages/alemonjs/src/loader/**/*`
-  config.push(buildJs(input, dir, inc))
-  config.push(buildDts(input, dir, inc))
-}
-
 const build = () => {
   if (process.env.B == 'create-yunzaijs') {
     BuildByName('create-yunzaijs')
   } else {
     BuildByName('yunzaijs')
-    build1()
-    build2()
-    build3()
   }
 }
 

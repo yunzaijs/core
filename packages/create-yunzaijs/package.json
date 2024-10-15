@@ -4,7 +4,6 @@
   "description": "yunzai",
   "author": "ningmengchongshui",
   "main": "bin/index.js",
-  "license": "GPL-2.0",
   "type": "module",
   "scripts": {
     "dev": "node bin/yunzai.js",
@@ -27,8 +26,5 @@
   },
   "keywords": [
     "yunzai"
-  ],
-  "engines": {
-    "node": ">=16.14.0"
-  }
+  ]
 }
