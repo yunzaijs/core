@@ -1,3 +1,3 @@
-export * from '@/apps/img.group.js'
-export * from '@/apps/img.private.js'
-export * from '@/apps/observer.group.js'
+export * from '@src/apps/img.group.js'
+export * from '@src/apps/img.private.js'
+export * from '@src/apps/observer.group.js'

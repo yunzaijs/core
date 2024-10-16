@@ -1,9 +1,9 @@
 import React from 'react'
-import { BackgroundImage, createRequire } from 'react-puppeteer'
-import Nav from '@/image/component/Nav.tsx'
-import NavItem from '@/image/component/NavItem.tsx'
-import List from '@/image/component/List.tsx'
-import ListItem, { MovieType } from '@/image/component/ListItem.tsx'
+import { BackgroundImage } from 'jsxp'
+import Nav from '@src/image/component/Nav.tsx'
+import NavItem from '@src/image/component/NavItem.tsx'
+import List from '@src/image/component/List.tsx'
+import ListItem, { MovieType } from '@src/image/component/ListItem.tsx'
 export type DataType = {
   name: string
 }
@@ -11,7 +11,9 @@ export type PropsType = {
   data: DataType
   movies: MovieType[]
 }
-const require = createRequire(import.meta.url)
+
+import img_url from '@src/assets/App-Store.png'
+
 /**
  *
  * @param param0
@@ -20,12 +22,10 @@ const require = createRequire(import.meta.url)
 export default function App({ data, movies }: PropsType) {
   return (
     <html>
+      <head></head>
       <body>
         <section className="flex flex-col">
-          <BackgroundImage
-            url={require('../../../assets/App-Store.png')}
-            size={'100% auto'}
-          >
+          <BackgroundImage url={img_url} size={'100% auto'}>
             <Nav>
               {
                 // 跳转到music

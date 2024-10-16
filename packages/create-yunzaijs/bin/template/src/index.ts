@@ -1,5 +1,5 @@
 import { Application, applicationOptions, useEvent } from 'yunzaijs'
-import * as apps from '@/apps/index.js'
+import * as apps from '@src/apps/index.js'
 export default () => {
   // 预先存储
   const rules: {

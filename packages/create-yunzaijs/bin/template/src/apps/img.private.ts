@@ -1,10 +1,10 @@
 import { Messages, Segment } from 'yunzaijs'
-import { Screenshot } from '@/image/index.js'
+import { screenshotRender } from '@src/image/index.js'
 // 私聊
 const Private = new Messages('message.private')
 Private.use(
   async e => {
-    const img = await Screenshot.createHelp({})
+    const img = await screenshotRender({})
     if (Buffer.isBuffer(img)) {
       e.reply(Segment.image(img))
     } else {

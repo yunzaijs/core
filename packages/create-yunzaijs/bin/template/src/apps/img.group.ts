@@ -1,10 +1,10 @@
 import { Messages, Segment } from 'yunzaijs'
-import { Screenshot } from '@/image/index.js'
+import { screenshotRender } from '@src/image/index.js'
 // 群聊
 const Group = new Messages('message.group')
 Group.use(
   async e => {
-    const img = await Screenshot.createHelp({})
+    const img = await screenshotRender({})
     if (Buffer.isBuffer(img)) {
       e.reply(Segment.image(img))
     } else {
