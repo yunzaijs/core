@@ -1,6 +1,6 @@
 {
   "name": "yunzaijs",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.4",
   "author": "Le-niao",
   "description": "Chat-Bot",
   "main": "./lib/index.js",

@@ -5,6 +5,6 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "routes*", "jsxp.config.tsx"],
+  "include": ["src/**/*", "jsxp.config.tsx"],
   "extends": "lvyjs/tsconfig.json"
 }

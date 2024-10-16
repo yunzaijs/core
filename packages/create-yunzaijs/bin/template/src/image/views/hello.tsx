@@ -1,28 +1,22 @@
 import React from 'react'
-import { BackgroundImage } from 'jsxp'
+import { BackgroundImage, LinkStyleSheet } from 'jsxp'
 import Nav from '@src/image/component/Nav.tsx'
 import NavItem from '@src/image/component/NavItem.tsx'
 import List from '@src/image/component/List.tsx'
-import ListItem, { MovieType } from '@src/image/component/ListItem.tsx'
-export type DataType = {
-  name: string
-}
-export type PropsType = {
-  data: DataType
-  movies: MovieType[]
-}
-
+import ListItem from '@src/image/component/ListItem.tsx'
+import css_output from './input.css'
 import img_url from '@src/assets/App-Store.png'
-
 /**
  *
  * @param param0
  * @returns
  */
-export default function App({ data, movies }: PropsType) {
+export default function App({ data, movies }) {
   return (
     <html>
-      <head></head>
+      <head>
+        <LinkStyleSheet src={css_output} />
+      </head>
       <body>
         <section className="flex flex-col">
           <BackgroundImage url={img_url} size={'100% auto'}>

@@ -19,10 +19,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "puppeteer": "^23.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "jsxp": "^1.0.3"
+    "jsxp": "^1.0.4"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
@@ -31,11 +30,11 @@
     "@types/react": "^18.3.4",
     "husky": "^9.1.5",
     "icqq": "^0.6.10",
-    "lvyjs": "^0.0.2",
+    "lvyjs": "^0.0.3",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.4.5",
-    "yunzaijs": "^1.0.0-rc.1"
+    "yunzaijs": "^1.0.0-rc.4"
   },
   "types": "lib",
   "exports": {

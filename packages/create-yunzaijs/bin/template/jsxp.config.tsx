@@ -8,10 +8,10 @@ export default defineConfig({
     '/word': {
       component: <Hello data={{ name: 'pages' }} movies={[]} />
     },
-    'music': {
+    '/music': {
       component: <Music />
     },
-    'image': {
+    '/image': {
       component: <Image />
     }
   }

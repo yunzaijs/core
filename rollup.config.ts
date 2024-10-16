@@ -79,7 +79,7 @@ const BuildByName = (name: string) => {
 }
 
 const build = () => {
-  if (process.env.B == 'mys') {
+  if (process.env.build == 'mys') {
     BuildByName('mys')
   } else {
     BuildByName('yunzaijs')

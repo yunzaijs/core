@@ -1,5 +1,5 @@
 import { Application, Segment } from 'yunzaijs'
-import { screenshotRender } from '../puppeteer/index'
+import { screenshotRender } from '../image/index'
 import { parse } from 'yaml'
 import { createRequire } from 'jsxp'
 import { readFileSync } from 'fs'

@@ -1,13 +1,12 @@
 {
   "name": "create-yunzaijs",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "yunzaijs",
   "author": "ningmengchongshui",
   "main": "bin/index.js",
   "type": "module",
   "scripts": {
     "dev": "node bin/yunzaijs.js",
-    "build": "tsc",
     "format": "prettier --write .",
     "check-format": "git diff --exit-code",
     "prepare": "husky"

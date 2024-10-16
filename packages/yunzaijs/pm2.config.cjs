@@ -23,7 +23,7 @@ module.exports = {
       // name
       name: 'yunzai-next',
       // run script
-      script: 'src/main.js',
+      script: 'lib/main.js',
       // args
       args: [...process.argv].slice(4),
       // 超时时间内进程仍未终止，则 PM2 将强制终止该进程
