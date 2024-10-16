@@ -1,2 +1,2 @@
-/// <reference types="alemonjs/env" />
+/// <reference types="lvyjs/env" />
 /// <reference types="yunzaijs/global" />

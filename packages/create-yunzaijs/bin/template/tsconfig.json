@@ -6,5 +6,5 @@
     }
   },
   "include": ["src/**/*", "routes*", "jsxp.config.tsx"],
-  "extends": "yunzai/tsconfig.json"
+  "extends": "lvyjs/tsconfig.json"
 }

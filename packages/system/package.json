@@ -5,10 +5,10 @@
   "description": "system",
   "type": "module",
   "scripts": {
-    "app": "yunzaijs app",
-    "dev": "yunzaijs dev --node-options alemonjs/loader",
-    "build": "alemonjs build",
-    "server": "npx jsxp dev --node-options alemonjs/loader",
+    "app": "node lib/main.js",
+    "dev": "lvy dev --yunzai",
+    "view": "lvy dev --view",
+    "build": "lvy build",
     "start": "pm2 startOrRestart pm2.config.cjs",
     "bundle": "rollup --config rollup.config.js",
     "stop": "pm2 stop pm2.config.cjs",
@@ -30,6 +30,7 @@
     "alemonjs": "^2.0.0-rc.33",
     "husky": "^9.1.5",
     "icqq": "^0.6.10",
+    "lvyjs": "^0.0.2",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.4.10"
   },

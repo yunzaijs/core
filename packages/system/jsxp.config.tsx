@@ -10,7 +10,7 @@ export default defineConfig({
       component: (
         <Help
           helpData={parse(
-            readFileSync(require('./assets/yaml/help.yaml'), 'utf-8')
+            readFileSync(require('./src/assets/yaml/help.yaml'), 'utf-8')
           )}
         />
       )

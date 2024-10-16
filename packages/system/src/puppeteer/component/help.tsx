@@ -1,14 +1,11 @@
 import React from 'react'
 import { BOT_NAME, ConfigController } from 'yunzaijs'
-import data from '../../../package.json'
 import icon_abyss from '../../assets/img/icon/abyss.png'
 import { LinkStyleSheet } from 'jsxp'
 import output_csss from './input.css'
-
 const icons = {
   abyss: icon_abyss
 }
-
 export default function Help({ helpData }) {
   const version = ConfigController.package.version
   return (
@@ -20,7 +17,7 @@ export default function Help({ helpData }) {
         <div className="container" id="container">
           <div className="head_box">
             <div className="id_text">{BOT_NAME} System</div>
-            <h2 className="day_text">使用说明 V{data.version}</h2>
+            <h2 className="day_text">使用说明 V 1.0.0</h2>
           </div>
           {helpData.map((val, index) => (
             <div key={index} className="data_box">
