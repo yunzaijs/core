@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    // pages
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@src/*": ["src/*"]
     }
   },
   "include": ["src/**/*", "routes*", "jsxp.config.tsx"],

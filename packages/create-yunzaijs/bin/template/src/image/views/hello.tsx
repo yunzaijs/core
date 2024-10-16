@@ -19,24 +19,28 @@ const require = createRequire(import.meta.url)
  */
 export default function App({ data, movies }: PropsType) {
   return (
-    <section className="flex flex-col">
-      <BackgroundImage
-        url={require('../../../assets/App-Store.png')}
-        size={'100% auto'}
-      >
-        <Nav>
-          {
-            // 跳转到music
-          }
-          <NavItem href="./music">New {data.name}</NavItem>
-        </Nav>
-        <div>xxxxuu</div>
-        <List>
-          {movies.map(movie => (
-            <ListItem key={movie.id} movie={movie} />
-          ))}
-        </List>
-      </BackgroundImage>
-    </section>
+    <html>
+      <body>
+        <section className="flex flex-col">
+          <BackgroundImage
+            url={require('../../../assets/App-Store.png')}
+            size={'100% auto'}
+          >
+            <Nav>
+              {
+                // 跳转到music
+              }
+              <NavItem href="./music">New {data.name}</NavItem>
+            </Nav>
+            <div>xxxxuu</div>
+            <List>
+              {movies.map(movie => (
+                <ListItem key={movie.id} movie={movie} />
+              ))}
+            </List>
+          </BackgroundImage>
+        </section>
+      </body>
+    </html>
   )
 }

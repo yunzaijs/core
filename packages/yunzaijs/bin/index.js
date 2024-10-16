@@ -47,4 +47,17 @@ if (args.includes('dev')) {
       process.exit()
     }
   }
+} else if (args.includes('app')) {
+  let argsx = args.filter(arg => arg !== 'app')
+  const msg = spawn('node', [jsDir, '--run-client', ...argsx], {
+    stdio: 'inherit',
+    env: Object.assign({}, process.env, {
+      PKG_DIR: pkgFilr
+    }),
+    shell: process.platform === 'win32'
+  })
+  if (msg.error) {
+    console.error(msg.error)
+    process.exit()
+  }
 }

@@ -5,7 +5,8 @@
   "description": "system",
   "type": "module",
   "scripts": {
-    "dev": "yunzai dev --node-options alemonjs/loader",
+    "app": "yunzaijs app",
+    "dev": "yunzaijs dev --node-options alemonjs/loader",
     "build": "alemonjs build",
     "server": "npx jsxp dev --node-options alemonjs/loader",
     "start": "pm2 startOrRestart pm2.config.cjs",
@@ -30,23 +31,19 @@
     "husky": "^9.1.5",
     "icqq": "^0.6.10",
     "prettier": "^3.0.3",
-    "tailwindcss": "^3.4.10",
-    "typescript": "^5.4.5"
+    "tailwindcss": "^3.4.10"
   },
-  "types": "lib/types",
+  "types": "lib",
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "types": "./lib/types/index.d.ts"
+      "types": "./lib/index.d.ts"
     }
   },
   "keywords": [
-    "yunzai"
+    "yunzaijs"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
-  },
-  "engines": {
-    "node": ">=16.14.0"
   }
 }

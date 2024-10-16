@@ -1,5 +1,5 @@
-import { EventType } from '@/core/types.js'
-import cfg from '@/config/config.js'
+import { EventType } from '../types.js'
+import cfg from '../../config/config.js'
 export class Limit {
   groupGlobalCD = {}
   singleCD = {}
