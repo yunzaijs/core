@@ -1,6 +1,6 @@
 {
   "name": "create-yunzaijs",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "yunzaijs",
   "author": "ningmengchongshui",
   "main": "bin/index.js",
@@ -18,7 +18,7 @@
     "husky": "^9.0.11"
   },
   "bin": {
-    "create-yunzaijs": "bin/yunzaijs.js"
+    "create-yunzaijs": "bin/index.js"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

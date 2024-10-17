@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "yunzaijs": "file:packages/yunzaijs",
+    "@yunzai/mys": "file:packages/mys",
     "create-yunzaijs": "file:packages/create-yunzaijs"
   },
   "devDependencies": {

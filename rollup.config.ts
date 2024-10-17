@@ -78,9 +78,19 @@ const BuildByName = (name: string) => {
   config.push(buildDts(input, dir, inc))
 }
 
+const Build1 = (name: string, file: string) => {
+  const input = `packages/${name}/src/middleware/${file}.ts`
+  const dir = `packages/${name}/lib/middleware`
+  const inc = `packages/${name}/src/middleware/**/*`
+  config.push(buildJs(input, dir, inc))
+  config.push(buildDts(input, dir, inc))
+}
+
 const build = () => {
   if (process.env.build == 'mys') {
     BuildByName('mys')
+    Build1('mys', 'runtime')
+    Build1('mys', 'message')
   } else {
     BuildByName('yunzaijs')
   }
