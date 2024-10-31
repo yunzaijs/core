@@ -1,0 +1,43 @@
+{
+  "name": "@yunzaijs/system",
+  "version": "0.0.1",
+  "author": "ningmengchongshui",
+  "description": "system",
+  "type": "module",
+  "main": "./lib/index.js",
+  "scripts": {
+    "app": "node lib/main.js",
+    "dev": "lvy dev --yunzai",
+    "view": "lvy dev --view",
+    "build": "lvy build",
+    "start": "pm2 startOrRestart pm2.config.cjs",
+    "bundle": "rollup --config rollup.config.js",
+    "stop": "pm2 stop pm2.config.cjs",
+    "delete": "pm2 delete pm2.config.cjs"
+  },
+  "dependencies": {
+    "jsxp": "^1.0.4",
+    "lodash-es": "^4.17.21",
+    "moment": "^2.30.1"
+  },
+  "devDependencies": {
+    "icqq": "^0.6.10",
+    "lvyjs": "^0.1.0",
+    "prettier": "^3.0.3",
+    "tailwindcss": "^3.4.10"
+  },
+  "types": "lib",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "keywords": [
+    "yunzaijs"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}

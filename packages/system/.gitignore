@@ -1,0 +1,15 @@
+node_modules
+/config
+/data
+/logs
+/resources
+/renderers
+/plugins
+/index.js
+/types
+/temp
+/lib
+yarn.lock
+yz-system-*
+
+public

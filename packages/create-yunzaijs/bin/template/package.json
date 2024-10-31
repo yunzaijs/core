@@ -1,0 +1,52 @@
+{
+  "name": "yz-template",
+  "version": "1.0.0-rc.0",
+  "description": "Yunzai-Next APP",
+  "author": "ningmengchongshui",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "app": "node lib/main.js",
+    "dev": "lvy dev --yunzai",
+    "view": "lvy dev --view",
+    "build": "lvy build",
+    "start": "pm2 startOrRestart pm2.config.cjs",
+    "bundle": "rollup --config rollup.config.js",
+    "stop": "pm2 stop pm2.config.cjs",
+    "delete": "pm2 delete pm2.config.cjs",
+    "format": "prettier --write .",
+    "check-format": "git diff --exit-code",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "jsxp": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.8.5",
+    "@types/node-schedule": "^2.1.7",
+    "@types/react": "^18.3.4",
+    "husky": "^9.1.5",
+    "icqq": "^0.6.10",
+    "lvyjs": "^0.1.0",
+    "prettier": "^3.0.3",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.4.5",
+    "yunzaijs": "^1.0.0-rc.5"
+  },
+  "types": "lib",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "keywords": [
+    "yunzaijs"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  }
+}

@@ -1,0 +1,10 @@
+# 依赖
+node_modules
+*.lock
+data
+lib
+*.log.ts
+logs
+log 
+*.log
+*.logs

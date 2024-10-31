@@ -1,0 +1,24 @@
+# chromium 地址，可填写系统的edge/chromium路径，例如（根据实际情况调整）：
+# windows chromiumPath: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+chromiumPath:
+
+# 废弃
+# puppeteer websocket 地址。连接单独存在的 chromium。
+# puppeteerWS: 'ws://browserless:3000'
+puppeteerWS:
+
+# 废弃
+# headless
+headless: 'new'
+
+# 废弃
+# puppeteer启动args，注意args的--前缀
+args:
+  - --disable-gpu
+  - --disable-setuid-sandbox
+  - --no-sandbox
+  - --no-zygote
+
+# 废弃
+# puppeteer截图超时时间
+puppeteerTimeout:

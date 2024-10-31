@@ -1,0 +1,5 @@
+# Node dependencies
+node_modules
+
+# 旧版文件夹
+config

@@ -1,0 +1,12 @@
+node_modules
+/config
+/data
+/logs
+/renderers
+/index.js
+/types
+/temp
+/lib
+yarn.lock
+
+yunzai-mys-*

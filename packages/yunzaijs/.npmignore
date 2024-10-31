@@ -1,0 +1,7 @@
+# 忽略所有文件
+/*   
+# 不忽略
+!/lib
+!/yaml
+!/tsconfig.json
+!/pm2.config.cjs

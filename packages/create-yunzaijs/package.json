@@ -1,0 +1,29 @@
+{
+  "name": "create-yunzaijs",
+  "version": "1.0.0-rc.4",
+  "description": "yunzaijs",
+  "author": "ningmengchongshui",
+  "main": "bin/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node bin/yunzaijs.js",
+    "format": "prettier --write .",
+    "check-format": "git diff --exit-code",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@types/node": "16.7.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.2.2",
+    "husky": "^9.0.11"
+  },
+  "bin": {
+    "create-yunzaijs": "bin/index.js"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "yunzaijs"
+  ]
+}
