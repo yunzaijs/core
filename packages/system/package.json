@@ -7,11 +7,10 @@
   "main": "./lib/index.js",
   "scripts": {
     "app": "node lib/main.js",
-    "dev": "lvy dev --yunzai",
-    "view": "lvy dev --view",
-    "build": "lvy build",
+    "dev": "npx lvy dev",
+    "view": "npx lvy dev --view",
+    "build": "npx lvy build",
     "start": "pm2 startOrRestart pm2.config.cjs",
-    "bundle": "rollup --config rollup.config.js",
     "stop": "pm2 stop pm2.config.cjs",
     "delete": "pm2 delete pm2.config.cjs"
   },
@@ -22,7 +21,7 @@
   },
   "devDependencies": {
     "icqq": "^0.6.10",
-    "lvyjs": "^0.1.0",
+    "lvyjs": "^0.2.14",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.4.10"
   },

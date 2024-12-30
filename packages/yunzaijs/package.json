@@ -6,6 +6,7 @@
   "main": "./lib/index.js",
   "type": "module",
   "scripts": {
+    "build": "node bundle.js",
     "format": "prettier --write .",
     "check-format": "git diff --exit-code",
     "prepare": "husky"
@@ -28,6 +29,11 @@
     "redis": "^4.6.13",
     "yaml": "^2.5.0"
   },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.18.1",
+    "rollup-plugin-dts": "^6.1.1"
+  },
   "types": "types",
   "exports": {
     ".": {
@@ -35,6 +41,10 @@
       "types": "./lib/index.d.ts"
     },
     "./tsconfig.json": {
+      "import": "./tsconfig.json",
+      "require": "./tsconfig.json"
+    },
+    "./tsconfig": {
       "import": "./tsconfig.json",
       "require": "./tsconfig.json"
     },

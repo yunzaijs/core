@@ -5,7 +5,9 @@
   "description": "QQ Group Bot MYS Module",
   "main": "./lib/index.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "build": "node bundle.js"
+  },
   "dependencies": {
     "chokidar": "^3.6.0",
     "lodash": "^4.17.21",
@@ -17,7 +19,9 @@
     "yaml": "^2.5.0"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.18.1",
+    "rollup-plugin-dts": "^6.1.1",
     "jsxp": "^1.0.4",
     "typescript": "^5.5.3",
     "yunzaijs": "^1.0.0-rc.4"
