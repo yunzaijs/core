@@ -3,8 +3,8 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const includes = (value: string) => process.argv.includes(value)
-const jsxp = () => import('jsxp').then(res => res.createServer())
-const useYunzaiJS = async () => {
+const startJSXP = () => import('jsxp').then(res => res.createServer())
+const startYunzaiJS = async () => {
   const { Client, createLogin, Processor } = await import('yunzaijs')
   setTimeout(async () => {
     await createLogin()
@@ -16,8 +16,8 @@ const useYunzaiJS = async () => {
 export default defineConfig({
   plugins: [
     () => {
-      if (includes('--view')) return jsxp
-      return useYunzaiJS
+      if (includes('--view')) return startJSXP
+      return startYunzaiJS
     }
   ],
   alias: {

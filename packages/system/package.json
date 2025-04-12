@@ -15,13 +15,12 @@
     "delete": "pm2 delete pm2.config.cjs"
   },
   "dependencies": {
-    "jsxp": "^1.0.4",
     "lodash-es": "^4.17.21",
     "moment": "^2.30.1"
   },
   "devDependencies": {
-    "icqq": "^0.6.10",
-    "lvyjs": "^0.2.14",
+    "jsxp": "^1.2.1",
+    "lvyjs": "^0.2.19",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.4.10"
   },
@@ -38,5 +37,10 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
+  },
+  "bugs": "https://github.com/yunzaijs/core/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunzaijs/core.git"
   }
 }

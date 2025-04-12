@@ -1,4 +1,4 @@
-import { defineConfig, RollupOptions } from 'rollup'
+import { RollupOptions } from 'rollup'
 import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 
@@ -64,10 +64,9 @@ const buildDts = (input: string, dir: string, inc: string) => {
   } as RollupOptions
 }
 
-const config: any[] = []
+export const config: any[] = []
 
-const build = () => {
-  const input = `src/index.ts`
+export const build = (input: string = `src/index.ts`) => {
   const dir = `lib`
   const inc = `src/**/*`
   try {
@@ -82,6 +81,6 @@ const build = () => {
   }
 }
 
-build()
-
+import { defineConfig } from 'rollup'
+build('src/index.ts')
 export default defineConfig(config.flat(Infinity))

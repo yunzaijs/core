@@ -1,7 +1,7 @@
 import { Application, Segment } from 'yunzaijs'
 import { screenshotRender } from '../image/index'
 import { parse } from 'yaml'
-import { createRequire } from 'jsxp'
+import { createRequire } from 'node:module'
 import { readFileSync } from 'fs'
 const require = createRequire(import.meta.url)
 let cache: Buffer | null = null

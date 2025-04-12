@@ -1,8 +1,8 @@
 {
   "name": "yunzaijs",
-  "version": "1.0.0-rc.5",
+  "version": "1.0.0",
   "author": "Le-niao",
-  "description": "Chat-Bot",
+  "description": "Yunzai-Bot",
   "main": "./lib/index.js",
   "type": "module",
   "scripts": {
@@ -20,6 +20,7 @@
     "lodash-es": "^4.17.21",
     "log4js": "^6.9.1",
     "md5": "^2.3.0",
+    "image-size": "^1.1.1",
     "moment": "^2.30.1",
     "node-fetch": "^3.3.2",
     "node-localstorage": "^3.0.5",
@@ -28,11 +29,6 @@
     "puppeteer": "^22.13.1",
     "redis": "^4.6.13",
     "yaml": "^2.5.0"
-  },
-  "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.6",
-    "rollup": "^4.18.1",
-    "rollup-plugin-dts": "^6.1.1"
   },
   "types": "types",
   "exports": {
@@ -58,5 +54,10 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
+  },
+  "bugs": "https://github.com/yunzaijs/core/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunzaijs/core.git"
   }
 }
